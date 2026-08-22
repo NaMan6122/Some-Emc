@@ -19,10 +19,10 @@ Last File Touched: dev-changelog.md
 Immediate Next Step: On human approval of spec-003-v2 + ADR-004, implement jose-based auth layer per v2 acceptance criteria.
 
 ## Active Task
-T-010 — Implement spec-004-v1: Audit trail service & API
+T-011 — Implement spec-005-v1: Projects module
 State: PENDING
 Started: —
-Last Updated: 2026-08-23 02:48
+Last Updated: 2026-08-23 02:55
 
 ## Task Log
 
@@ -192,6 +192,23 @@ Last Updated: 2026-08-23 02:48
 **Test Evidence:** vitest 7 files / 34 tests passed (session tamper/expiry, rate-limit windows, full login/me/password/logout/revocation integration incl. old-token rejection); tsc --noEmit clean; eslint clean; live curls: unauth 401 envelope, page 307→/login, login 200 Set-Cookie(HttpOnly,SameSite=Lax), me 200, logout Max-Age=0.
 **Blockers:** NONE
 **Rollback:** Remove auth module/middleware/login/script; users table persists harmlessly.
+
+### [2026-08-23 02:55] — T-010: Implement spec-004-v1 Audit trail service & API
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (02:51) → DONE (02:55).
+**Goal:** Atomic audit writes on business mutations plus ADMIN-only filtered/paginated read API.
+**Spec Reference:** specs/spec-004-v1.md; TDD §5 (AuditLog), §8 (envelope/pagination).
+**Approach:** `audit(tx, input)` service taking the caller's transaction client; deterministic diff via sorted-key normalization; changed-top-level-keys-only diffs for UPDATE, verbatim null semantics for CREATE/DELETE; cursor pagination with inclusive-cursor correction (skip:1).
+**Checklist:**
+  - [x] src/server/audit/service.ts — audit(), diffChangedKeys(), normalizeForAudit()
+  - [x] GET /api/v1/audit — ADMIN-only; entity/entityId/from/to filters; limit≤100; nextCursor
+  - [x] No mutating handlers on the route module (structural test)
+  - [x] Unit tests: determinism, undefined-dropping, no-op diffs, passthrough payloads
+  - [x] Integration tests: AC1 atomicity+attribution, AC2 rollback-on-audit-failure via broken-tx proxy, AC3/3b access+pagination, AC4 structure
+**Outcome:** All spec-004 ACs verified. One real bug found and fixed by tests: Prisma cursor pagination is inclusive → added skip:1 when cursor present. jsonSafe applied so BigInt ids serialize as strings in responses.
+**Test Evidence:** vitest 9 files / 46 tests passed; tsc --noEmit clean; eslint clean.
+**Blockers:** NONE
+**Rollback:** Remove service/route/tests; table persists harmlessly.
 
 ## Self-Corrections
 
