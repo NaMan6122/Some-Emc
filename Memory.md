@@ -19,10 +19,10 @@ Last File Touched: dev-changelog.md
 Immediate Next Step: On human approval of spec-003-v2 + ADR-004, implement jose-based auth layer per v2 acceptance criteria.
 
 ## Active Task
-T-013 — Implement spec-007-v1: LPO register
+T-014 — Implement spec-008-v1: Job 1571 seed pipeline
 State: PENDING
 Started: —
-Last Updated: 2026-08-23 03:20
+Last Updated: 2026-08-23 03:44
 
 ## Task Log
 
@@ -244,6 +244,23 @@ Last Updated: 2026-08-23 03:20
 **Test Evidence:** vitest 12 files / 65 tests passed; tsc clean; eslint clean.
 **Blockers:** NONE
 **Rollback:** Remove routes/service/tests; supplier rows persist.
+
+### [2026-08-23 03:44] — T-013: Implement spec-007-v1 LPO register
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (03:28) → DONE (03:44).
+**Goal:** Core register: ref generation, revision chains, filters/pagination/totals, CSV export, VO linkage, verification flags, role-scoped patches.
+**Spec Reference:** specs/spec-007-v1.md; PRD FR-4; TDD §5/§7/§8; design.md §7/§8.
+**Approach:** Service-level revision engine — financial edits on ISSUED create successors (base ref + R{n} suffix, fresh per-project seq slot, predecessor immutable via supersededById); descriptive/lifecycle edits in place; COMMERCIAL restricted to voId-only patches; read-only roles 403 at service gate; FLAGGED verification opens/resolves DataFlag rows; CSV export paginates through the same filter pipeline.
+**Checklist:**
+  - [x] POST/GET /projects/:id/lpos (+ ?q insensitive, trade/status/verification/supplier/date/sort/cursor/includeSuperseded)
+  - [x] GET|PATCH /lpos/:id incl. chain endpoint; POST /projects/:id/lpos/revisions alias
+  - [x] GET /projects/:id/lpos/export CSV
+  - [x] Totals meta: activeCount + activeSumFils respecting filters, excluding CANCELLED unless explicitly filtered
+  - [x] DCL-002 filed: UI screen re-scoped to M2; spec-007-v2 drafted (G1 ratification pending)
+**Outcome:** All eight spec-007 ACs verified. Bugs caught by tests along the way: requireRole() with zero roles denied everything (route switched to requireAuth); VARIATION-without-voId was not enforced on create; revision path hardcoded kind=VARIATION breaking STANDARD patches; refNo/seq collision on revisions resolved with R-suffix refs + own seq slot per revision; LPO-log UI re-scoped to M2 via DCL-002 (spec-007-v2 awaiting G1). Dev logins created for human: one user per role @trends.local (passwords handed in-session, never stored in tracked files).
+**Test Evidence:** vitest 13 files / 75 tests passed sequentially (fileParallelism:false — shared dev DB); tsc clean; eslint clean.
+**Blockers:** NONE
+**Rollback:** Remove routes/service/validation/tests; lpo rows persist.
 
 ## Self-Corrections
 

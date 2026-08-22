@@ -59,8 +59,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await prisma.lpo.deleteMany({ where: { project: { code: `SU${stamp}` } } });
   await prisma.auditLog.deleteMany({ where: { entity: "Supplier" } });
-  await prisma.supplier.deleteMany({ where: { name: { contains: "UNIGULF" } } });
-  await prisma.supplier.deleteMany({ where: { name: `MERGE TARGET ${stamp}` } });
+  await prisma.supplier.deleteMany({ where: { OR: [{ name: { contains: "UNIGULF" } }, { name: { contains: "SILVER WAVES" } }, { name: { contains: "LPO HOLDER" } }, { name: { startsWith: "MERGE " } }] } });
   await prisma.project.delete({ where: { id: projectId } }).catch(() => undefined);
   await prisma.user.deleteMany({ where: { email: { contains: `-sup-${stamp}@` } } });
   await prisma.$disconnect();
@@ -103,8 +102,8 @@ describe("spec-006-v1 suppliers", () => {
   });
 
   it("AC2: merge A→B re-points LPOs, aliases the loser, marks mergedIntoId, one audit entry", async () => {
-    const supplier = await prisma.supplier.create({ data: { name: "MERGE SOURCE LPO HOLDER" } });
-    const supplier2 = await prisma.supplier.create({ data: { name: "MERGE TARGET LPO HOLDER" } });
+    const supplier = await prisma.supplier.create({ data: { name: `MERGE SOURCE LPO HOLDER ${stamp}` } });
+    const supplier2 = await prisma.supplier.create({ data: { name: `MERGE TARGET LPO HOLDER ${stamp}` } });
     await prisma.lpo.create({
       data: {
         projectId,
@@ -133,7 +132,7 @@ describe("spec-006-v1 suppliers", () => {
     expect(src.mergedIntoId).toBe(supplier2.id);
 
     const tgt = await prisma.supplier.findUniqueOrThrow({ where: { id: supplier2.id } });
-    expect((tgt.aliases as string[])).toContain("MERGE SOURCE LPO HOLDER");
+    expect((tgt.aliases as string[])).toContain(`MERGE SOURCE LPO HOLDER ${stamp}`);
 
     const audits = await prisma.auditLog.findMany({
       where: { entity: "Supplier", entityId: String(supplier.id), action: "MERGE" },
@@ -143,7 +142,7 @@ describe("spec-006-v1 suppliers", () => {
   });
 
   it("AC3: merging into an already-merged target → 422 TARGET_MERGED", async () => {
-    const source = await prisma.supplier.create({ data: { name: "MERGE THIRD PARTY" } });
+    const source = await prisma.supplier.create({ data: { name: `MERGE THIRD PARTY ${stamp}` } });
     const r = await routes();
     // Target = UNIGULF supplier which is now merged (AC2 merged it? no — AC2 used other rows).
     // Use explicit chain: merge source -> A (A already merged into B by nothing yet)…

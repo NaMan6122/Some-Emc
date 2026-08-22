@@ -8,7 +8,7 @@ type Tx = Prisma.TransactionClient | PrismaClient;
 export type AuditInput = {
   actorId: number;
   entity: string;
-  entityId: string | number;
+  entityId: string | number | bigint;
   action: string;
   before?: unknown;
   after?: unknown;

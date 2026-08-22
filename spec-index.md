@@ -8,7 +8,7 @@
 | spec-004 | Audit trail service & API | v1 | IMPLEMENTED | spec-002, spec-003 | T-010 DONE | |
 | spec-005 | Projects module | v1 | IMPLEMENTED | spec-003, spec-004 | T-011 DONE | |
 | spec-006 | Suppliers vendor master | v1 | IMPLEMENTED | spec-003, spec-004 | T-012 DONE | |
-| spec-007 | LPO register | v1 | ACTIVE | spec-003, spec-004, spec-005, spec-006 | — | Highest-complexity M1 module |
+| spec-007 | LPO register | v2 | DRAFT (v1 IMPLEMENTED) | spec-003, spec-004, spec-005, spec-006 | T-013 DONE | v1 ACs all verified; v2 re-scopes UI to M2 per DCL-002 — awaiting G1 ratification |
 | spec-008 | Job 1571 seed pipeline | v1 | ACTIVE | spec-001, spec-002, spec-005, spec-006, spec-007 | — | |
 
 _Promoted DRAFT → ACTIVE by human at Gate G1 on 2026-08-23 (all eight). design.md v0.1 ACCEPTED in the same checkpoint._

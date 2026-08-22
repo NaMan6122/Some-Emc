@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => ({
   test: {
     include: ["src/**/*.test.ts"],
     environment: "node",
+    // Integration suites share one dev database — never run spec files in parallel.
+    fileParallelism: false,
     // Expose .env (DATABASE_URL, AUTH_SECRET) to integration tests.
     env: loadEnv(mode ?? "test", process.cwd(), ""),
   },

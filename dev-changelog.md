@@ -28,3 +28,26 @@ specs/spec-003-v1 → DEPRECATED, replaced by specs/spec-003-v2 (same acceptance
 
 **Human Feedback:**
 **Feedback Applied:**
+
+## [2026-08-23 03:45] — DCL-002
+
+**Task Reference:** T-013
+**Spec Affected:** specs/spec-007-v1.md
+**Type:** REDUCTIVE
+
+**Original Spec:**
+spec-007-v1 "What" included a UI deliverable: "UI: LPO log page — filter bar, TanStack table (frozen first columns, right-aligned tabular numerals), detail drawer with revision-chain timeline (design.md §8)."
+
+**Deviation:**
+The LPO-log UI screen was not built in T-013. It is re-scoped into milestone M2 as part of the FR-8 dashboard work, where the app shell, project switcher, and shared components land first. All eight spec-007-v1 acceptance criteria — every one API-level — are implemented and verified. @tanstack/react-table and swr were installed ahead of the M2 screen.
+
+**Reason:**
+The dashboard shell, navigation, and design-token plumbing (M2) are prerequisites for a coherent LPO-log screen; building it standalone would produce throwaway layout work outside any spec. Deferral keeps one-task-one-concern discipline (§9).
+
+**Impact:**
+spec-007-v2 drafted with the UI sentence removed (acceptance criteria unchanged and already satisfied). A new M2 spec will cover the LPO log screen referencing design.md §8. Milestone table in TDD §14: the UI deliverable moves from M1 to M2.
+
+**Spec Updated:** YES — specs/spec-007-v2.md created
+
+**Human Feedback:**
+**Feedback Applied:**
