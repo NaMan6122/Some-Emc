@@ -1,0 +1,1555 @@
+{
+  "extractedFrom": "midisland_1571_procurement_PC_ Invsetment - 24 07 26 (1).html",
+  "extractedAt": null,
+  "project": {
+    "code": "1571",
+    "name": "Mid Island Parkway Phase 1C",
+    "mainContractor": "China Harbour Engineering Co. LLC (CHEC)",
+    "contractValueAED": 18786625,
+    "contractRef": "CHEC-MIP1C-B2-2025-006"
+  },
+  "lpos": [
+    {
+      "supplier": "M/S MECHLERIC MEP SOLUTIONS CONTRACTING",
+      "description": "Storm Water Pumping Station",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//039",
+      "issueDate": "2025-06-02",
+      "amountFils": 383250000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL FUTTAIM ENGINEERING L.L.C",
+      "description": "Loi For Fire Protection & Fire Alarm System",
+      "trade": "Fire Fighting",
+      "refNo": "TEMW/REF/LPO/FF/FA/009",
+      "issueDate": "2025-03-25",
+      "amountFils": 157500000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MUSANDUM ELECTRICAL EQUIPMENT CO LLC",
+      "description": "Lv Power Cables",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//093",
+      "issueDate": "2025-12-16",
+      "amountFils": 143221400,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S BAHRI & MAZROEI TRADING CO LLC",
+      "description": "Lighting  Control System",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//125",
+      "issueDate": "2025-05-25",
+      "amountFils": 104651200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S RUDD LIGHTING ARABIA",
+      "description": "Tunnel  Lighting  Fixtures  Loi",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//124",
+      "issueDate": "2026-05-25",
+      "amountFils": 72975000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ELECTRICAL CENTER",
+      "description": "Lv Switch Gear",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//087",
+      "issueDate": "2025-11-20",
+      "amountFils": 55125000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL WASL TRADING GROUP",
+      "description": "Disel Genrator Loi",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//041",
+      "issueDate": "2025-06-11",
+      "amountFils": 40797800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SKM AIR CONDITIONING L.L.C",
+      "description": " Fahu& Vrf",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//061R1",
+      "issueDate": "2025-09-03",
+      "amountFils": 27657000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ARAB DEVELOPMENT EST",
+      "description": "Modular Cable ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//120",
+      "issueDate": "2026-05-13",
+      "amountFils": 22785000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ALPHA CABLE MANAGEMENT SYSTEM LLC",
+      "description": "Ss316 L Cable Tray, Trunking & Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//091",
+      "issueDate": "2026-01-02",
+      "amountFils": 21206300,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S METAL CRAFT BUILDING & CONSTRUCTION MATERIALS TRADING L.",
+      "description": "Ss 316L General Materials",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//073",
+      "issueDate": "2025-11-01",
+      "amountFils": 17836200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S METAL CRAFT BUILDING & CONSTRUCTION MATERILAS TRADING L.",
+      "description": "Ss General Materials Accessories ",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//100",
+      "issueDate": "2026-01-20",
+      "amountFils": 15842600,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SITE TECHNOLOGY POWER SYSTEMS COMPANY SOLE PROPRIETORSHI",
+      "description": "Ups System",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//067",
+      "issueDate": "2025-11-24",
+      "amountFils": 15435000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SYS SENSE COMPUTERS- L.L.C- O.P.C",
+      "description": " Emergency & Telephone Data",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//090",
+      "issueDate": "2025-11-27",
+      "amountFils": 14903500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ALPHA CABLE MANAGEMENT SYSTEM LLC",
+      "description": "Ss316 L Cable Tray, Trunking & Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//109",
+      "issueDate": "2026-02-20",
+      "amountFils": 13454500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SUN STAR ELECTROMECHANICAL CO L.L.C-S.P.C",
+      "description": "Dg Set Installtion With Tank & Pipe  Line",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//111",
+      "issueDate": "2026-02-27",
+      "amountFils": 12600000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ALPHA CABLE MANAGEMENT SYSTEM LLC",
+      "description": "Ss 316L Cable Tray & Trunning",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO/HVAC/022",
+      "issueDate": "2025-07-03",
+      "amountFils": 12420900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S S.S.G . TRADING L.L.C",
+      "description": "Grp Hot Pressed Insulated Tank",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO/PL/010",
+      "issueDate": "2025-04-04",
+      "amountFils": 11655000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MECHLERIC MEP SOLUTIONS CONTRACTING L.L.C",
+      "description": "Di Pipes",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//129",
+      "issueDate": "2026-06-11",
+      "amountFils": 11025000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ALPHA CABLE MANAGEMENT SYSTEM LLC",
+      "description": "Ss 316L Cable Tray & Trunning",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//065",
+      "issueDate": "2025-09-09",
+      "amountFils": 10028200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ALPHA CABLE MANAGEMENT SYSTEM LLC",
+      "description": "Cable  Tray -Ss  Cable  Tray",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//127R1",
+      "issueDate": "2026-06-06",
+      "amountFils": 9450000,
+      "kind": "VARIATION",
+      "remark": "VARIATION"
+    },
+    {
+      "supplier": "M/S HIRA INDUSTRIES LLC",
+      "description": "Ventilation Fan -Loi",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//068R1",
+      "issueDate": "2026-04-22",
+      "amountFils": 8989500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S NAFFCO ELECTROMECHANICAL CO.L.L.C",
+      "description": "Bms System For Midisland",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//088",
+      "issueDate": "2025-11-20",
+      "amountFils": 8610000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S POLYFAB PLASTIC INDUSTRY LLC",
+      "description": "Upvc Duct Pipe",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//051",
+      "issueDate": "2025-07-08",
+      "amountFils": 7795300,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S METAL CRAFT BUILDING & CONSTRUCTION MATERILAS TRADING L.",
+      "description": "Ss 316 L Generl Materilas & Accessories",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//092",
+      "issueDate": "2025-12-22",
+      "amountFils": 7403400,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S BOTON ELECTRICAL FITTINGS TRADING LLC",
+      "description": "Ss316L Conduit & Accessories ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//099",
+      "issueDate": "2026-01-15",
+      "amountFils": 7221000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SYS SENSE COMPUTER -L.L.C-O.P.C",
+      "description": "Telephone Data",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//054",
+      "issueDate": "2025-07-11",
+      "amountFils": 5756100,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SENTOR ELECTRICAL TRADING LLC",
+      "description": "Earthing & Lighting Control",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//034",
+      "issueDate": "2025-05-27",
+      "amountFils": 4094800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S GEMS SYSTEMS L.L.C",
+      "description": "Lighting Fixtures",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//031",
+      "issueDate": "2025-05-28",
+      "amountFils": 3889700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S TECHNALCO .",
+      "description": "Msfd & Fire Damper ",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//118",
+      "issueDate": "2026-06-20",
+      "amountFils": 3867200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MUSANDUM ELECTRICAL EQUIPMENT CO LLC",
+      "description": "Isolator & Tpn Switch",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//080R1",
+      "issueDate": "2025-02-11",
+      "amountFils": 2923300,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S LEMINAR AIR CONDITIONING COMPANY",
+      "description": "Copper Pipe And Fittings",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//053",
+      "issueDate": "2025-07-21",
+      "amountFils": 2907000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S EMIRATES FIRE AND RESCUE COMPANY",
+      "description": "Drawing  Approval  For  Utlity  Building",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//110",
+      "issueDate": "2026-02-21",
+      "amountFils": 2625000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AIR CONFLEX INDUSTRY L.L.C",
+      "description": "Fire Rated Duct",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//042",
+      "issueDate": "2025-06-11",
+      "amountFils": 2567200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S TECNALCO",
+      "description": "Air Terminal & Msfd",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//131",
+      "issueDate": "2026-06-25",
+      "amountFils": 2563500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S HYDRO POINT BUILING MATERILAS",
+      "description": "Plumbing Valves, Clean Out, Man Hole, Water Arrester,Floor Drains & Co",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO/HVAC/019",
+      "issueDate": "2025-05-21",
+      "amountFils": 2277200,
+      "kind": "STANDARD",
+      "remark": "EL MAN HOLE"
+    },
+    {
+      "supplier": "M/S ARABIAN FALCON ELECTRICAL EQUIPMENT LLC",
+      "description": "Cable Glands And Lugs",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//085",
+      "issueDate": "2025-11-11",
+      "amountFils": 2268500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S BAHARI & MAZROEIL.L.C",
+      "description": "Under Pass Light Fittings",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//045",
+      "issueDate": "2025-06-16",
+      "amountFils": 2100000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/SS.S.G. TRADING L.L.C",
+      "description": "Grp Hot  Pressed Insulated Tank",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//122",
+      "issueDate": "2026-05-20",
+      "amountFils": 1911000,
+      "kind": "VARIATION",
+      "remark": "VARIATION"
+    },
+    {
+      "supplier": "M/S AL WASL TRADING GROUP",
+      "description": "Fat Testing",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//130",
+      "issueDate": "2026-06-13",
+      "amountFils": 1890000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S PRIME TECHNOLOGYIES LLC",
+      "description": "Acoustic Formep Study",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO/HVAC/018",
+      "issueDate": "2025-05-12",
+      "amountFils": 1837500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S LEO MIDDLE EAST FZE",
+      "description": " Booster Pump ",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//059",
+      "issueDate": "2025-08-05",
+      "amountFils": 1680000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S TECNALCO",
+      "description": "Motorized Smoke & Fire Damper Double Skin Blade, Prd, Nrd",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//047",
+      "issueDate": "2025-06-30",
+      "amountFils": 1555800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MUSANDAM ELECTRICAL EQUIPMENT",
+      "description": "Pvc Conduit & Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO/EL/011",
+      "issueDate": "2025-04-05",
+      "amountFils": 1493700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S BINBAY METAL INDUSTRIES",
+      "description": "Ss 316 L Junction Box With Cover ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//114",
+      "issueDate": "2026-03-24",
+      "amountFils": 1396500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S BOTON ELECTRICAL FITTINGS TRADING LLC",
+      "description": "Ss 316L Conduit & Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//046",
+      "issueDate": "2025-06-20",
+      "amountFils": 1343800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S TECNALCO",
+      "description": "Air Register & Defelction Ss316L ",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//079",
+      "issueDate": "2025-11-11",
+      "amountFils": 1170500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/SBIN BAY METAL INDUSTRIES (S,P,S-L.L.C)",
+      "description": "Grp Trip Tray",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//137",
+      "issueDate": "2026-06-29",
+      "amountFils": 1134000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S METAL CRAFT BUILDING & CONSTRUCTION MATERILAS TRADING L.",
+      "description": "Ss316L General Materilas",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//055",
+      "issueDate": "2025-07-12",
+      "amountFils": 1049900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S LEO PUMP MIDDLE EAST",
+      "description": "Circulation Pump",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//122 (A)",
+      "issueDate": "2026-05-20",
+      "amountFils": 992800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S QUICK SERVICE ALUMINIUM & GLASS WORKS",
+      "description": "Container Rack  & Woodern Partition ",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/020",
+      "issueDate": "2025-05-21",
+      "amountFils": 966000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL TAREEQ AL AKHDHAR SANITARY WARETRADING",
+      "description": "Pressure Pvc ",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//049",
+      "issueDate": "2025-06-26",
+      "amountFils": 952900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AFREEN TECH ELECTROMECHANICAL -LLC",
+      "description": "Hdpe Work",
+      "trade": "Fire Fighting",
+      "refNo": "TEMW/REF/LPO//133 (A)",
+      "issueDate": "2026-06-24",
+      "amountFils": 892500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MOHD.ZAINUL FARAIDOONI L.L.C",
+      "description": "Plumbing Sanitary Wares",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//024",
+      "issueDate": "2025-05-29",
+      "amountFils": 892100,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ZAM ZAM WATER WELL DRILLING CONTRACTING CO .L.L.C",
+      "description": "Earthig Hole  Work",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//134",
+      "issueDate": "2026-06-24",
+      "amountFils": 850500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S LEMINAR AIR CONDITIONING INDUSTRIES LLC",
+      "description": "Acoustic Louver",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//078",
+      "issueDate": "2025-10-31",
+      "amountFils": 839200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MAJID BUKATARA BUILDING MATERILAS TRADING L.L.C",
+      "description": "Ms Expoxy Coated 75 Gpm Oil Interceptor",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//048",
+      "issueDate": "2025-06-26",
+      "amountFils": 787500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S LEO MIDDLE EAST FZE",
+      "description": "Ss Sump Pump",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//072",
+      "issueDate": "2025-10-14",
+      "amountFils": 771800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S . HYDRO SANITARY WARE TRADING",
+      "description": "Upvc Sleeve, Upvc Puddle Sleeve Class & Pvc Puddle Flang",
+      "trade": "Plumbing/Electrical",
+      "refNo": "TEMW/REF/LPO/PL/EL/013",
+      "issueDate": "2025-04-21",
+      "amountFils": 692100,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ELECRICAL CENTER",
+      "description": "Msfd  Control Panel ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//113",
+      "issueDate": "2026-03-05",
+      "amountFils": 660600,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL TAREEQ AL AKHDHAR SANITARY WARETRADING",
+      "description": "Upvc, Pex, Ppr Pipes And Fittings",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//027",
+      "issueDate": "2025-05-26",
+      "amountFils": 652200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ROYAL EMIRATES HARDWARES TRADING L.L.C",
+      "description": "Tools",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/005",
+      "issueDate": "2025-02-25",
+      "amountFils": 561800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SEAGULL HVAC INDUSTRY LLC",
+      "description": "Sound Attenuator For Fahu& Genset",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//058",
+      "issueDate": "2025-07-22",
+      "amountFils": 548300,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL TAREEQ AL AKHDHAR SANITARY WARETRADING",
+      "description": "Hdpe Pipes And Fitting -Drainage Work",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO/PL/030",
+      "issueDate": "2025-06-30",
+      "amountFils": 546000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S WORLD TRANSPORT SOLE PROPERTORSHIP L.L.C",
+      "description": "Container Shifting",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//056",
+      "issueDate": "2025-07-15",
+      "amountFils": 546000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S WIRELESS TECHNOLOGY LLC",
+      "description": "Adcd Approval ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//143",
+      "issueDate": "2026-07-10",
+      "amountFils": 525000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S PIONEER ELECTRICAL LLC",
+      "description": "Heat Resisitance Flexible Cable",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//036",
+      "issueDate": "2025-05-30",
+      "amountFils": 504000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S GULF DUCT INDUSTRIESLLC",
+      "description": "Gi Duct & Accessories",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//128",
+      "issueDate": "2026-06-04",
+      "amountFils": 502600,
+      "kind": "VARIATION",
+      "remark": "VARIATION"
+    },
+    {
+      "supplier": "M/S KAKARAS ELECT & SANITARY WARE TRADING L.L.C",
+      "description": "Indentification Labels",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//121",
+      "issueDate": "2026-05-23",
+      "amountFils": 494300,
+      "kind": "STANDARD",
+      "remark": "MEP"
+    },
+    {
+      "supplier": "M/S ELECTRA ABU DHABI LLC",
+      "description": "Wiring Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//023",
+      "issueDate": "2025-05-21",
+      "amountFils": 491600,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MUSANDAM ELECTRICAL EQUIPMENT",
+      "description": "Industrial Socket & Floor Box",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//040",
+      "issueDate": "2025-06-09",
+      "amountFils": 468300,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ROYAL EMIRATES HARDWARE TRADING LLC",
+      "description": "General Materials",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//139",
+      "issueDate": "2026-07-06",
+      "amountFils": 466700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S PIONEER ELECTRICAL LLC",
+      "description": "Heat Resisitance  Flexible  Cable",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//105",
+      "issueDate": "2026-02-16",
+      "amountFils": 462000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S UNIGULF DEVELOPMENT LLC",
+      "description": "Board Insulation  Duct & Fiber Glass Insulation",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//026R1",
+      "issueDate": "2026-04-15",
+      "amountFils": 449300,
+      "kind": "STANDARD",
+      "remark": "SA"
+    },
+    {
+      "supplier": "M/S UNIGULF DEVELOPMWNT LLC",
+      "description": "Copper Pipe Insulation",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//052",
+      "issueDate": "2025-07-09",
+      "amountFils": 447700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SILVER WAVES ELELCTRICAL EQUIPMENT TRADING",
+      "description": "Cable  Ties , Stailless Steeel Ties",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//107",
+      "issueDate": "2026-02-17",
+      "amountFils": 435200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S BINBAY METAL INDUSTRIES",
+      "description": "Ss Junction Box",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO/EL/014R1",
+      "issueDate": "2025-05-07",
+      "amountFils": 420000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S NEW SMART OFFICE AUTOMATION L.L.C",
+      "description": "Photcopier Annaul Maintenance Contract Renewal",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/012",
+      "issueDate": "2025-04-17",
+      "amountFils": 419900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S METAL CRAFT BUILDING & CONSTRUCTION MATERIALS TRADING L.",
+      "description": "Ss L Angle",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//138",
+      "issueDate": "2026-07-04",
+      "amountFils": 409500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S CRESCENT SCAFFFOLDING INDUSTRIES LLC",
+      "description": "Scaffolding ",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//077",
+      "issueDate": "2025-10-31",
+      "amountFils": 390600,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL MANFOOS COMPUTERS",
+      "description": "Cctv For Store Monitoring",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//102",
+      "issueDate": "2026-02-10",
+      "amountFils": 388500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S BIN BAY METAL INDUSTRIES (S.P,S-L.LC)",
+      "description": "Flange Collar",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//141",
+      "issueDate": "2026-07-08",
+      "amountFils": 371700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S FINE TOOLS TRADING LLC",
+      "description": "Tools",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/006",
+      "issueDate": "2025-02-25",
+      "amountFils": 360200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S HALIMA TRADING EST",
+      "description": "Window Air Conditioning -2 Tr",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/016",
+      "issueDate": "2025-05-05",
+      "amountFils": 354400,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL SILMIYA HARDWARES L.L.C",
+      "description": "General Materials",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//069",
+      "issueDate": "2025-09-26",
+      "amountFils": 346500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S NEW SMART OFFICE AUTOMATION L.L.C",
+      "description": "Printer   Renewal ",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//132",
+      "issueDate": "2026-06-22",
+      "amountFils": 346500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S FAST TRACK EXPRESS LOGISTICS LLC",
+      "description": "4O Feet Container",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//084",
+      "issueDate": "2025-11-11",
+      "amountFils": 346500,
+      "kind": "STANDARD",
+      "remark": "50% ONLY"
+    },
+    {
+      "supplier": "M/S PHOENIX TRADING COMPANY LLC",
+      "description": "Lsf Cleat &  Bolt",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//106",
+      "issueDate": "2026-02-17",
+      "amountFils": 334100,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SCIEN TECHNIC LLC",
+      "description": "Pvc Conduit & Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO/EL/007",
+      "issueDate": "2025-03-04",
+      "amountFils": 326900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MUSANDUM ELECTRICAL EQUIPMENT CO LLC",
+      "description": "Pvc Conduit & Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//083R1",
+      "issueDate": "2025-11-14",
+      "amountFils": 326300,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ROYAL EMIRATES HARDWARE TRADING LLC",
+      "description": "Electrical  General  ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//108R1",
+      "issueDate": "2026-02-26",
+      "amountFils": 326000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S DANUBE BUILDING MATERILAS FZCO",
+      "description": "Aluminium Cladding",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//082",
+      "issueDate": "2026-03-13",
+      "amountFils": 324400,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SKILLSAFE TRAINING AND INSPECTION SERVICES",
+      "description": "Training For Scafffolding",
+      "trade": "HSE",
+      "refNo": "TEMW/REF/LPO//097",
+      "issueDate": "2025-12-30",
+      "amountFils": 315000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S PROTECH ELECTROMECH SOLUTIONS",
+      "description": "Vibration Isolator",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//063",
+      "issueDate": "2025-08-14",
+      "amountFils": 314500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S OROSTAR EXPROOF ELECTRICAL MATERIALS TRADING LLC",
+      "description": "Ss Junction Box With Cover ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO/GEN/017",
+      "issueDate": "2025-05-07",
+      "amountFils": 296800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL MAFNOOD COMPUTERS",
+      "description": "Laptop For Mr. Param",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//086",
+      "issueDate": "2025-11-18",
+      "amountFils": 290500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL SILMIYA HARDWARES L.L.C",
+      "description": "Fan, Garbafge Bag",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//064",
+      "issueDate": "2025-08-21",
+      "amountFils": 255000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ROYAL EMIRATES TRADING LLC",
+      "description": "Pvc Tarpaulin",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//071",
+      "issueDate": "2025-10-13",
+      "amountFils": 252000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MEAPTASHI CO LTD",
+      "description": "Foster, Selant Etc",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//037",
+      "issueDate": "2025-05-30",
+      "amountFils": 248200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S . WORLD TTANSPORT SOLE PROPERTORSHIP L.L.C",
+      "description": " Mobile Crane",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//039A",
+      "issueDate": "2025-06-02",
+      "amountFils": 236200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S GULF DUCT INDUSTRIESLLC",
+      "description": "Gi Duct & Accessories",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//060",
+      "issueDate": "2025-08-04",
+      "amountFils": 229100,
+      "kind": "STANDARD",
+      "remark": "LPO VALUE5579.47 CLOSED BY 2181+VAT "
+    },
+    {
+      "supplier": "M/S GENUINE STAR TECHNOLOGY L.L.C",
+      "description": "Laptop For  Mr. Fayaz",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//115",
+      "issueDate": "2026-03-11",
+      "amountFils": 220500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S NEW SMART OFFICE AUTOMATION L.L.C",
+      "description": "Toner Cartrridge",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//096",
+      "issueDate": "2025-12-29",
+      "amountFils": 203700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL MAFNOOD COMPUTERS",
+      "description": "Cctv Storage  Back Up",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//119",
+      "issueDate": "2026-05-08",
+      "amountFils": 196800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S UNIGULF DEVELOPMENT LLC",
+      "description": "Plumbing Pipe  Insulation",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//116",
+      "issueDate": "2026-03-23",
+      "amountFils": 192500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MEW SMART OFFICE AUTOMATION LLC",
+      "description": "Vcd & Access Door ",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//044",
+      "issueDate": "2025-06-16",
+      "amountFils": 179900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SEVEN INTERNATIONAL (FZE)",
+      "description": "Health And Safety Materilas",
+      "trade": "HSE",
+      "refNo": "TEMW/REF/LPO/HSE/001",
+      "issueDate": "2025-02-19",
+      "amountFils": 174600,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S NAFFCO ELECTROMECHANICAL CO.L.L.C",
+      "description": "03 Hmi For Variation",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//089",
+      "issueDate": "2025-11-20",
+      "amountFils": 157500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AMAN INTEGRATED SOLUTION - SOLE PROPERTORSHIP LLC",
+      "description": "Chemical Analysis Of Stainless Steel",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//094",
+      "issueDate": "2025-12-18",
+      "amountFils": 157500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MUSANDUM ELECTRICAL EQUIPMENT CO LLC",
+      "description": "Pvc Cconduit & Acceessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//104",
+      "issueDate": "2026-02-16",
+      "amountFils": 151900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/SAL SILMIYA HARDWARES LLC",
+      "description": "Drill Pit Hss",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//074",
+      "issueDate": "2025-10-24",
+      "amountFils": 147000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S DIGITAL STOUT INNOVATION AND TRADING FZC",
+      "description": "B3 Cable Lszh Cable ",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//117",
+      "issueDate": "2026-04-08",
+      "amountFils": 147000,
+      "kind": "STANDARD",
+      "remark": "SA"
+    },
+    {
+      "supplier": "M/S RED UMBRELLA TRANSPORTATION BY HEAVY TRUCKS",
+      "description": "Flat Bedd Trailer Contasiner Shiftinh",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//038R1",
+      "issueDate": "2025-06-02",
+      "amountFils": 147000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ROYAL EMIRATES HARDWARES TRADING L.L.C",
+      "description": "Fire Extinguisher",
+      "trade": "HSE",
+      "refNo": "TEMW/REF/LPO/HSE/002R1",
+      "issueDate": "2024-04-08",
+      "amountFils": 141200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S HYDRO SANIATRY WARE TRADING",
+      "description": "Pressure Pvc -Cdp",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//057",
+      "issueDate": "2025-07-16",
+      "amountFils": 130500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S COOL TRACK AIRCONDITION TRADING LLC",
+      "description": "Rubber Lined Split Claamp",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//126",
+      "issueDate": "2026-06-02",
+      "amountFils": 126400,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ROYAL EMIRATES HARDWARES TRADING L.L.C",
+      "description": "Pvc Tarpaulin",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/021",
+      "issueDate": "2025-05-21",
+      "amountFils": 126000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S OROSTAR EXPROOF ELECTRICAL MATERIALS TRADING LLC",
+      "description": "Junction Box",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//070",
+      "issueDate": "2025-10-01",
+      "amountFils": 125000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S QUICK SERVICE ALUMINIUM GLASS WORKS -L.L.C",
+      "description": "Window Ac Cutting Work",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//062",
+      "issueDate": "2025-08-13",
+      "amountFils": 120800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S GRACE LABEKLS LLC",
+      "description": "Id Engraved Labels & Tags",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//095",
+      "issueDate": "2025-12-29",
+      "amountFils": 120500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL NAHAR SATATIONARY",
+      "description": "Office Supplies",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//033",
+      "issueDate": "2025-05-27",
+      "amountFils": 118800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S MEW SMART OFFICE AUTOMATION LLC",
+      "description": "Toner Cartridge ",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//043",
+      "issueDate": "2025-06-12",
+      "amountFils": 118600,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL SILMIYA HARDWARES LLC",
+      "description": "Genral Materials",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/008R1",
+      "issueDate": "2025-03-04",
+      "amountFils": 115000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S TECNALCO",
+      "description": "Msfd",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//112",
+      "issueDate": "2026-02-28",
+      "amountFils": 111200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL ANAHR STATIONARY",
+      "description": "Office Stationary",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//101",
+      "issueDate": "2026-02-03",
+      "amountFils": 105100,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S PROTECTOL HEALTHY SAFETY TTRADING SOLE PROPERTORSHIP L.L",
+      "description": "Super Enerdrate - Hydration Drinks",
+      "trade": "HSE",
+      "refNo": "TEMW/REF/LPO//035",
+      "issueDate": "2025-05-28",
+      "amountFils": 104000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S NEW SMART OFFICE AUTOMATION L.L.C",
+      "description": "Toner Cartridge ",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO//066",
+      "issueDate": "2025-09-18",
+      "amountFils": 101800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S FOCUS AIR CONDITIONG AN DUSTRIES",
+      "description": "Flexible Duct, Aluminum Foil Tape, Flexible Duct Connector",
+      "trade": "HVAC",
+      "refNo": "TEMW/REF/LPO//025",
+      "issueDate": "2025-06-13",
+      "amountFils": 101400,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "MATERIALS TRANSFER FROM AL WASL TO MID ISALAND",
+      "description": "Pvc Conduit & Accessories",
+      "trade": "Internal",
+      "refNo": "INTERNAL MATERILAS TRANSFER",
+      "issueDate": "2025-03-25",
+      "amountFils": 92100,
+      "kind": "INTERNAL_TRANSFER",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ABDULLA NAJIM ELECTRICAL APPLIANCES CO.W.L.L",
+      "description": "Office Work Materilas",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO/GEN/004",
+      "issueDate": "2025-02-25",
+      "amountFils": 89900,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ELECTRA ABU DHABI",
+      "description": "Ceiling Rose",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//103",
+      "issueDate": "2026-02-16",
+      "amountFils": 85700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S OROSTAR EXPROOF ELELCTRUICAL MATERILAS TRADING LLC",
+      "description": "Ss Junction Box",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//050",
+      "issueDate": "2025-06-26",
+      "amountFils": 83800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S EMERALD ENGINEERING AND INNOVATIVE SOLUTIONS",
+      "description": "Hdg Steel Pole",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//140",
+      "issueDate": "2026-07-09",
+      "amountFils": 78800,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S AL NAHAR STATIONARY",
+      "description": "Office Supplier",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/003",
+      "issueDate": "2025-02-21",
+      "amountFils": 78700,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SILVER WAVES ELELCTRICAL EQUIPMENT TRADING",
+      "description": "Din Rail Connector",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//127 (A)",
+      "issueDate": "2026-06-09",
+      "amountFils": 63300,
+      "kind": "VARIATION",
+      "remark": "VARIATION"
+    },
+    {
+      "supplier": "M/S .HIRA WALRAVEN METAL INDUSTRIES L.L.C",
+      "description": "Rubber Lined Split Claamp",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO//028",
+      "issueDate": "2025-05-22",
+      "amountFils": 61300,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S SKILLSAFE TRIANING AND INSPECTTION SERVICES",
+      "description": "3Rd Party Inspection Certificate",
+      "trade": "HSE",
+      "refNo": "TEMW/REF/LPO//075",
+      "issueDate": "2025-10-23",
+      "amountFils": 52500,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S M.AH.Y KHOORY CO.L.L.C",
+      "description": "Electric Water Heater",
+      "trade": "Plumbing",
+      "refNo": "TEMW/REF/LPO/EL/029",
+      "issueDate": "2025-05-23",
+      "amountFils": 47200,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ROYAL EMIRATES HARDWARES TRADING L.L.C",
+      "description": "Tarpaulin Sheet Blue Ft X40Ft",
+      "trade": "General",
+      "refNo": "TEMW/REF/LPO/GEN/015",
+      "issueDate": "2025-04-30",
+      "amountFils": 42000,
+      "kind": "STANDARD",
+      "remark": null
+    },
+    {
+      "supplier": "M/S ELECTRA ABU DHABI",
+      "description": "Wiring Accessories",
+      "trade": "Electrical",
+      "refNo": "TEMW/REF/LPO//098",
+      "issueDate": "2026-01-02",
+      "amountFils": 24700,
+      "kind": "STANDARD",
+      "remark": null
+    }
+  ],
+  "pcs": [
+    {
+      "pcNumber": 1,
+      "periodLabel": "Apr 2025",
+      "invoiceDate": "2025-05-07",
+      "netFils": 115248900,
+      "retentionFils": 5776900,
+      "variationClaimFils": 0,
+      "provenance": "SOURCE_DOCUMENT",
+      "notes": "First claim — covers mobilization value too"
+    },
+    {
+      "pcNumber": 2,
+      "periodLabel": "Upto 25 Jun 2025",
+      "invoiceDate": "2025-07-07",
+      "netFils": 33402900,
+      "retentionFils": 1674300,
+      "variationClaimFils": 0,
+      "provenance": "SOURCE_DOCUMENT",
+      "notes": "Confirmed — matched earlier derived estimate to the fils"
+    },
+    {
+      "pcNumber": 3,
+      "periodLabel": "Jun 2025",
+      "invoiceDate": null,
+      "netFils": 35979700,
+      "retentionFils": 0,
+      "variationClaimFils": 0,
+      "provenance": "CLIENT_SUMMARY",
+      "notes": "CHEC certification summary, not Trends invoice"
+    },
+    {
+      "pcNumber": 4,
+      "periodLabel": "Jul 2025",
+      "invoiceDate": "2025-09-18",
+      "netFils": 29395200,
+      "retentionFils": 1473400,
+      "variationClaimFils": 0,
+      "provenance": "SOURCE_DOCUMENT",
+      "notes": null
+    },
+    {
+      "pcNumber": 5,
+      "periodLabel": "Aug 2025",
+      "invoiceDate": "2025-10-17",
+      "netFils": 46076800,
+      "retentionFils": 2309600,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    },
+    {
+      "pcNumber": 6,
+      "periodLabel": "Sep 2025",
+      "invoiceDate": "2025-11-04",
+      "netFils": 30655100,
+      "retentionFils": 1536600,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    },
+    {
+      "pcNumber": 7,
+      "periodLabel": "Oct 2025",
+      "invoiceDate": "2025-12-04",
+      "netFils": 32761400,
+      "retentionFils": 1349200,
+      "variationClaimFils": 5566500,
+      "provenance": "SOURCE_DOCUMENT",
+      "notes": "Incl. first AED 55,665 variation-works claim"
+    },
+    {
+      "pcNumber": 8,
+      "periodLabel": "Nov 2025",
+      "invoiceDate": "2026-01-16",
+      "netFils": 89012900,
+      "retentionFils": 4461000,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    },
+    {
+      "pcNumber": 9,
+      "periodLabel": "Dec 2025",
+      "invoiceDate": "2026-01-30",
+      "netFils": 106578100,
+      "retentionFils": 5342300,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    },
+    {
+      "pcNumber": 10,
+      "periodLabel": "Jan 2026",
+      "invoiceDate": "2026-03-06",
+      "netFils": 87049000,
+      "retentionFils": 4363400,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    },
+    {
+      "pcNumber": 11,
+      "periodLabel": "Feb 2026",
+      "invoiceDate": "2026-03-25",
+      "netFils": 99509000,
+      "retentionFils": 4892800,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    },
+    {
+      "pcNumber": 12,
+      "periodLabel": "Mar 2026",
+      "invoiceDate": "2026-04-21",
+      "netFils": 67588300,
+      "retentionFils": 3237900,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    },
+    {
+      "pcNumber": 13,
+      "periodLabel": "Apr 2026",
+      "invoiceDate": "2026-06-01",
+      "netFils": 164429700,
+      "retentionFils": 8093000,
+      "variationClaimFils": 2833600,
+      "provenance": "SOURCE_DOCUMENT",
+      "notes": "Incl. AED 28,336 variation-works claim"
+    },
+    {
+      "pcNumber": 14,
+      "periodLabel": "May 2026",
+      "invoiceDate": "2026-06-29",
+      "netFils": 95510800,
+      "retentionFils": 4399300,
+      "variationClaimFils": 0,
+      "provenance": "OCR_ESTIMATE",
+      "notes": null
+    }
+  ]
+}

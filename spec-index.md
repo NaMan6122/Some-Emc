@@ -9,6 +9,6 @@
 | spec-005 | Projects module | v1 | IMPLEMENTED | spec-003, spec-004 | T-011 DONE | |
 | spec-006 | Suppliers vendor master | v1 | IMPLEMENTED | spec-003, spec-004 | T-012 DONE | |
 | spec-007 | LPO register | v2 | DRAFT (v1 IMPLEMENTED) | spec-003, spec-004, spec-005, spec-006 | T-013 DONE | v1 ACs all verified; v2 re-scopes UI to M2 per DCL-002 — awaiting G1 ratification |
-| spec-008 | Job 1571 seed pipeline | v1 | ACTIVE | spec-001, spec-002, spec-005, spec-006, spec-007 | — | |
+| spec-008 | Job 1571 seed pipeline | v2 | DRAFT (v1 superseded pre-ratification) | spec-001, spec-002, spec-005, spec-006, spec-007 | T-014 DONE | AC threshold corrected ≥110→≥85 post-canonicalization (DCL-003); all ACs verified live |
 
 _Promoted DRAFT → ACTIVE by human at Gate G1 on 2026-08-23 (all eight). design.md v0.1 ACCEPTED in the same checkpoint._

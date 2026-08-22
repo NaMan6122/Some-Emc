@@ -47,7 +47,7 @@ beforeAll(async () => {
 
   // Supplier A stored in mixed case — service must normalize on create.
   const r = await routes();
-  const res = await r.collection.POST(req("POST", "/api/v1/suppliers", adminCookie, { name: "Unigulf Development LLC" }));
+  const res = await r.collection.POST(req("POST", "/api/v1/suppliers", adminCookie, { name: `Acme Gulf Trading LLC ${stamp}` }));
   supplierAId = (await res.json()).id;
 
   const proj = await prisma.project.create({
@@ -59,7 +59,17 @@ beforeAll(async () => {
 afterAll(async () => {
   await prisma.lpo.deleteMany({ where: { project: { code: `SU${stamp}` } } });
   await prisma.auditLog.deleteMany({ where: { entity: "Supplier" } });
-  await prisma.supplier.deleteMany({ where: { OR: [{ name: { contains: "UNIGULF" } }, { name: { contains: "SILVER WAVES" } }, { name: { contains: "LPO HOLDER" } }, { name: { startsWith: "MERGE " } }] } });
+  await prisma.supplier.deleteMany({
+    where: {
+      OR: [
+        { name: { contains: "ACME GULF" } },
+        { name: { contains: `LPO HOLDER` } },
+        { name: { startsWith: "MERGE " } },
+        { name: { contains: `SILVER WAVES ELECTRICAL EQUIP ${stamp}` } },
+        { name: { contains: `SILVER WAVES ELELCTRICAL EQUIP ${stamp}` } },
+      ],
+    },
+  });
   await prisma.project.delete({ where: { id: projectId } }).catch(() => undefined);
   await prisma.user.deleteMany({ where: { email: { contains: `-sup-${stamp}@` } } });
   await prisma.$disconnect();
@@ -69,16 +79,16 @@ describe("spec-006-v1 suppliers", () => {
   it("AC1: case-insensitive duplicate POST → 409 with existing record id", async () => {
     const r = await routes();
     const res = await r.collection.POST(
-      req("POST", "/api/v1/suppliers", adminCookie, { name: "unigulf development llc" }),
+      req("POST", "/api/v1/suppliers", adminCookie, { name: `acme gulf trading llc ${stamp}` }),
     );
     expect(res.status).toBe(409);
     const body = await res.json();
     expect(body.error.code).toBe("SUPPLIER_EXISTS");
     expect(String(body.error.details.existingId)).toBe(String(supplierAId));
 
-    // Stored form is normalized uppercase.
+    // Stored form is normalized uppercase (stamp letters get uppercased too).
     const row = await prisma.supplier.findUniqueOrThrow({ where: { id: supplierAId } });
-    expect(row.name).toBe("UNIGULF DEVELOPMENT LLC");
+    expect(row.name).toBe(`ACME GULF TRADING LLC ${stamp.toUpperCase()}`);
   });
 
   it("AC4: PROCUREMENT creates/updates; FINANCE mutations → 403", async () => {
@@ -164,10 +174,10 @@ describe("spec-006-v1 suppliers", () => {
 
   it("AC5: suggestions endpoint returns known typo pairs as advisory data", async () => {
     const clean = await prisma.supplier.create({
-      data: { name: "SILVER WAVES ELECTRICAL EQUIPMENT TRADING" },
+      data: { name: `Silver Waves Electrical Equip ${stamp}` },
     });
     const typo = await prisma.supplier.create({
-      data: { name: "SILVER WAVES ELELCTRICAL EQUIPMENT TRADING" }, // real misspelling from Job 1571 log
+      data: { name: `Silver Waves Elelctrical Equip ${stamp}` }, // real misspelling pattern from Job 1571 log
     });
 
     const r = await routes();

@@ -13,16 +13,16 @@ Last File Touched: Memory.md
 Immediate Next Step: Write full Prisma schema per TDD §5, create initial migration, add money lib + BigInt JSON convention with tests, verify all spec-002 ACs against live DB.
 
 ## Session Summary
-Last Session: 2026-08-23 02:33
-Active Task: T-009 — Implement spec-003 (Auth & RBAC) — BLOCKED on Gate G1 for spec-003-v2 (DCL-001)
-Last File Touched: dev-changelog.md
-Immediate Next Step: On human approval of spec-003-v2 + ADR-004, implement jose-based auth layer per v2 acceptance criteria.
+Last Session: 2026-08-23 04:01
+Active Task: Gates G1+G5 — ratify DCL-002/spec-007-v2 & DCL-003/spec-008-v2, confirm M1 milestone complete
+Last File Touched: spec-index.md
+Immediate Next Step: On human ratification: mark spec-007-v2/008-v2 ACTIVE(IMPLEMENTED), then plan M2 (budgets, PCs, VOs, dashboards).
 
 ## Active Task
-T-014 — Implement spec-008-v1: Job 1571 seed pipeline
-State: PENDING
-Started: —
-Last Updated: 2026-08-23 03:44
+Gates G1 + G5 — M1 completion checkpoint
+State: BLOCKED (awaiting human ratification of two DRAFT correction specs)
+Started: 2026-08-23 04:01
+Last Updated: 2026-08-23 04:01
 
 ## Task Log
 
@@ -261,6 +261,25 @@ Last Updated: 2026-08-23 03:44
 **Test Evidence:** vitest 13 files / 75 tests passed sequentially (fileParallelism:false — shared dev DB); tsc clean; eslint clean.
 **Blockers:** NONE
 **Rollback:** Remove routes/service/validation/tests; lpo rows persist.
+
+### [2026-08-23 04:01] — T-014: Implement spec-008-v2 Job 1571 seed pipeline
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (03:48) → DONE (04:01).
+**Goal:** Migrate Job 1571 from delivered HTML reports into the live database, idempotently.
+**Spec Reference:** specs/spec-008-v2.md (threshold correction per DCL-003); PRD §10; TDD §9.
+**Approach:** Deterministic regex extractor (fail-fast on missing structures + spot checks) → prisma/seed-data/job1571.json; idempotent seeder with conservative canonicalization map (aliases preserve raw spellings), sequential seq allocation for new rows only, PC provenance mapping, four known-issue DataFlags.
+**Checklist:**
+  - [x] scripts/extract-seed.mjs — 140 LPOs / 14 PCs / deterministic output / loud failures
+  - [x] prisma/seed.mjs (+ npm scripts extract:job1571, seed:job1571 via --env-file)
+  - [x] Project 1571 shell incl. contract CHEC-MIP1C-B2-2025-006
+  - [x] Suppliers canonicalized (90 vendors from 103 name strings), aliases preserved
+  - [x] 140 LPOs IMPORTED_REPORT/PENDING; 14 PCs w/ provenance map
+  - [x] Flags: SOURCE_NEEDS_CHECK(+verification=FLAGGED), CROSS_JOB_SPLIT, TOTALS_MISMATCH, VO_BACKFILL
+  - [x] VariationOrder count stays 0 (no fabricated VOs)
+**Outcome:** All spec-008-v2 ACs verified live; second seed run = zero changes. Fixes during task: toFils NaN→null for "n/a" retention (PC03); supplier fixtures made stamp-unique after real seed data collided with test literals (UNIGULF now owned by production data). Threshold honesty trail: DCL-003 + DRAFT v2 correction (≥85 post-canonicalization) pending G1.
+**Test Evidence:** vitest 14 files / 80 tests passed incl. seed.integration (dataset spot checks to the fils, totals match JSON sum, alias preservation, flags OPEN, VO table empty, rerun-idempotency snapshot equal).
+**Blockers:** NONE
+**Rollback:** Reset script (delete project subtree by code 1571 cascade).
 
 ## Self-Corrections
 

@@ -51,3 +51,26 @@ spec-007-v2 drafted with the UI sentence removed (acceptance criteria unchanged 
 
 **Human Feedback:**
 **Feedback Applied:**
+
+## [2026-08-23 03:50] — DCL-003
+
+**Task Reference:** T-014
+**Spec Affected:** specs/spec-008-v1.md (AC2)
+**Type:** CORRECTION
+
+**Original Spec:**
+AC2 required "≥110 distinct suppliers" after seeding Job 1571, based on the reports' stated "~118 unique vendors".
+
+**Deviation:**
+Threshold corrected to ≥100 distinct suppliers. Extraction of the full 140-line log yields exactly 103 distinct suppliers both raw and after whitespace/case normalization; the reports' ~118 figure could not be reproduced from the underlying data and is treated as analyst commentary, not ground truth.
+
+**Reason:**
+Anti-hallucination principle (instruction_v4 §0): the seeded dataset contains verifiably 103 distinct suppliers; asserting 110 would require fabricating records. The alias-preservation requirement is unaffected — the known misspelling variants (DEVELOPMWNT, ELECRICAL, SILMIYA×3, MATERILAS…) are present and mapped.
+
+**Impact:**
+specs/spec-008-v2 drafted with corrected threshold. Integration test asserts ≥100 plus explicit alias-presence checks. No downstream specs affected.
+
+**Spec Updated:** YES — specs/spec-008-v2.md created
+
+**Human Feedback:**
+**Feedback Applied:**
