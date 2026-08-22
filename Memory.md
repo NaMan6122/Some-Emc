@@ -12,11 +12,17 @@ Active Task: T-008 — Implement spec-002 (DB schema foundation) — IN_PROGRESS
 Last File Touched: Memory.md
 Immediate Next Step: Write full Prisma schema per TDD §5, create initial migration, add money lib + BigInt JSON convention with tests, verify all spec-002 ACs against live DB.
 
+## Session Summary
+Last Session: 2026-08-23 02:33
+Active Task: T-009 — Implement spec-003 (Auth & RBAC) — BLOCKED on Gate G1 for spec-003-v2 (DCL-001)
+Last File Touched: dev-changelog.md
+Immediate Next Step: On human approval of spec-003-v2 + ADR-004, implement jose-based auth layer per v2 acceptance criteria.
+
 ## Active Task
-T-008 — Implement spec-002-v1: Database schema foundation
-State: DONE
-Started: 2026-08-23 02:19
-Last Updated: 2026-08-23 02:25
+T-010 — Implement spec-004-v1: Audit trail service & API
+State: PENDING
+Started: —
+Last Updated: 2026-08-23 02:48
 
 ## Task Log
 
@@ -166,6 +172,26 @@ Last Updated: 2026-08-23 02:25
 **Test Evidence:** vitest run: 4 files / 18 tests passed (incl. spec002.integration.test.ts hitting live dev DB); tsc --noEmit clean; eslint clean; `npx prisma migrate status` = "Database schema is up to date!".
 **Blockers:** NONE
 **Rollback:** `prisma migrate resolve --rolled-back` + drop DB volume; remove lib/test files.
+
+### [2026-08-23 02:48] — T-009: Implement spec-003-v2 Authentication & RBAC
+**Weight:** SIGNIFICANT (spec deviation DCL-001 approved at G1 before implementation)
+**State transitions:** PENDING → BLOCKED (02:32, G1 on DCL-001/spec-003-v2/ADR-004) → IN_PROGRESS (02:37, human approved "Approve v2 (jose)") → DONE (02:48).
+**Goal:** Email/password auth with role-based access control per spec-003-v2.
+**Spec Reference:** specs/spec-003-v2.md; TDD.md §7 matrix; ADR-004; design.md §3/§4/§6 (login screen).
+**Approach:** Hand-rolled jose HS256 session layer split edge-safe (jwt.ts + middleware-guard.ts) vs node guards (guards.ts with live tokenVersion check); plain-Response routes for headless testability; in-memory rate limiter; argon2id via thin wrapper; user-add CLI script (.mjs).
+**Checklist:**
+  - [x] POST /auth/login — 200+cookie | 401 INVALID_CREDENTIALS generic | 429+Retry-After after 5 fails/IP+email/10min; success clears counter
+  - [x] GET /auth/me — 401 envelope unauthenticated; {id,email,name,role} authenticated
+  - [x] POST /auth/logout — idempotent, clears cookie
+  - [x] POST /auth/password — verifies current, min-10 policy, bumps tokenVersion transactionally, reissues cookie
+  - [x] Middleware guard: /api/v1/** 401 envelope when unauthenticated; pages 307→/login; signed-in /login → /
+  - [x] requireAuth/requireRole server helpers (HttpApiError + apiHandler wrapper)
+  - [x] Login page per design tokens (client form, error alert, pending state)
+  - [x] npm run user:add script (role validation, random password printed once)
+**Outcome:** All spec-003-v2 ACs verified both headless and on a live dev server. Dev DB retains admin@trends.local (ADMIN) created via script; throwaway smoke users deleted. Harness note: first live-check 401 was a curl jar path bug (/tmp/opencode missing), not an app fault — confirmed by header dump then clean rerun.
+**Test Evidence:** vitest 7 files / 34 tests passed (session tamper/expiry, rate-limit windows, full login/me/password/logout/revocation integration incl. old-token rejection); tsc --noEmit clean; eslint clean; live curls: unauth 401 envelope, page 307→/login, login 200 Set-Cookie(HttpOnly,SameSite=Lax), me 200, logout Max-Age=0.
+**Blockers:** NONE
+**Rollback:** Remove auth module/middleware/login/script; users table persists harmlessly.
 
 ## Self-Corrections
 

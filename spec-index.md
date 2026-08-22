@@ -4,7 +4,7 @@
 |---|---|---|---|---|---|---|
 | spec-001 | Application scaffold & toolchain | v1 | ACTIVE | NONE | T-007 IN_PROGRESS | |
 | spec-002 | Database schema foundation | v1 | IMPLEMENTED | spec-001 | T-008 DONE | Case-insensitive supplier uniqueness enforced at service layer (uppercase invariant), documented in schema |
-| spec-003 | Authentication & RBAC | v1 | ACTIVE | spec-001, spec-002 | — | |
+| spec-003 | Authentication & RBAC | v2 | IMPLEMENTED | spec-001, spec-002 | T-009 DONE | v1 DEPRECATED by DCL-001; v2 + ADR-004 approved at G1 2026-08-23 |
 | spec-004 | Audit trail service & API | v1 | ACTIVE | spec-002, spec-003 | — | |
 | spec-005 | Projects module | v1 | ACTIVE | spec-003, spec-004 | — | |
 | spec-006 | Suppliers vendor master | v1 | ACTIVE | spec-003, spec-004 | — | |

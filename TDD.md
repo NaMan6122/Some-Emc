@@ -43,7 +43,7 @@ PostgreSQL 16 (Prisma ORM)
 | Framework | Next.js 15 (App Router, TS strict) | NestJS API + Vite SPA | Human-selected; one codebase/deploy for small team; API routes sufficient for REST v1 |
 | DB | PostgreSQL 16 | SQLite, MySQL | ACID + numeric types + window functions for cumulative analytics; required in dev via Docker |
 | ORM | Prisma | Drizzle, Kysely | Typed schema-first workflow, migrations tooling mature |
-| Auth | Auth.js v5 credentials provider, JWT httpOnly cookie, argon2id hashes (@node-rs/argon2) | DB sessions, NextAuth OAuth-only | Stateless sessions fine at this scale; revocation handled by token rotation + password change bumping `tokenVersion` |
+| Auth | Hand-rolled jose JWT sessions (httpOnly, SameSite=Lax), argon2id hashes (@node-rs/argon2) — per DCL-001/ADR-004 | Auth.js v5 (superseded: envelope/429/testability conflicts) | Stateless sessions fine at this scale; revocation handled by tokenVersion bump |
 | Validation | Zod (shared client/server) | class-validator, yup | One schema drives API validation + form types |
 | Charts | Recharts | Chart.js (used in current reports), ECharts | Native React composition; SSR-friendly |
 | Tables | TanStack Table | plain HTML tables | Sorting/filtering/pagination needed for the LPO log |

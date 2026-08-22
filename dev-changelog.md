@@ -5,3 +5,26 @@ Append-only audit trail of spec deviations per instruction_v4.md §5. Entries ar
 ---
 
 _No entries yet._
+
+## [2026-08-23 02:32] — DCL-001
+
+**Task Reference:** T-009
+**Spec Affected:** specs/spec-003-v1.md (+ TDD.md §3 stack table "Auth" row)
+**Type:** SUBSTITUTION
+
+**Original Spec:**
+spec-003-v1 / TDD §3 / ADR-003 specified authentication built on Auth.js v5 (`next-auth@beta`) credentials provider issuing JWT httpOnly SameSite=Lax cookies, with argon2id hashing, tokenVersion revocation, middleware route protection, server-side requireRole(), in-memory login rate limiting, endpoints POST /auth/login | /auth/logout, GET /auth/me, minimal login page, and admin user creation script.
+
+**Deviation:**
+Authentication will be implemented as a lightweight hand-rolled session layer using `jose` (HS256 JWT in httpOnly, SameSite=Lax, Secure-in-prod cookie) instead of Auth.js v5. All security properties are preserved: argon2id hashes (@node-rs/argon2), 7-day sliding expiry, tokenVersion revocation, middleware protection, requireRole(), rate limiting, same endpoint paths, same login page, same admin script.
+
+**Reason:**
+Three spec-003 acceptance criteria conflict with Auth.js v5's fixed flows: (1) AC requires HTTP 429 + Retry-After header after 5 failed logins/IP+email — next-auth emits only 401/redirects from its credential flow; (2) TDD §8 mandates the `{error:{code,message}}` envelope on API responses — next-auth returns its own body shapes on /csrf,/login,/session; (3) role-matrix integration tests must be headless JSON calls — next-auth's form-encoded CSRF-token handshake complicates them unnecessarily at this scale. Hand-rolling (~120 LOC with jose) satisfies every stated security property while conforming to all three criteria.
+
+**Impact:**
+specs/spec-003-v1 → DEPRECATED, replaced by specs/spec-003-v2 (same acceptance criteria, revised implementation basis). TDD.md §3 stack-table Auth row to be updated to "jose JWT sessions" once approved. ADR-003 superseded by ADR-004 documenting the evaluated options. No downstream spec changes (spec-004..008 consume only requireRole()/session helpers whose signatures are unchanged).
+
+**Spec Updated:** YES — specs/spec-003-v2.md created
+
+**Human Feedback:**
+**Feedback Applied:**
