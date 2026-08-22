@@ -1,11 +1,16 @@
-import { EmptyState } from "@/components/ui/primitives";
+import { LpoLogClient } from "./LpoLogClient";
+import { PageHeader } from "@/components/ui/primitives";
 
-export default function Page() {
+// spec-010-v1: Vendors & LPO Log — the register screen.
+export default function VendorsPage() {
   return (
-    <div className="mx-auto max-w-3xl">
-      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">ProCare</p>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Vendors & LPO Log</h1>
-      <EmptyState title="Vendors & LPO Log" body="LPO log screen lands here next — spec-010." />
+    <div className="mx-auto max-w-[1200px]">
+      <PageHeader
+        eyebrow="Analytics"
+        title="Vendors & LPO Log"
+        context="Local purchase orders incl. 5% VAT · server-computed totals"
+      />
+      <LpoLogClient />
     </div>
   );
 }

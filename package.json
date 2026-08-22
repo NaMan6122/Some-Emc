@@ -17,7 +17,7 @@
   "dependencies": {
     "@node-rs/argon2": "^2.1.0",
     "@prisma/client": "^6",
-    "@tanstack/react-table": "^9.1.2",
+    "@tanstack/react-table": "^8.21.3",
     "jose": "^6.2.10",
     "next": "^15.5.0",
     "react": "19.2.8",

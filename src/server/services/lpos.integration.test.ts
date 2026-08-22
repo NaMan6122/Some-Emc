@@ -309,6 +309,12 @@ describe("spec-007-v1 LPO register", () => {
       { params: Promise.resolve({ id }) },
     );
     expect(flagged.status).toBe(200);
+    // spec-010 AC6 (drawer): chain response carries the open flag note.
+    const flaggedChain = await (await r.item.GET(
+      new Request(`http://localhost/api/v1/lpos/${id}`, { headers: { cookie: cookies.PROCUREMENT } }),
+      { params: Promise.resolve({ id }) },
+    )).json();
+    expect(flaggedChain.flagNote).toBe("manhole value needs check");
     const openFlag = await prisma.dataFlag.findFirst({
       where: { entityType: "Lpo", entityId: id, ruleCode: "VERIFICATION_FLAGGED", status: "OPEN" },
     });

@@ -11,7 +11,7 @@
 | spec-007 | LPO register | v2 | IMPLEMENTED | spec-003, spec-004, spec-005, spec-006 | T-013 DONE | v2 ratified at G1 2026-08-23; UI re-scoped to M2 (DCL-002) |
 | spec-008 | Job 1571 seed pipeline | v2 | IMPLEMENTED | spec-001, spec-002, spec-005, spec-006, spec-007 | T-014 DONE | v2 ratified at G1 2026-08-23; ≥85 vendors post-canonicalization (DCL-003) |
 | spec-009 | App shell & navigation | v1 | IMPLEMENTED | spec-003 | T-016 DONE | Design tokens now live in globals.css |
-| spec-010 | LPO log screen | v1 | ACTIVE | spec-007, spec-009 | — | Ratified (DCL-002 deliverable) |
+| spec-010 | LPO log screen | v1 | IMPLEMENTED | spec-007, spec-009 | T-017 DONE | Ratified (DCL-002 deliverable) |
 | spec-011 | Budgets module (JCA) | v1 | ACTIVE | spec-004, spec-005 | — | Ratified; queued |
 | spec-012 | Payment certificates module | v1 | ACTIVE | spec-004, spec-005 | — | Ratified; queued |
 | spec-013 | Variation orders module | v1 | ACTIVE | spec-004, spec-005, spec-007 | — | Ratified; queued |

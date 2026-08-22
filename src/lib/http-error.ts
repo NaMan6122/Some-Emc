@@ -14,14 +14,19 @@ import { apiError } from "@/lib/api-envelope";
 /**
  * Wrap a Next.js route handler so HttpApiError becomes a proper envelope
  * response; unknown errors log server-side and emit a generic envelope.
- * The context param (dynamic-route params etc.) is passed through untouched.
+ * Overloads let dynamic-route handlers declare a required context (Next's
+ * typed-routes validation demands it) while static ones stay single-arg.
  */
-export function apiHandler<C = unknown>(
+export function apiHandler(fn: (request: Request) => Promise<Response>): (request: Request) => Promise<Response>;
+export function apiHandler<C>(
   fn: (request: Request, ctx: C) => Promise<Response>,
-): (request: Request, ctx?: C) => Promise<Response> {
-  return async (request: Request, ctx?: C) => {
+): (request: Request, ctx: C) => Promise<Response>;
+export function apiHandler(
+  fn: (request: Request, ctx?: unknown) => Promise<Response>,
+): (request: Request, ctx?: unknown) => Promise<Response> {
+  return async (request: Request, ctx?: unknown) => {
     try {
-      return await fn(request, ctx as C);
+      return await fn(request, ctx);
     } catch (e) {
       if (e instanceof HttpApiError) {
         return Response.json(apiError(e.code, e.message, e.details), { status: e.status });
@@ -31,3 +36,4 @@ export function apiHandler<C = unknown>(
     }
   };
 }
+

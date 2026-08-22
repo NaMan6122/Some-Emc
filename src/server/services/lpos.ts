@@ -139,7 +139,13 @@ export async function getLpoChain(rawId: string) {
       description: true,
     },
   });
-  return { ...current, chain };
+  // spec-010 AC6: the drawer shows why a line is flagged.
+  const openFlag = await prisma.dataFlag.findFirst({
+    where: { entityType: "Lpo", entityId: String(id), ruleCode: "VERIFICATION_FLAGGED", status: "OPEN" },
+    orderBy: { createdAt: "desc" },
+    select: { message: true },
+  });
+  return { ...current, flagNote: openFlag?.message ?? null, chain };
 }
 
 export async function patchLpo(actorId: number, role: Role, rawId: string, patch: PatchLpoInput) {

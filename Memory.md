@@ -1,18 +1,43 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-23 04:24
-Active Task: T-017 — Implement spec-010 (LPO log screen) — PENDING
+Last Session: 2026-08-23 04:48
+Active Task: T-018 — Implement spec-011 (Budgets module) — PENDING
 Last File Touched: Memory.md
-Immediate Next Step: Implement spec-010 LPO log screen in the shell (filters, TanStack table, drawer with revision timeline, CSV).
+Immediate Next Step: Implement budgets API + variance service + admin section, then PCs (012), VOs (013), analytics (014), dashboards (015).
 
 ## Active Task
-T-016 — Implement spec-009-v1: Application shell & navigation
+T-017 — Implement spec-010-v1: LPO log screen
 State: DONE
-Started: 2026-08-23 04:12
-Last Updated: 2026-08-23 04:24
+Started: 2026-08-23 04:30
+Last Updated: 2026-08-23 04:48
 
 ## Task Log
+
+### [2026-08-23 04:48] — T-017: Implement spec-010-v1 LPO log screen
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (04:30) → DONE (04:48).
+**Goal:** The register UI — filter bar, server-sorted table, revision-timeline drawer, CSV export, role-gated actions.
+**Spec Reference:** specs/spec-010-v1.md; design.md §7–§9.
+**Approach:** Server-side sort/filter/cursor pagination via buildQuery() (unit tested); TanStack table v8 (pinned back from v9 — features-map API mismatch); frozen first column via sticky CSS; drawer fetches /lpos/:id chain incl. new flagNote field (service extension under this spec's AC6); create drawer for PROCUREMENT; COMMERCIAL voId-only editor; read-only roles see no actions; toasts for background outcomes.
+**Checklist:**
+  - [x] Filter bar: debounced q (300ms), trade chips w/ dots, status/verification selects, date range, superseded toggle, clear-all
+  - [x] Table: sticky header, frozen ref column, tabular right-aligned amounts, sortable issueDate/amountFils/refNo headers
+  - [x] Load more cursor pagination + totals footer (activeCount · activeSumFils)
+  - [x] CSV export with identical filter set
+  - [x] Detail drawer: record fields, provenance chip, flag note, revision timeline (ref/rev/amount/superseded links)
+  - [x] Role-gated actions per spec matrix; server 403s surface as messages
+**Outcome:** All ACs verified live against seeded Job 1571 (id resolution code→numeric id fixed mid-task; ELECTRICAL filter = 52 rows / AED 5,952,274 matching report). Tests caught buildQuery leaking raw dates + "undefined" params. Note: status/verification filters shipped single-select (What said multi-selects) — simplification logged as Self-Correction below; upgrade deferred until a real user needs it.
+**Test Evidence:** vitest 16 files / 94 tests passed; tsc clean; eslint clean; live curls: filtered list totals match report figures; CSV header+rows verified.
+**Blockers:** NONE
+**Rollback:** Remove screen files; APIs unaffected.
+
+## Self-Corrections
+
+### [2026-08-23 04:48]
+**Earlier reasoning (now incorrect):** Spec-010 filter bar promised multi-selects for status/verification.
+**Correction:** Shipped single-select dropdowns (with All option) — simpler UX at current data scale, no AC depended on multi.
+**Impact:** Upgrade to multi-select when a user asks; noted here so it is not silently forgotten.
 
 ### [2026-08-23 04:24] — T-016: Implement spec-009-v1 Application shell & navigation
 **Weight:** STANDARD

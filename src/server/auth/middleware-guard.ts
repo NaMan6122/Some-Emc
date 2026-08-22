@@ -9,7 +9,7 @@ import { readSessionCookie, verifySessionToken } from "./jwt";
 //  - Unauthenticated pages → redirect to /login
 //  - Authenticated visitors of /login → redirect to /
 
-const PUBLIC_PREFIXES = ["/login", "/api/v1/auth/"];
+const PUBLIC_PREFIXES = ["/login", "/api/v1/auth/", "/api/health"];
 
 export async function guard(request: NextRequest): Promise<NextResponse | undefined> {
   const { pathname } = request.nextUrl;
