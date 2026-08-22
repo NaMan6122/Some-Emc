@@ -19,10 +19,10 @@ Last File Touched: dev-changelog.md
 Immediate Next Step: On human approval of spec-003-v2 + ADR-004, implement jose-based auth layer per v2 acceptance criteria.
 
 ## Active Task
-T-012 — Implement spec-006-v1: Suppliers vendor master
+T-013 — Implement spec-007-v1: LPO register
 State: PENDING
 Started: —
-Last Updated: 2026-08-23 03:08
+Last Updated: 2026-08-23 03:20
 
 ## Task Log
 
@@ -227,6 +227,23 @@ Last Updated: 2026-08-23 03:08
 **Test Evidence:** vitest 10 files / 54 tests passed; tsc clean; eslint clean; live curls documented in-session.
 **Blockers:** NONE
 **Rollback:** Remove routes/service/validation/screen/tests; project rows persist.
+
+### [2026-08-23 03:20] — T-012: Implement spec-006-v1 Suppliers vendor master
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (03:15) → DONE (03:20).
+**Goal:** Vendor master with case-insensitive uniqueness, atomic audited merge, advisory duplicate suggestions.
+**Spec Reference:** specs/spec-006-v1.md; PRD FR-3.
+**Approach:** Service-layer normalization invariant (uppercase + collapsed whitespace) making DB @unique act case-insensitively; merge re-points LPOs via updateMany inside $transaction with alias append + MERGE audit row; suggestion heuristic = stop-token-filtered token sets with per-token levenshtein≤2 matching, containment allowed with ratio penalty, threshold 0.6, advisory only.
+**Checklist:**
+  - [x] GET|POST /suppliers (?q= filter); GET|PATCH /suppliers/:id (name/addAlias)
+  - [x] POST /suppliers/:id/merge — ADMIN; 422 guards SELF_MERGE/ALREADY_MERGED/TARGET_MERGED
+  - [x] GET /suppliers/duplicates/suggestions
+  - [x] Unit tests: normalize, levenshtein, pairing flags real typo variants, non-flags distinct vendors
+  - [x] Integration tests: AC1 409+existingId & stored-uppercase, AC2 full merge semantics + single audit row, AC3 TARGET_MERGED, AC4 role gates, AC5 seeded Job-1571-style typo pair returned
+**Outcome:** All spec-006 ACs verified. No UI in this scope (vendors page arrives with M2 dashboards per design.md shell). One test corrected to match designed containment behavior (LLC as stop-token).
+**Test Evidence:** vitest 12 files / 65 tests passed; tsc clean; eslint clean.
+**Blockers:** NONE
+**Rollback:** Remove routes/service/tests; supplier rows persist.
 
 ## Self-Corrections
 
