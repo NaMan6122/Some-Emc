@@ -14,9 +14,14 @@ export type AuditInput = {
   after?: unknown;
 };
 
-/** Deterministic deep normalization: sorted keys, undefined values dropped. */
+/** Deterministic deep normalization: sorted keys, undefined dropped,
+ *  BigInt/Decimal → strings (JSON-safe), Dates → ISO strings. */
 export function normalizeForAudit(value: unknown): unknown {
-  if (value === null || typeof value !== "object" || value instanceof Date) return value ?? null;
+  if (typeof value === "bigint") return value.toString();
+  if (value === null || typeof value !== "object") return value ?? null;
+  // Covers Prisma Decimal and other objects exposing toJSON.
+  const maybeToJSON = value as { toJSON?: () => unknown };
+  if (typeof maybeToJSON.toJSON === "function") return normalizeForAudit(maybeToJSON.toJSON());
   if (Array.isArray(value)) return value.map(normalizeForAudit);
   const out: Record<string, unknown> = {};
   for (const k of Object.keys(value as Record<string, unknown>).sort()) {

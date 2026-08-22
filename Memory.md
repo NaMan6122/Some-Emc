@@ -19,10 +19,10 @@ Last File Touched: dev-changelog.md
 Immediate Next Step: On human approval of spec-003-v2 + ADR-004, implement jose-based auth layer per v2 acceptance criteria.
 
 ## Active Task
-T-011 — Implement spec-005-v1: Projects module
+T-012 — Implement spec-006-v1: Suppliers vendor master
 State: PENDING
 Started: —
-Last Updated: 2026-08-23 02:55
+Last Updated: 2026-08-23 03:08
 
 ## Task Log
 
@@ -209,6 +209,24 @@ Last Updated: 2026-08-23 02:55
 **Test Evidence:** vitest 9 files / 46 tests passed; tsc --noEmit clean; eslint clean.
 **Blockers:** NONE
 **Rollback:** Remove service/route/tests; table persists harmlessly.
+
+### [2026-08-23 03:08] — T-011: Implement spec-005-v1 Projects module
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (02:57) → DONE (03:08).
+**Goal:** Project CRUD with role gates, audited mutations, field-level validation, minimal admin UI.
+**Spec Reference:** specs/spec-005-v1.md; PRD FR-2; design.md §4/§7/§8.
+**Approach:** Zod schemas shared API/UI (moneyString→parseMoney→fils with negative refinement); service wraps mutations in $transaction + audit(); apiHandler generalized for dynamic-route context; shared parseJsonBody helper (zod v4).
+**Checklist:**
+  - [x] GET|POST /api/v1/projects; GET|PATCH|DELETE /api/v1/projects/:id
+  - [x] ADMIN RW, others R; 403/401 envelopes verified
+  - [x] Duplicate code → 409 CODE_TAKEN; delete-with-LPOs → 409 HAS_DEPENDENTS (Restrict, no cascade)
+  - [x] PATCH audits only changed keys — updatedAt excluded as volatile noise
+  - [x] Field-level 422s: vatRate>1, negative amount, empty code, bad dates
+  - [x] /admin/projects screen: list table + create/edit form + per-field errors + status pills
+**Outcome:** All ACs verified headless + live smoke (page renders; POST with "1,000.50" → exact fils). Two convention fixes surfaced by tests/live smoke: (1) zod v4 flatten().fieldErrors is plain arrays (no _errors wrapper); (2) jsonSafe now honors toJSON — Prisma Decimal leaked internals before ("vatRate":{s,e,d}) → now "0.05"; Dates → ISO strings.
+**Test Evidence:** vitest 10 files / 54 tests passed; tsc clean; eslint clean; live curls documented in-session.
+**Blockers:** NONE
+**Rollback:** Remove routes/service/validation/screen/tests; project rows persist.
 
 ## Self-Corrections
 

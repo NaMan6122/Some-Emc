@@ -21,9 +21,15 @@ describe("jsonSafe BigInt serialization convention", () => {
     expect(() => JSON.stringify({ v: 42n })).toThrow();
   });
 
-  it("preserves non-BigInt values untouched", () => {
+  it("converts Dates to ISO strings; primitives pass through untouched", () => {
     const d = new Date("2026-08-23T00:00:00Z");
-    expect(jsonSafe({ d, n: 1.5, s: "x", b: true }).d).toBe(d);
-    expect(jsonSafe({ n: 1.5 })).toEqual({ n: 1.5 });
+    const out = jsonSafe({ d, n: 1.5, s: "x", b: true });
+    expect(out.d).toBe("2026-08-23T00:00:00.000Z");
+    expect(out.n).toBe(1.5);
+  });
+
+  it("converts toJSON-bearing objects (Prisma Decimal) to their JSON form", () => {
+    const decimalLike = { s: 1, e: -2, d: [500000], toJSON: () => "0.05" };
+    expect(jsonSafe({ vatRate: decimalLike })).toEqual({ vatRate: "0.05" });
   });
 });
