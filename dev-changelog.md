@@ -74,3 +74,10 @@ specs/spec-008-v2 drafted with corrected threshold. Integration test asserts ≥
 
 **Human Feedback:**
 **Feedback Applied:**
+
+---
+
+## [2026-08-23 04:04] — G1/G5 ratification note (no deviation)
+
+**Task Reference:** T-013, T-014
+**Note:** Human ratified DCL-002/spec-007-v2 and DCL-003/spec-008-v2 at the combined checkpoint ("Yes"), and confirmed M1 milestone completion by directing work to the frontend (M2). spec-index updated accordingly.

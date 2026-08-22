@@ -1,30 +1,41 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-23 02:12
-Active Task: T-008 — Implement spec-002 (DB schema foundation) — PENDING
+Last Session: 2026-08-23 04:24
+Active Task: T-017 — Implement spec-010 (LPO log screen) — PENDING
 Last File Touched: Memory.md
-Immediate Next Step: Start T-008: full Prisma schema per TDD §5, initial migration, money lib + BigInt serialization convention with tests.
-
-## Session Summary
-Last Session: 2026-08-23 02:19
-Active Task: T-008 — Implement spec-002 (DB schema foundation) — IN_PROGRESS
-Last File Touched: Memory.md
-Immediate Next Step: Write full Prisma schema per TDD §5, create initial migration, add money lib + BigInt JSON convention with tests, verify all spec-002 ACs against live DB.
-
-## Session Summary
-Last Session: 2026-08-23 04:01
-Active Task: Gates G1+G5 — ratify DCL-002/spec-007-v2 & DCL-003/spec-008-v2, confirm M1 milestone complete
-Last File Touched: spec-index.md
-Immediate Next Step: On human ratification: mark spec-007-v2/008-v2 ACTIVE(IMPLEMENTED), then plan M2 (budgets, PCs, VOs, dashboards).
+Immediate Next Step: Implement spec-010 LPO log screen in the shell (filters, TanStack table, drawer with revision timeline, CSV).
 
 ## Active Task
-Gates G1 + G5 — M1 completion checkpoint
-State: BLOCKED (awaiting human ratification of two DRAFT correction specs)
-Started: 2026-08-23 04:01
-Last Updated: 2026-08-23 04:01
+T-016 — Implement spec-009-v1: Application shell & navigation
+State: DONE
+Started: 2026-08-23 04:12
+Last Updated: 2026-08-23 04:24
 
 ## Task Log
+
+### [2026-08-23 04:24] — T-016: Implement spec-009-v1 Application shell & navigation
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (04:12) → DONE (04:24).
+**Goal:** design.md §3 shell — role-aware sidebar, topbar, project context, tokens, shared primitives.
+**Spec Reference:** specs/spec-009-v1.md; design.md §3–§8.
+**Approach:** CSS-variable tokens (zinc/indigo, class-based dark) mapped via Tailwind v4 @theme; pure nav config unit-tested for role gating; SWR hooks for session/projects/context (?project= persisted in URL); primitives (StatusPill w/ full enum coverage, ProvenanceChip, TradeDot, KpiCard, EmptyState, ErrorBanner, PageHeader); route group (app) wraps all authenticated pages.
+**Checklist:**
+  - [x] globals.css tokens + dark variant
+  - [x] AppShell: sidebar 240px / mobile drawer / sticky topbar / user menu + logout + dark toggle
+  - [x] filterNav/canAccess role logic (ADMIN-only Administration group)
+  - [x] StatusPill maps every Lpo/Pc/Vo/Verification enum; unknown → gray fallback
+  - [x] Project switcher persists ?project=CODE defaulting first ACTIVE
+  - [x] Deep-link preservation: middleware redirects to /login?next=<path>, LoginForm honors it
+  - [x] Placeholder pages for pending M2 routes (each referencing its spec)
+  - [x] Root / now redirects to /overview
+**Outcome:** All spec-009 ACs verified (role gating + enum mapping by unit tests; shell render + deep-link live). Live smoke note: first curl omitted cookie → 307 was harness error; with cookie /overview returns shell markup.
+**Test Evidence:** vitest 16 files / 90 tests passed; tsc clean; eslint clean; live curls in-session.
+**Blockers:** NONE
+**Rollback:** Remove components/layout/placeholders; APIs unaffected.
+
+## Self-Corrections
+
 
 ### [2026-08-23 00:45] — T-001: Research source reports and extract domain model
 **Weight:** STANDARD
@@ -280,6 +291,47 @@ Last Updated: 2026-08-23 04:01
 **Test Evidence:** vitest 14 files / 80 tests passed incl. seed.integration (dataset spot checks to the fils, totals match JSON sum, alias preservation, flags OPEN, VO table empty, rerun-idempotency snapshot equal).
 **Blockers:** NONE
 **Rollback:** Reset script (delete project subtree by code 1571 cascade).
+
+### [2026-08-23 04:10] — Gate G1 closure: M2 batch ratified
+**Weight:** STANDARD
+**State transitions:** BLOCKED → DONE (2026-08-23 04:08) — human ruled 'Promote all 7'.
+**Checklist:**
+  - [x] spec-009..015 promoted DRAFT → ACTIVE
+**Outcome:** M2 implementation authorized in order 009→010→011→012→013→014→015.
+**Test Evidence:** Manual sign-off by human on 2026-08-23 via gate question.
+**Blockers:** NONE
+**Rollback:** NONE.
+
+
+### [2026-08-23 04:04] — Gates G1+G5 closure: DCL ratifications + M1 complete
+**Weight:** STANDARD
+**State transitions:** BLOCKED → DONE (2026-08-23 04:04) — human ratified both and directed frontend work.
+**Checklist:**
+  - [x] DCL-002/spec-007-v2 ratified (UI re-scope to M2)
+  - [x] DCL-003/spec-008-v2 ratified (supplier threshold correction)
+  - [x] M1 milestone confirmed complete (G5)
+**Outcome:** spec-007-v2 and spec-008-v2 → IMPLEMENTED. M1 closed with 80/80 tests across 14 files.
+**Test Evidence:** Manual sign-off by human on 2026-08-23 ("Yes" at combined checkpoint).
+**Blockers:** NONE
+**Rollback:** NONE.
+
+### [2026-08-23 04:08] — T-015: Draft M2 atomic spec batch (spec-009..015)
+**Weight:** SIGNIFICANT
+**Goal:** Decompose M2 (frontend kickoff + money modules + analytics + dashboards) into dependency-ordered specs.
+**Spec Reference:** TDD §14 milestone table; PRD FR-5/6/7/8; design.md throughout.
+**Checklist:**
+  - [x] spec-009 App shell & navigation (tokens land here)
+  - [x] spec-010 LPO log screen (DCL-002 deliverable)
+  - [x] spec-011 Budgets module
+  - [x] spec-012 Payment certificates module
+  - [x] spec-013 Variation orders module
+  - [x] spec-014 Analytics engine (golden-value regression anchors from Job 1571)
+  - [x] spec-015 Dashboard screens (six ProCare tabs live)
+  - [x] spec-index updated; all seven DRAFT pending G1
+**Outcome:** M2 plan presented for Gate G1. Implementation order respects dependencies; golden Job 1571 figures embedded as test anchors (85% / 123.4% / 117.9% utilizations, recovery ≈81.8%, top-8 ≈76%, totals to the fils).
+**Test Evidence:** N/A — specs define the tests.
+**Blockers:** NONE
+**Rollback:** Delete the seven spec files; revert index.
 
 ## Self-Corrections
 

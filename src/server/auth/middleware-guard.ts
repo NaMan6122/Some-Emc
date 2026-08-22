@@ -28,7 +28,9 @@ export async function guard(request: NextRequest): Promise<NextResponse | undefi
         { status: 401 },
       );
     }
-    const loginUrl = new URL("/login", request.url);
+    // Preserve the deep link so login can return the user to their target (spec-009 AC).
+    const target = pathname + request.nextUrl.search;
+    const loginUrl = new URL(`/login?next=${encodeURIComponent(target)}`, request.url);
     return NextResponse.redirect(loginUrl);
   }
   return undefined;
