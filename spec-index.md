@@ -3,7 +3,7 @@
 | Spec | Title | Version | Status | Depends On | Task | Notes |
 |---|---|---|---|---|---|---|
 | spec-001 | Application scaffold & toolchain | v1 | ACTIVE | NONE | T-007 IN_PROGRESS | |
-| spec-002 | Database schema foundation | v1 | ACTIVE | spec-001 | — | |
+| spec-002 | Database schema foundation | v1 | IMPLEMENTED | spec-001 | T-008 DONE | Case-insensitive supplier uniqueness enforced at service layer (uppercase invariant), documented in schema |
 | spec-003 | Authentication & RBAC | v1 | ACTIVE | spec-001, spec-002 | — | |
 | spec-004 | Audit trail service & API | v1 | ACTIVE | spec-002, spec-003 | — | |
 | spec-005 | Projects module | v1 | ACTIVE | spec-003, spec-004 | — | |

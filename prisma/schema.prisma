@@ -1,5 +1,10 @@
-// Prisma wiring point. Domain models are introduced by spec-002.
-// instruction_v4.md §9: nothing ships without a spec reference.
+// ProCare schema — implements TDD.md §5 (spec-002-v1).
+// Conventions:
+//  - All monetary amounts are BigInt fils (ADR-002). Never Float.
+//  - Financial children of Project use onDelete: Restrict — no silent cascades.
+//  - Supplier.name is stored normalized (uppercased, whitespace-collapsed) by the
+//    service layer; the DB @unique therefore acts as case-insensitive in practice.
+//    Raw import spellings are preserved in Supplier.aliases.
 
 generator client {
   provider = "prisma-client-js"
@@ -8,4 +13,236 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGEMENT
+  PROCUREMENT
+  COMMERCIAL
+  FINANCE
+  VIEWER
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ON_HOLD
+  CLOSED
+}
+
+enum Trade {
+  ELECTRICAL
+  PLUMBING
+  HVAC
+  FIRE_FIGHTING
+  GENERAL
+  HSE
+  OTHER
+}
+
+enum LpoStatus {
+  DRAFT
+  ISSUED
+  CLOSED
+  CANCELLED
+}
+
+enum LpoKind {
+  STANDARD
+  VARIATION
+  INTERNAL_TRANSFER
+}
+
+enum Verification {
+  PENDING
+  VERIFIED
+  FLAGGED
+}
+
+enum PcStatus {
+  DRAFT
+  SUBMITTED
+  CERTIFIED
+  PAID
+}
+
+enum Provenance {
+  SOURCE_DOCUMENT
+  OCR_ESTIMATE
+  CLIENT_SUMMARY
+  DERIVED
+  IMPORTED_REPORT
+}
+
+enum VoStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(VIEWER)
+  tokenVersion Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model Project {
+  id                Int           @id @default(autoincrement())
+  code              String        @unique
+  name              String
+  mainContractor    String
+  contractValueFils BigInt
+  vatRate           Decimal       @default(0.05) @db.Decimal(5, 4)
+  status            ProjectStatus @default(ACTIVE)
+  startedAt         DateTime?
+  endedAt           DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  lpos    Lpo[]
+  pcs     PaymentCertificate[]
+  budgets BudgetLine[]
+  vos     VariationOrder[]
+}
+
+model Supplier {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  aliases      Json     @default("[]")
+  mergedIntoId Int?
+  mergedInto   Supplier?  @relation("SupplierMerges", fields: [mergedIntoId], references: [id])
+  merges       Supplier[] @relation("SupplierMerges")
+  createdAt    DateTime @default(now())
+
+  lpos Lpo[]
+}
+
+model Lpo {
+  id             BigInt       @id @default(autoincrement())
+  projectId      Int
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  refNo          String
+  seq            Int
+  revisionOfId   BigInt?
+  revisionOf     Lpo?         @relation("LpoRevisions", fields: [revisionOfId], references: [id], onDelete: Restrict)
+  revisions      Lpo[]        @relation("LpoRevisions")
+  revisionNo     Int          @default(0)
+  supersededById BigInt?      @unique
+  supersededBy   Lpo?         @relation("LpoSupersede", fields: [supersededById], references: [id], onDelete: Restrict)
+  supersedes     Lpo[]        @relation("LpoSupersede")
+  supplierId     Int
+  supplier       Supplier     @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  trade          Trade
+  description    String
+  issueDate      DateTime     @db.Date
+  amountFils     BigInt
+  vatRate        Decimal      @db.Decimal(5, 4)
+  kind           LpoKind      @default(STANDARD)
+  status         LpoStatus    @default(DRAFT)
+  verification   Verification @default(PENDING)
+  provenance     Provenance   @default(SOURCE_DOCUMENT)
+  remark         String?
+  voId           BigInt?
+  vo             VariationOrder? @relation(fields: [voId], references: [id], onDelete: Restrict)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([projectId, refNo])
+  @@unique([projectId, seq])
+  @@index([projectId, issueDate])
+  @@index([supplierId])
+}
+
+model BudgetLine {
+  id          BigInt   @id @default(autoincrement())
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  trade       Trade
+  category    String   @default("MATERIALS")
+  amountFils  BigInt
+  sourceLabel String
+  refDate     DateTime?
+  note        String?
+  createdAt   DateTime @default(now())
+
+  @@index([projectId, trade])
+}
+
+model PaymentCertificate {
+  id                    BigInt     @id @default(autoincrement())
+  projectId             Int
+  project               Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  pcNumber              Int
+  periodLabel           String
+  periodStart           DateTime?
+  periodEnd             DateTime?
+  invoiceDate           DateTime?
+  grossFils             BigInt
+  retentionFils         BigInt
+  netPayableFils        BigInt
+  variationClaimFils    BigInt     @default(0)
+  statedCumulativeFils  BigInt?
+  status                PcStatus   @default(DRAFT)
+  provenance            Provenance
+  notes                 String?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@unique([projectId, pcNumber])
+  @@index([projectId])
+}
+
+model VariationOrder {
+  id                  BigInt    @id @default(autoincrement())
+  projectId           Int
+  project             Project   @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  voNumber            Int
+  title               String
+  status              VoStatus  @default(DRAFT)
+  submittedValueFils  BigInt
+  approvedValueFils   BigInt?
+  approvedAt          DateTime?
+  approvalRef         String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  lpos Lpo[]
+
+  @@unique([projectId, voNumber])
+}
+
+model AuditLog {
+  id        BigInt   @id @default(autoincrement())
+  actorId   Int
+  entity    String
+  entityId  String
+  action    String
+  before    Json?
+  after     Json?
+  at        DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([at])
+}
+
+model DataFlag {
+  id             BigInt    @id @default(autoincrement())
+  entityType     String
+  entityId       String
+  ruleCode       String
+  severity       String
+  message        String
+  status         String    @default("OPEN")
+  assigneeId     Int?
+  resolutionNote String?
+  resolvedAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([entityType, entityId])
+  @@index([status])
 }

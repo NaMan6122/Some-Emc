@@ -1,16 +1,22 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-23 02:09
+Last Session: 2026-08-23 02:12
 Active Task: T-008 — Implement spec-002 (DB schema foundation) — PENDING
-Last File Touched: package.json
-Immediate Next Step: On commit confirmation, commit T-007 via anv; then start spec-002 (Prisma schema + migration + money lib).
+Last File Touched: Memory.md
+Immediate Next Step: Start T-008: full Prisma schema per TDD §5, initial migration, money lib + BigInt serialization convention with tests.
+
+## Session Summary
+Last Session: 2026-08-23 02:19
+Active Task: T-008 — Implement spec-002 (DB schema foundation) — IN_PROGRESS
+Last File Touched: Memory.md
+Immediate Next Step: Write full Prisma schema per TDD §5, create initial migration, add money lib + BigInt JSON convention with tests, verify all spec-002 ACs against live DB.
 
 ## Active Task
-T-007 — Implement spec-001-v1: Application scaffold & toolchain
-State: DONE (pending first-session commit confirmation)
-Started: 2026-08-23 01:52
-Last Updated: 2026-08-23 02:09
+T-008 — Implement spec-002-v1: Database schema foundation
+State: DONE
+Started: 2026-08-23 02:19
+Last Updated: 2026-08-23 02:25
 
 ## Task Log
 
@@ -142,6 +148,24 @@ Last Updated: 2026-08-23 02:09
 **Test Evidence:** Command outputs in-session: curl /api/health (200 ok / 503 degraded), curl /api/v1/foo (404 envelope), `npm run lint` clean, `tsc --noEmit` clean, `vitest run` 1 file / 3 tests passed.
 **Blockers:** NONE
 **Rollback:** Remove scaffold files/dirs added this task; git history unaffected (no commits yet).
+
+### [2026-08-23 02:25] — T-008: Implement spec-002-v1 Database schema foundation
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (2026-08-23 02:19) → DONE (2026-08-23 02:25).
+**Goal:** Full Prisma schema per TDD §5 with initial migration, money lib, and BigInt JSON serialization convention.
+**Spec Reference:** specs/spec-002-v1.md; TDD.md §5/§6; ADR-002.
+**Approach:** Schema-first with explicit named self-relations for LPO revision chains; Restrict deletes on all financial relations; unique `(projectId, refNo)`/`(projectId, seq)`/`(projectId, pcNumber)`/`(projectId, voNumber)`; money lib uses pure string math (no floats); jsonSafe recursive serializer preserves Dates.
+**Checklist:**
+  - [x] prisma/schema.prisma — all 9 models + 9 enums + indexes/uniques
+  - [x] Initial migration `20260822205046_init_core_schema` applied; `migrate status` up to date
+  - [x] src/lib/money.ts parse/format (exact fils; AED prefix, commas, accounting negatives)
+  - [x] src/lib/bigint-json.ts jsonSafe convention
+  - [x] Integration tests against live DB: duplicate refNo rejected, project delete restricted, BigInt round-trip exact, supplier name uniqueness
+  - [x] lint ✓ typecheck ✓ vitest 18/18 ✓ (4 files incl. integration)
+**Outcome:** All spec-002 ACs verified. Notes: (1) tsconfig target ES2017→ES2022 for BigInt literals (+ stale tsbuildinfo removed); (2) case-insensitive supplier uniqueness implemented as service-layer uppercase invariant + DB @unique — Prisma cannot express lower() unique indexes without migration drift; documented in schema header and spec-index notes; (3) vitest alias config added.
+**Test Evidence:** vitest run: 4 files / 18 tests passed (incl. spec002.integration.test.ts hitting live dev DB); tsc --noEmit clean; eslint clean; `npx prisma migrate status` = "Database schema is up to date!".
+**Blockers:** NONE
+**Rollback:** `prisma migrate resolve --rolled-back` + drop DB volume; remove lib/test files.
 
 ## Self-Corrections
 
