@@ -1,0 +1,14 @@
+# Spec Index
+
+| Spec | Title | Version | Status | Depends On | Task | Notes |
+|---|---|---|---|---|---|---|
+| spec-001 | Application scaffold & toolchain | v1 | ACTIVE | NONE | T-007 IN_PROGRESS | |
+| spec-002 | Database schema foundation | v1 | ACTIVE | spec-001 | — | |
+| spec-003 | Authentication & RBAC | v1 | ACTIVE | spec-001, spec-002 | — | |
+| spec-004 | Audit trail service & API | v1 | ACTIVE | spec-002, spec-003 | — | |
+| spec-005 | Projects module | v1 | ACTIVE | spec-003, spec-004 | — | |
+| spec-006 | Suppliers vendor master | v1 | ACTIVE | spec-003, spec-004 | — | |
+| spec-007 | LPO register | v1 | ACTIVE | spec-003, spec-004, spec-005, spec-006 | — | Highest-complexity M1 module |
+| spec-008 | Job 1571 seed pipeline | v1 | ACTIVE | spec-001, spec-002, spec-005, spec-006, spec-007 | — | |
+
+_Promoted DRAFT → ACTIVE by human at Gate G1 on 2026-08-23 (all eight). design.md v0.1 ACCEPTED in the same checkpoint._

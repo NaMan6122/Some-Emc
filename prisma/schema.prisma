@@ -1,0 +1,11 @@
+// Prisma wiring point. Domain models are introduced by spec-002.
+// instruction_v4.md §9: nothing ships without a spec reference.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
