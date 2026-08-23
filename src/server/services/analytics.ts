@@ -1,0 +1,262 @@
+import { prisma } from "@/server/db";
+import { HttpApiError } from "@/lib/http-error";
+import type { Trade } from "@prisma/client";
+import { computeCompliance } from "@/server/services/vos";
+
+// spec-014: server-computed analytics (PRD §8 formulas; clients never aggregate).
+//
+// Matched-window semantics were pinned against the legacy Investment report's
+// own chart arrays before any UI consumes them (spec AC4):
+// - window months = the months covered by payment certificates;
+// - invested(month) = Σ active-LPO amounts issued in that calendar month;
+// - LPOs issued BEFORE the window collapse into a carry-in base added to
+//   cumulative invested (report: TOTAL INVESTMENT 12.64M);
+// - certificates bucket by period label (PC01 invoices in May but occupies the
+//   Apr slot), falling back to invoice date;
+// - recoveryRate = cumulative recovered ÷ (carry-in + Σ window invested).
+
+/** Storm Water Pumping Station package — sits outside the JCA budget
+ *  (specialist subcontract, PRD §6). Excluded ONLY from the budget-variance
+ *  lens; register totals stay faithful to source (spec-007/011 contracts). */
+export const EXCLUDED_REFS = ["TEMW/REF/LPO//039"];
+
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+function monthKey(d: Date): string {
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+
+/** "Upto 25 Jun 2025" → "2025-06"; "Apr 2025" → "2025-04". */
+export function parseLabelMonth(label: string): string | null {
+  const m = label.toLowerCase().match(new RegExp(`(${MONTHS.join("|")})[a-z]*\\s*,?\\s*(\\d{4})`));
+  if (!m) return null;
+  const mi = MONTHS.indexOf(m[1]);
+  return `${m[2]}-${String(mi + 1).padStart(2, "0")}`;
+}
+
+function addMonths(key: string, n: number): string {
+  const [y, mo] = key.split("-").map(Number);
+  const d = new Date(Date.UTC(y, mo - 1 + n, 1));
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+
+function pct(part: bigint, whole: bigint): number {
+  if (whole === 0n) return 0;
+  return Number((part * 10000n) / whole) / 100;
+}
+
+async function activeLpos(projectId: number) {
+  return prisma.lpo.findMany({
+    where: { projectId, supersededById: null, status: { not: "CANCELLED" } },
+    select: { refNo: true, trade: true, amountFils: true, issueDate: true, verification: true, supplierId: true },
+  });
+}
+
+async function requireProject(projectId: number) {
+  const p = await prisma.project.findUnique({ where: { id: projectId }, select: { id: true } });
+  if (!p) throw new HttpApiError(404, "NOT_FOUND", "Project not found");
+}
+
+export type OverviewPayload = Awaited<ReturnType<typeof overview>>;
+
+export async function overview(projectId: number) {
+  await requireProject(projectId);
+  const lpos = await activeLpos(projectId);
+  const amounts = lpos.map((l) => l.amountFils).sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  const total = amounts.reduce((s, a) => s + a, 0n);
+  const n = BigInt(amounts.length);
+  const median =
+    amounts.length === 0
+      ? 0n
+      : amounts.length % 2 === 1
+        ? amounts[(amounts.length - 1) / 2]
+        : (amounts[amounts.length / 2 - 1] + amounts[amounts.length / 2]) / 2n;
+
+  const byTrade = new Map<string, { fils: bigint; count: number }>();
+  const bySupplier = new Set<number>();
+  const byMonth = new Map<string, bigint>();
+  let flagged = 0;
+  for (const l of lpos) {
+    const t = byTrade.get(l.trade) ?? { fils: 0n, count: 0 };
+    byTrade.set(l.trade, { fils: t.fils + l.amountFils, count: t.count + 1 });
+    bySupplier.add(l.supplierId);
+    if (l.issueDate) {
+      const k = monthKey(l.issueDate);
+      byMonth.set(k, (byMonth.get(k) ?? 0n) + l.amountFils);
+    }
+    if (l.verification !== "VERIFIED") flagged++;
+  }
+
+  return {
+    totalLpoFils: total,
+    activeCount: lpos.length,
+    supplierCount: bySupplier.size,
+    avgLpoFils: amounts.length ? total / n : 0n,
+    medianLpoFils: median,
+    largestLpoFils: amounts.at(-1) ?? 0n,
+    flaggedCount: flagged,
+    tradeBreakdown: [...byTrade.entries()]
+      .map(([trade, v]) => ({ trade, fils: v.fils, count: v.count, pct: pct(v.fils, total) }))
+      .sort((a, b) => (b.fils > a.fils ? 1 : b.fils < a.fils ? -1 : 0)),
+    monthlySeries: [...byMonth.entries()].sort(([a], [b]) => (a < b ? -1 : 1)).map(([month, committedFils]) => ({ month, committedFils })),
+  };
+}
+
+export async function budgetAnalytics(projectId: number) {
+  await requireProject(projectId);
+  const TRADE_ORDER: Trade[] = ["ELECTRICAL", "PLUMBING", "HVAC", "FIRE_FIGHTING", "GENERAL", "HSE", "OTHER"];
+  const [lpos, budgets] = await Promise.all([
+    activeLpos(projectId),
+    prisma.budgetLine.groupBy({ by: ["trade"], where: { projectId }, _sum: { amountFils: true } }),
+  ]);
+  // Budget lens excludes out-of-scope packages (SWPS) from committed side.
+  const excluded = lpos.filter((l) => EXCLUDED_REFS.includes(l.refNo));
+  const included = lpos.filter((l) => !EXCLUDED_REFS.includes(l.refNo));
+
+  const committedMap = new Map<string, bigint>();
+  for (const l of included) {
+    committedMap.set(l.trade, (committedMap.get(l.trade) ?? 0n) + l.amountFils);
+  }
+  const budgetMap = new Map(budgets.map((b) => [b.trade, b._sum?.amountFils ?? 0n]));
+
+  const rows = TRADE_ORDER.map((trade) => {
+    const budget = budgetMap.get(trade) ?? 0n;
+    const committed = committedMap.get(trade) ?? 0n;
+    const utilizationPct = budget > 0n ? Number((committed * 10000n) / budget) / 100 : 0;
+    let status: "under" | "watch" | "over" | "no_budget" | "no_spend";
+    if (budget === 0n && committed > 0n) status = "no_budget";
+    else if (budget === 0n) status = "no_spend";
+    else if (utilizationPct > 100) status = "over";
+    else if (utilizationPct >= 90) status = "watch";
+    else status = "under";
+    return { trade, budgetFils: budget, committedFils: committed, utilizationPct, status };
+  });
+
+  return {
+    items: rows,
+    excludedRefs: EXCLUDED_REFS,
+    excludedFils: excluded.reduce((s, l) => s + l.amountFils, 0n),
+  };
+}
+
+async function pcMonths(projectId: number) {
+  const pcs = await prisma.paymentCertificate.findMany({
+    where: { projectId },
+    orderBy: { pcNumber: "asc" },
+    select: { pcNumber: true, periodLabel: true, invoiceDate: true, netPayableFils: true, retentionFils: true, variationClaimFils: true, status: true, createdAt: true },
+  });
+  return pcs.map((pc) => ({
+    ...pc,
+    month: parseLabelMonth(pc.periodLabel) ?? monthKey(pc.invoiceDate ?? pc.createdAt),
+  }));
+}
+
+function enumerateMonths(start: string, end: string): string[] {
+  const out: string[] = [];
+  let cur = start;
+  while (cur <= end) {
+    out.push(cur);
+    cur = addMonths(cur, 1);
+  }
+  return out;
+}
+
+export async function cashflow(projectId: number) {
+  await requireProject(projectId);
+  const pcs = await pcMonths(projectId);
+  const lpos = await activeLpos(projectId);
+
+  if (pcs.length === 0) {
+    return { windowMonths: [], monthly: [], carryInFils: 0n, retentionTotalFils: 0n, variationClaims: { claimedFils: 0n, unapprovedVoExposureFils: 0n } };
+  }
+  const months = enumerateMonths(pcs[0].month, pcs[pcs.length - 1].month);
+  const windowStart = months[0];
+
+  const investedByMonth = new Map<string, bigint>(months.map((m) => [m, 0n]));
+  let carryIn = 0n;
+  for (const l of lpos) {
+    if (!l.issueDate) continue;
+    const k = monthKey(l.issueDate);
+    if (k >= windowStart) investedByMonth.set(k, (investedByMonth.get(k) ?? 0n) + l.amountFils);
+    else carryIn += l.amountFils;
+  }
+
+  let cumInv = carryIn;
+  let cumCert = 0n;
+  const monthly = months.map((month) => {
+    const committedFils = investedByMonth.get(month) ?? 0n;
+    const certifiedFils = pcs.filter((p) => p.month === month).reduce((s, p) => s + p.netPayableFils, 0n);
+    cumInv += committedFils;
+    cumCert += certifiedFils;
+    return { month, committedFils, certifiedFils, cumulativeCommittedFils: cumInv, cumulativeCertifiedFils: cumCert, outstandingFils: cumInv - cumCert };
+  });
+
+  const compliance = await computeCompliance(projectId);
+  return {
+    windowMonths: [months[0], months[months.length - 1]],
+    monthly,
+    carryInFils: carryIn,
+    retentionTotalFils: pcs.reduce((s, p) => s + p.retentionFils, 0n),
+    variationClaims: {
+      claimedFils: pcs.reduce((s, p) => s + p.variationClaimFils, 0n),
+      unapprovedVoExposureFils: compliance.unapprovedVoExposure,
+    },
+  };
+}
+
+export async function investment(projectId: number) {
+  await requireProject(projectId);
+  const cf = await cashflow(projectId);
+  const monthly = cf.monthly;
+  if (monthly.length === 0) {
+    return { windowMonths: [], investedTotalFils: 0n, recoveredTotalFils: 0n, outstandingFinalFils: 0n, recoveryRatePct: 0, peakExposureMonth: null, carryInFils: cf.carryInFils, monthly };
+  }
+  const investedTotal = monthly[monthly.length - 1].cumulativeCommittedFils;
+  const recoveredTotal = monthly[monthly.length - 1].cumulativeCertifiedFils;
+  const peak = monthly.reduce((best, m) => (m.outstandingFils > best.outstandingFils ? m : best), monthly[0]);
+  return {
+    windowMonths: cf.windowMonths,
+    investedTotalFils: investedTotal,
+    recoveredTotalFils: recoveredTotal,
+    outstandingFinalFils: monthly[monthly.length - 1].outstandingFils,
+    recoveryRatePct: investedTotal > 0n ? Number((recoveredTotal * 10000n) / investedTotal) / 100 : 0,
+    peakExposureMonth: peak.month,
+    peakExposureFils: peak.outstandingFils,
+    carryInFils: cf.carryInFils,
+    monthly: monthly.map(({ month, committedFils, certifiedFils, outstandingFils }) => ({ month, investedFils: committedFils, recoveredFils: certifiedFils, outstandingFils })),
+  };
+}
+
+export async function vendors(projectId: number) {
+  await requireProject(projectId);
+  const [lpos, suppliers] = await Promise.all([
+    activeLpos(projectId),
+    prisma.supplier.findMany({ select: { id: true, name: true } }),
+  ]);
+  const nameById = new Map(suppliers.map((s) => [s.id, s.name]));
+  const bySupplier = new Map<number, { fils: bigint; count: number }>();
+  for (const l of lpos) {
+    const cur = bySupplier.get(l.supplierId) ?? { fils: 0n, count: 0 };
+    bySupplier.set(l.supplierId, { fils: cur.fils + l.amountFils, count: cur.count + 1 });
+  }
+  const total = [...bySupplier.values()].reduce((s, v) => s + v.fils, 0n);
+  const ranked = [...bySupplier.entries()]
+    .map(([supplierId, v]) => ({ supplierId, supplierName: nameById.get(supplierId) ?? `#${supplierId}`, ...v, sharePct: pct(v.fils, total) }))
+    .sort((a, b) => (b.fils > a.fils ? 1 : b.fils < a.fils ? -1 : 0));
+
+  let cum = 0n;
+  const curve = ranked.map((r, i) => {
+    cum += r.fils;
+    return { rank: i + 1, supplierName: r.supplierName, fils: r.fils, count: r.count, sharePct: r.sharePct, cumSharePct: pct(cum, total) };
+  });
+  const top8Share = curve.slice(0, 8).at(-1)?.cumSharePct ?? 0;
+
+  return {
+    totalFils: total,
+    supplierCount: ranked.length,
+    top8SharePct: top8Share,
+    repeatSuppliers: ranked.filter((r) => r.count >= 2).length,
+    longTailSuppliers: ranked.filter((r) => r.count === 1).length,
+    curve,
+  };
+}

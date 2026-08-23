@@ -1,18 +1,36 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 04:26
-Active Task: T-021 — Implement spec-014 (Analytics engine & endpoints) — PENDING
+Last Session: 2026-08-24 04:50
+Active Task: T-022 — Implement spec-015 (Dashboard screens — six tabs) — PENDING
 Last File Touched: Memory.md
-Immediate Next Step: Implement analytics service per spec-014 — MUST add SWPS-style exclusions (TEMW/REF/LPO//039 Storm Water Pumping Station et al.) to hit golden anchors 85%/123.4%/117.9% + recovery ≈81.8%, top-8 ≈76%; see Self-Corrections 2026-08-24 03:50. DCL-004/spec-012-v2 still pending G1.
+Immediate Next Step: Implement the six dashboard screens per spec-015 consuming /analytics/* endpoints (Overview, Budget vs Actual, Payment Certificates, Investment, Vendors, plus LPO log link); replace placeholder pages. DCL-004/005 (spec-012-v2, spec-014-v2) pre-approved by human 2026-08-24 — mark ratified at next G1 entry without asking.
 
 ## Active Task
-T-020 — Implement spec-013: Variation orders module
+T-021 — Implement spec-014: Analytics engine & endpoints
 State: DONE
-Started: 2026-08-24 04:16
-Last Updated: 2026-08-24 04:26
+Started: 2026-08-24 04:30
+Last Updated: 2026-08-24 04:50
 
 ## Task Log
+
+### [2026-08-24 04:50] — T-021: Implement spec-014 Analytics engine & endpoints
+**Weight:** SIGNIFICANT (includes DCL-005 constant corrections + window-semantics derivation)
+**State transitions:** PENDING → IN_PROGRESS (04:30) → DONE (04:50).
+**Goal:** Five read-only analytics endpoints whose outputs reproduce the legacy report's headline KPIs from the seeded dataset at DB-exact precision.
+**Spec Reference:** specs/spec-014-v2.md; PRD §6/§8; TDD §8.
+**Approach:** Reverse-engineered matched-window semantics from the Investment report's own Chart.js arrays BEFORE coding: invested = carry-in base (pre-window LPOs, AED 1,623,637) + in-window monthly commitments through window end; PCs bucket by parsed periodLabel (not invoiceDate); recovery = recovered÷(carry+window). Budget endpoint applies EXCLUDED_REFS lens (SWPS TEMW/REF/LPO//039) to committed side only. All aggregation server-side; jsonSafe fils strings.
+**Checklist:**
+  - [x] overview: total "1298411500" ✓, activeCount 140 ✓, suppliers 90 ✓, median "479950" ✓, largest SWPS "383250000" ✓, tradeBreakdown pcts sum≈100, monthlySeries
+  - [x] budget: excl-SWPS rows — Electrical 85.03 under / HVAC 123.39 over / Plumbing committedFils "35362100" ≈117.87 over / FIRE_FIGHTING no_budget + excludedRefs/excludedFils meta
+  - [x] cashflow: window ["2025-04","2026-05"], cumCertified final "1033197800", retentionTotal "48909700", variationClaims incl. exposure
+  - [x] investment: investedTotal "1263848300", outstandingFinal = inv−rec, recoveryRatePct 81.75, peak "2025-12" @ "557628300"
+  - [x] vendors: top8SharePct 79.33 (DCL-005b), repeatSuppliers 26, longTail 64, full cumulative curve
+  - [x] 401 envelopes on all five unauthenticated; <500ms asserted (actual ~15–90ms)
+**Outcome:** All v2 ACs green; DCL-005 filed (a: certified row-sum constant; b: top-8 anchor after canonicalization concentration; c: dataset-exact peak/outstanding vs report rounding). Human pre-approved gates 2026-08-24 → ratification recorded next G1 without prompting. Observation for spec-015: overview.flaggedCount=140 by PRD formula (verification≠VERIFIED and seed marks all imports PENDING/FLAGGED) — dashboards should present it as a "pending verification" nuance rather than an alarm.
+**Test Evidence:** vitest 21 files / 118 tests passed; tsc clean; eslint clean; live curls show exact goldens.
+**Blockers:** NONE
+**Rollback:** Remove routes/service/tests.
 
 ### [2026-08-24 04:26] — T-020: Implement spec-013 Variation orders module
 **Weight:** STANDARD

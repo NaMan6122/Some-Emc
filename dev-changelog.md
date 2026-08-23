@@ -109,3 +109,23 @@ specs/spec-012-v2.md drafted with corrected constant; integration test asserts t
 
 **Task Reference:** T-020
 **Note:** spec-013 implemented to all five ACs. Two documented interpretation calls, neither a deviation: (1) unapprovedVoExposure attribution is project-level aggregate — PC variationClaimFils carries no per-VO split in the legacy data (spec Risks section), so exposure equals the full claimed amount while ANY non-APPROVED VO exists and zero with no VOs or all-approved; surfaced in UI sub-labels. (2) The AC1 narrative example ("VO #1") is exercised via the suite's reserved voNumber ≥900 range to keep reruns collision-free on the shared dev DB; behavior verified is identical (COMMERCIAL raise → 201 + audit). Real-data bonus anchor: seeded Job 1571 carries AED 84,001.00 of variation claims (PC07 55,665.00 + PC13 28,336.00), so compliance live-smoke shows totalClaims=8400100 with zero exposure pre-backfill.
+
+## [2026-08-24 04:45] — DCL-005
+
+**Task Reference:** T-021
+**Spec Affected:** specs/spec-014-v1.md (AC3, AC4, AC5)
+**Type:** CORRECTION
+
+**Original Spec:**
+AC3 asserted cashflow cumulative certified at PC14 = "1,033,297,200 fils"; AC5 asserted vendors top-8 share ≈ 76% ±2pp; AC4 pinned recovery ≈81.8% ±0.5pp and peak exposure ∈ Jun–Dec 2025.
+
+**Deviations:**
+1. (a) Cumulative certified corrected to the dataset row-sum **1,033,197,800 fils** — identical class to DCL-004; the v1 figure matches neither the data nor any source statement.
+2. (b) Top-8 vendor share corrected to **79.33% ±0.5pp**. The legacy "76%" was computed over ~118 raw vendor name strings; supplier canonicalization (103 raw → 90 masters, per spec-008) merges misspelled duplicates and necessarily concentrates spend. Top supplier ≈30% (report) reproduces exactly at 29.52%, confirming the concentration effect is confined to the tail of the top-8.
+3. (c) Peak-exposure and outstanding figures are now asserted at dataset-exact fils (557,628,300 / 2,306,505 AED-equivalent); the legacy report's chart values carry ±fils rounding noise from pre-rounded monthly inputs.
+
+**Verified against source (no deviation):**
+Recovery-rate semantics were reverse-engineered from the Investment report's own Chart.js arrays: its 12.64M "TOTAL INVESTMENT" = Σ active LPOs issued up to window END including a pre-window carry-in base of AED 1,623,637 (Apr'24+Feb'25+Mar'25 commitments), NOT an in-window-only sum (which yields 11.01M/93.8%). With carry-in semantics: invested = 1,263,848,300 fils, recovered = 1,033,197,800, rate = 81.75% ≈ report headline 81.8% ✓; peak gap Dec 2025 ✓. Certificates bucket by period label, not invoice date (PC01 invoices May, occupies Apr slot) ✓.
+
+**Impact:**
+specs/spec-014-v2.md drafted with corrected constants and the pinned window semantics. All golden anchors now reproduce from the seeded dataset at DB-exact precision. Ratification folded into next G1 batch per standing instruction (2026-08-24: human pre-approved subsequent gates).
