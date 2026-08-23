@@ -14,8 +14,8 @@
 | spec-010 | LPO log screen | v1 | IMPLEMENTED | spec-007, spec-009 | T-017 DONE | Ratified (DCL-002 deliverable) |
 | spec-011 | Budgets module (JCA) | v1 | IMPLEMENTED | spec-004, spec-005 | T-018 DONE | Variance v1 counts all non-cancelled LPOs (SWPS exclusion deferred to spec-014, see Memory.md) |
 | spec-012 | Payment certificates module | v2 | ACTIVE — v2 correction DRAFT pending G1 | spec-004, spec-005 | T-019 DONE | AC1 Σ-net figure corrected per DCL-004 (10,331,978.00 AED row-sum); rest identical to ratified v1 |
-| spec-013 | Variation orders module | v1 | ACTIVE | spec-004, spec-005, spec-007 | — | Ratified; queued |
-| spec-014 | Analytics engine & endpoints | v1 | ACTIVE | spec-007, spec-011, spec-012, spec-013 | — | Golden anchors from Job 1571; queued |
+| spec-013 | Variation orders module | v1 | IMPLEMENTED | spec-004, spec-005, spec-007 | T-020 DONE | Exposure attribution project-level aggregate per Risks limitation; UNAPPROVED_VO_CLAIM flag wired |
+| spec-014 | Analytics engine & endpoints | v1 | ACTIVE | spec-007, spec-011, spec-012, spec-013 | — | Golden anchors from Job 1571 (requires SWPS exclusions); queued |
 | spec-015 | Dashboard screens (six tabs) | v1 | ACTIVE | spec-009, spec-010, spec-014 | — | Ratified; queued |
 
 _M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015) drafted, pending Gate G1._

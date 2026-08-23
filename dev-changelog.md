@@ -104,3 +104,8 @@ Anti-hallucination principle (instruction_v4 §0), same class as DCL-003: assert
 
 **Impact:**
 specs/spec-012-v2.md drafted with corrected constant; integration test asserts the row-sum to the fils. No downstream spec affected (spec-014 anchors reference recovery/utilization ratios, not this absolute total). Pending G1 ratification alongside implementation per DCL-003 precedent.
+
+## [2026-08-24 04:25] — T-020 completion note (no deviation)
+
+**Task Reference:** T-020
+**Note:** spec-013 implemented to all five ACs. Two documented interpretation calls, neither a deviation: (1) unapprovedVoExposure attribution is project-level aggregate — PC variationClaimFils carries no per-VO split in the legacy data (spec Risks section), so exposure equals the full claimed amount while ANY non-APPROVED VO exists and zero with no VOs or all-approved; surfaced in UI sub-labels. (2) The AC1 narrative example ("VO #1") is exercised via the suite's reserved voNumber ≥900 range to keep reruns collision-free on the shared dev DB; behavior verified is identical (COMMERCIAL raise → 201 + audit). Real-data bonus anchor: seeded Job 1571 carries AED 84,001.00 of variation claims (PC07 55,665.00 + PC13 28,336.00), so compliance live-smoke shows totalClaims=8400100 with zero exposure pre-backfill.

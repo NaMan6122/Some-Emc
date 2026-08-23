@@ -220,6 +220,8 @@ export function ProjectsClient() {
                   <span className="mx-2 text-zinc-300">·</span>
                   <a href={`/admin/projects/${p.id}/pcs`} className="text-indigo-600 hover:text-indigo-800">PCs</a>
                   <span className="mx-2 text-zinc-300">·</span>
+                  <a href={`/admin/projects/${p.id}/vos`} className="text-indigo-600 hover:text-indigo-800">VOs</a>
+                  <span className="mx-2 text-zinc-300">·</span>
                   <button onClick={() => startEdit(p)} className="text-indigo-600 hover:text-indigo-800">Edit</button>
                   <span className="mx-2 text-zinc-300">·</span>
                   <button onClick={() => remove(p)} className="text-red-600 hover:text-red-800">Delete</button>

@@ -1,18 +1,37 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 04:15
-Active Task: T-020 — Implement spec-013 (Variation orders module) — PENDING
+Last Session: 2026-08-24 04:26
+Active Task: T-021 — Implement spec-014 (Analytics engine & endpoints) — PENDING
 Last File Touched: Memory.md
-Immediate Next Step: Implement VOs API + admin screen per spec-013, then analytics (014), dashboards (015). NOTE for 014: golden anchors require excluding SWPS-style out-of-scope packages (see Self-Correction 2026-08-24 03:50); DCL-004/spec-012-v2 pending G1 ratification.
+Immediate Next Step: Implement analytics service per spec-014 — MUST add SWPS-style exclusions (TEMW/REF/LPO//039 Storm Water Pumping Station et al.) to hit golden anchors 85%/123.4%/117.9% + recovery ≈81.8%, top-8 ≈76%; see Self-Corrections 2026-08-24 03:50. DCL-004/spec-012-v2 still pending G1.
 
 ## Active Task
-T-019 — Implement spec-012: Payment certificates module
+T-020 — Implement spec-013: Variation orders module
 State: DONE
-Started: 2026-08-24 03:57
-Last Updated: 2026-08-24 04:15
+Started: 2026-08-24 04:16
+Last Updated: 2026-08-24 04:26
 
 ## Task Log
+
+### [2026-08-24 04:26] — T-020: Implement spec-013 Variation orders module
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (04:16) → DONE (04:26).
+**Goal:** VO register CRUD (audited), strict status chain DRAFT→SUBMITTED→APPROVED/REJECTED, approval completeness enforcement, unapprovedVoExposure compliance KPI + UNAPPROVED_VO_CLAIM flag, admin VO screen with exposure banner.
+**Spec Reference:** specs/spec-013-v1.md; PRD FR-7; TDD §5/§7.
+**Approach:** Transition matrix in service (terminal APPROVED/REJECTED); approval demands approvedValueFils+approvedAt → 422 MISSING_APPROVAL; approvalRef captured in audit after-payload. Compliance is project-level aggregate per the spec Risks limitation (claims carry no per-VO split): exposure = Σ PC.variationClaimFils while any non-APPROVED VO exists, else 0; flag reconciled inside VO mutations AND on compliance GET read-path so PC-side claim edits stay fresh. Role gates ADMIN+COMMERCIAL write; no DELETE endpoint (financial record).
+**Checklist:**
+  - [x] GET|POST /projects/:id/vos; PATCH /vos/:id; GET /projects/:id/vos/compliance
+  - [x] AC1 COMMERCIAL raise SUBMITTED → 201 + audit (fixture in reserved ≥900 range)
+  - [x] AC2 incomplete approve → 422; complete → APPROVED, audit records JCA-VO-901-R1
+  - [x] AC3 VO_BACKFILL remains OPEN after all operations
+  - [x] AC4 exposure 0 → AED 94,001.00 w/ SUBMITTED VO over real claims (84,001 seeded + 10k fixture) → 0 after approval; flag OPEN→RESOLVED
+  - [x] AC5 VIEWER PATCH → 403; terminal-status moves → 422 INVALID_TRANSITION
+  - [x] Admin screen /admin/projects/[id]/vos: exposure banner, 3 KPI cards, table w/ StatusPill(vo)+linked LPO count, create/edit form incl. approve-with-details flow, "VOs" link in ProjectsClient
+**Outcome:** All five ACs verified; suite leaves zero rows (reserved-range purge both ends). Real-data anchor discovered en route: Job 1571 carries AED 84,001.00 of variation claims (PC07 55,665.00 + PC13 28,336.00), so compliance live-smoke shows totalClaims=8400100 with zero exposure pre-backfill — the exact "11 unsubmitted VOs" exposure story from the PRD evidence base. Live smoke: compliance endpoint + VO register page verified. Dev-server note: stale .next after a killed dev run caused transient 500s with JSON manifest errors — rm -rf .next restart fixed (environmental, not app).
+**Test Evidence:** vitest 20 files / 112 tests passed; tsc --noEmit clean; eslint clean; live curls in-session.
+**Blockers:** NONE
+**Rollback:** Remove routes/service/screen/tests; VO rows persist harmlessly (table empty outside tests).
 
 ### [2026-08-24 04:15] — T-019: Implement spec-012 Payment certificates module
 **Weight:** SIGNIFICANT (includes DCL-004 spec correction)
