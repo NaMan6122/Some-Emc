@@ -215,7 +215,9 @@ export function ProjectsClient() {
                     {p.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-right whitespace-nowrap">
+                  <a href={`/admin/projects/${p.id}/budget`} className="text-indigo-600 hover:text-indigo-800">Budget</a>
+                  <span className="mx-2 text-zinc-300">·</span>
                   <button onClick={() => startEdit(p)} className="text-indigo-600 hover:text-indigo-800">Edit</button>
                   <span className="mx-2 text-zinc-300">·</span>
                   <button onClick={() => remove(p)} className="text-red-600 hover:text-red-800">Delete</button>

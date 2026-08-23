@@ -1,18 +1,49 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-23 04:48
-Active Task: T-018 — Implement spec-011 (Budgets module) — PENDING
+Last Session: 2026-08-24 03:55
+Active Task: T-019 — Implement spec-012 (Payment certificates module) — PENDING
 Last File Touched: Memory.md
-Immediate Next Step: Implement budgets API + variance service + admin section, then PCs (012), VOs (013), analytics (014), dashboards (015).
+Immediate Next Step: Implement PCs API + admin screen per spec-012, then VOs (013), analytics (014), dashboards (015).
 
 ## Active Task
-T-017 — Implement spec-010-v1: LPO log screen
+T-018 — Implement spec-011-v1: Budgets module
 State: DONE
-Started: 2026-08-23 04:30
-Last Updated: 2026-08-23 04:48
+Started: 2026-08-23 05:00 (resumed 2026-08-24)
+Last Updated: 2026-08-24 03:55
 
 ## Task Log
+
+### [2026-08-24 03:55] — T-018: Implement spec-011-v1 Budgets module (JCA lines + variance)
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (2026-08-23 05:00, session cut mid-flight; resumed 2026-08-24) → DONE.
+**Goal:** JCA budget lines CRUD (audited), variance service (committed vs budget per trade w/ status bands + coverage gaps), BUDGET_DUPLICATE_LINE advisory rule, minimal admin Budget tab.
+**Spec Reference:** specs/spec-011-v1.md; PRD FR-5; design.md §7/§8.
+**Approach:** Resumed a half-written API layer (routes/service/validation existed with tsc errors). Fixed Prisma groupBy typing (`satisfies BudgetLineGroupByArgs`, `_sum` narrowing); added duplicate-line DataFlag inside the create transaction; moved the three JCA lines into prisma/seed.mjs (idempotent by sourceLabel, per-appendix I/II/III labels); rewrote integration suite to seed-owned data + tracked cleanup of its own rows; built /admin/projects/[id]/budget (variance table w/ under/watch/over/no-JCA-line bands, lines table, ADMIN+COMMERCIAL form, ADMIN-only delete) linked from Projects rows via "Budget" action.
+**Checklist:**
+  - [x] GET|POST /projects/:id/budget-lines; PATCH|DELETE /budget-lines/:id (ADMIN+COMMERCIAL write, DELETE admin-only, FINANCE 403)
+  - [x] GET /projects/:id/variance — per-trade {budgetFils, committedFils, utilizationPct, status}; FIRE_FIGHTING coverage gap surfaced
+  - [x] BUDGET_DUPLICATE_LINE advisory DataFlag on duplicate trade+category (severity LOW, OPEN)
+  - [x] Mutations audited; PATCH diff reduced to changed key only (AC4 verified via auditLog row keys)
+  - [x] Seed: JCA Appendix I/II/III = 7,000,000.00 / 500,000.00 / 300,000.00 AED, refDate 2025-01-23
+  - [x] Admin screen: Administration → Projects → Budget tab (+ Budget link in projects table)
+  - [x] Test hygiene: suppliers suite purges stale stamped fixtures beforeAll (dev DB had 40 leftover "Silver Waves … Equip mt*" rows flooding the capped top-20 suggestions list — fixed pre-existing AC5 flake)
+**Outcome:** All five spec-011 ACs verified live against seeded Job 1571 (id 220): ELECTRICAL under @85.03%, HVAC over @123.39%, PLUMBING over (1395% — see Self-Corrections), FIRE_FIGHTING no_budget with AED 1,583,925 committed. Live smoke: variance API returns golden figures; /admin/projects/220/budget renders shell 200 (rows hydrate client-side); unauth page 307→/login.
+**Test Evidence:** vitest 18 files / 99 tests passed (fileParallelism:false); tsc --noEmit clean; eslint clean (fixed unused-var warning in seed.mjs).
+**Blockers:** NONE
+**Rollback:** Remove routes/service/screen/tests; budget rows persist harmlessly.
+
+## Self-Corrections
+
+### [2026-08-24 03:50]
+**Earlier reasoning (now incorrect):** WIP integration test asserted PLUMBING utilization ≈117.9% (the Job 1571 golden anchor from T-015 planning notes).
+**Correction:** The 117.9%/85%/123.4% anchors require excluding SWPS-style out-of-scope packages (TEMW/REF/LPO//039 "Storm Water Pumping Station", AED 3.83M, is genuinely Plumbing in the source report). Spec-011 Risks explicitly defers exclusions ("v1 counts all non-cancelled latest-revision LPOs in-trade — documented limitation"); exclusion logic is spec-014 scope. Test now asserts v1 semantics (over, >100%) and the limitation is recorded here so spec-014 implements the anchor faithfully.
+**Impact:** No code change to computeVariance; spec-014 must add configurable exclusions to hit all three golden anchors.
+
+### [2026-08-24 03:46]
+**Earlier reasoning (now incorrect):** Suspected my budgets changes broke suppliers.integration AC5.
+**Correction:** Reproduced with changes stashed — pre-existing dev-DB pollution: repeated runs left stamped fixture suppliers that flooded the capped top-20 suggestions endpoint until the asserted pair fell out. Fixed by purging stale `Equip mt*` rows in beforeAll + one-time DB cleanup (40 rows); legit seeded supplier SILVER WAVES ELELCTRICAL EQUIPMENT TRADING untouched.
+**Impact:** Suppliers suite stable again; no production code touched.
 
 ### [2026-08-23 04:48] — T-017: Implement spec-010-v1 LPO log screen
 **Weight:** SIGNIFICANT

@@ -81,3 +81,8 @@ specs/spec-008-v2 drafted with corrected threshold. Integration test asserts ≥
 
 **Task Reference:** T-013, T-014
 **Note:** Human ratified DCL-002/spec-007-v2 and DCL-003/spec-008-v2 at the combined checkpoint ("Yes"), and confirmed M1 milestone completion by directing work to the frontend (M2). spec-index updated accordingly.
+
+## [2026-08-24 03:55] — T-018 completion note (no deviation)
+
+**Task Reference:** T-018
+**Note:** spec-011 implemented to all five ACs with two documented judgment calls, neither a deviation: (1) PLUMBING variance shows 1395% vs the report-derived 117.9% anchor because v1 committed-value semantics intentionally count SWPS-style out-of-scope packages (spec-011 Risks "documented limitation"); exclusion logic deferred to spec-014 analytics. (2) JCA budget lines seeded via per-appendix sourceLabels ("JCA Appendix I/II/III") rather than a shared label — more faithful to the JCA structure; AC1 figures unaffected. Also: suppliers integration suite now purges stale stamped fixtures beforeAll (test hygiene fixing a pre-existing dev-DB pollution flake in its AC5).

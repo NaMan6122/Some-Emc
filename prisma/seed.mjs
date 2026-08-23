@@ -242,6 +242,26 @@ try {
     },
   );
 
+  // spec-011: JCA Appendix I–III budget lines (idempotent by sourceLabel).
+  const jcaBudgets = [
+    { trade: "ELECTRICAL", amountFils: 700000000n, sourceLabel: "JCA Appendix I" },
+    { trade: "HVAC", amountFils: 50000000n, sourceLabel: "JCA Appendix II" },
+    { trade: "PLUMBING", amountFils: 30000000n, sourceLabel: "JCA Appendix III" },
+  ];
+  let newBudgets = 0;
+  for (const b of jcaBudgets) {
+    const exists = await prisma.budgetLine.findFirst({
+      where: { projectId: project.id, sourceLabel: b.sourceLabel },
+      select: { id: true },
+    });
+    if (exists) continue;
+    await prisma.budgetLine.create({
+      data: { projectId: project.id, ...b, category: "MATERIALS", refDate: new Date("2025-01-23") },
+    });
+    newBudgets++;
+  }
+  if (newBudgets > 0) console.log(`  + ${newBudgets} JCA budget lines`);
+
   console.log(
     `Seed complete: project ${project.code} · new suppliers ${counts.suppliers} · new LPOs ${counts.lpos} · new PCs ${counts.pcs} · flags ensured`,
   );

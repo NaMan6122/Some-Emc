@@ -32,6 +32,10 @@ async function routes() {
 }
 
 beforeAll(async () => {
+  // Test hygiene: stale runs leave stamped fixture suppliers behind, which flood
+  // the capped (top-20) suggestions list and can evict the pair this suite asserts on.
+  await prisma.supplier.deleteMany({ where: { name: { contains: " Equip mt", mode: "insensitive" } } });
+
   async function user(email: string, role: "ADMIN" | "PROCUREMENT" | "FINANCE") {
     const u = await prisma.user.create({
       data: { email, name: role, role, passwordHash: await hash("unused") },
