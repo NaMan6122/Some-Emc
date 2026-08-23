@@ -1,18 +1,47 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 03:55
-Active Task: T-019 — Implement spec-012 (Payment certificates module) — PENDING
+Last Session: 2026-08-24 04:15
+Active Task: T-020 — Implement spec-013 (Variation orders module) — PENDING
 Last File Touched: Memory.md
-Immediate Next Step: Implement PCs API + admin screen per spec-012, then VOs (013), analytics (014), dashboards (015).
+Immediate Next Step: Implement VOs API + admin screen per spec-013, then analytics (014), dashboards (015). NOTE for 014: golden anchors require excluding SWPS-style out-of-scope packages (see Self-Correction 2026-08-24 03:50); DCL-004/spec-012-v2 pending G1 ratification.
 
 ## Active Task
-T-018 — Implement spec-011-v1: Budgets module
+T-019 — Implement spec-012: Payment certificates module
 State: DONE
-Started: 2026-08-23 05:00 (resumed 2026-08-24)
-Last Updated: 2026-08-24 03:55
+Started: 2026-08-24 03:57
+Last Updated: 2026-08-24 04:15
 
 ## Task Log
+
+### [2026-08-24 04:15] — T-019: Implement spec-012 Payment certificates module
+**Weight:** SIGNIFICANT (includes DCL-004 spec correction)
+**State transitions:** PENDING → IN_PROGRESS (03:57) → DONE (04:15).
+**Goal:** PC CRUD with server-enforced integrity (net=gross−retention, gapless numbering advisory, cumulative cross-check), status workflow, audit, admin PC log screen.
+**Spec Reference:** specs/spec-012-v2.md (v1 AC1 figure corrected per DCL-004); PRD FR-6; TDD §5/§7.
+**Approach:** Extracted shared moneyString validator (validation/money.ts, budget-line.ts now imports it). Service enforces arithmetic → 422 ARITHMETIC_MISMATCH w/ field detail; duplicate pcNumber → 409 PC_NUMBER_TAKEN; PC_GAP + CUMULATIVE_MISMATCH raised as OPEN DataFlags inside the mutation tx with resolve-then-re-raise reconciliation; status transitions forward-only, PAID only from CERTIFIED. Role gates ADMIN+FINANCE write per TDD §7 matrix (spec v1's "FINANCE writes" read as shorthand — matrix is authoritative, consistent with every other module).
+**Checklist:**
+  - [x] GET|POST /projects/:id/pcs; PATCH|DELETE /pcs/:id (+audit rows)
+  - [x] Seeded 14 PCs verified to the fils; Σ net = 1,033,197,800 fils (AED 10,331,978.00) — DCL-004 correction from spec's unverifiable 10,332,972.00
+  - [x] Provenance surfaced via existing ProvenanceChip (OCR_ESTIMATE amber badge per Risks note)
+  - [x] Admin screen /admin/projects/[id]/pcs: log table w/ Σ net footer, create/edit form, status advance buttons (→SUBMITTED/CERTIFIED/PAID), linked "PCs" action in ProjectsClient
+  - [x] Test hygiene: suite owns pcNumbers ≥90 on project 1571, purges range beforeAll + afterAll
+**Outcome:** All five ACs verified live against seeded Job 1571. Two test bugs found & fixed during the task (both mine): (1) DELETE test spliced its id with indexOf→−1 removing the WRONG cleanup entry, orphaning PC93 every run — root-caused via audit-log diffing + afterAll instrumentation; (2) earlier collision cascade (409→undefined id→404) masked the leak until a beforeAll purge made reruns deterministic. Live smoke: /api/v1/projects/220/pcs returns 14 items, PC13 gross 172,522.700 AED, PC01 SOURCE_DOCUMENT; admin page 200.
+**Test Evidence:** vitest 19 files / 106 tests passed; tsc --noEmit clean; eslint clean; live curls in-session.
+**Blockers:** DCL-004/spec-012-v2 ratification queued for next G1 (implementation proceeded per DCL-003 precedent).
+**Rollback:** Remove routes/service/screen/tests; PC rows persist.
+
+## Self-Corrections
+
+### [2026-08-24 04:10]
+**Earlier reasoning (now incorrect):** Test cleanup used `createdPcIds.splice(createdPcIds.indexOf(id), 1)` in the DELETE test without pushing the id first — indexOf returned −1 and `splice(-1, 1)` silently removed the last list entry (PC93's), leaking one row per run and cascading into 409-collision failures on reruns.
+**Correction:** Removed the splice (row already deleted server-side); added deterministic beforeAll purge of the suite's reserved pcNumber ≥90 range. Lesson recorded: guard any indexOf-based removal; prefer building the keep-list rather than mutating by index.
+**Impact:** Suite now leaves zero rows behind across repeated runs (verified empirically).
+
+### [2026-08-24 04:05]
+**Earlier reasoning (now incorrect):** Assumed spec-012-v1's Σ-net figure (AED 10,332,972.00) was extracted from the dataset like the rest of the seed anchors.
+**Correction:** Row-sum is AED 10,331,978.00; the v1 figure matches no source and no computation (Δ exactly 994.00). Filed DCL-004 + drafted spec-012-v2 correcting only that constant; test asserts the dataset value.
+**Impact:** No downstream spec references the absolute total (spec-014 uses ratios). Ratification queued.
 
 ### [2026-08-24 03:55] — T-018: Implement spec-011-v1 Budgets module (JCA lines + variance)
 **Weight:** SIGNIFICANT

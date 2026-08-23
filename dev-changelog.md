@@ -86,3 +86,21 @@ specs/spec-008-v2 drafted with corrected threshold. Integration test asserts ≥
 
 **Task Reference:** T-018
 **Note:** spec-011 implemented to all five ACs with two documented judgment calls, neither a deviation: (1) PLUMBING variance shows 1395% vs the report-derived 117.9% anchor because v1 committed-value semantics intentionally count SWPS-style out-of-scope packages (spec-011 Risks "documented limitation"); exclusion logic deferred to spec-014 analytics. (2) JCA budget lines seeded via per-appendix sourceLabels ("JCA Appendix I/II/III") rather than a shared label — more faithful to the JCA structure; AC1 figures unaffected. Also: suppliers integration suite now purges stale stamped fixtures beforeAll (test hygiene fixing a pre-existing dev-DB pollution flake in its AC5).
+
+## [2026-08-24 04:05] — DCL-004
+
+**Task Reference:** T-019
+**Spec Affected:** specs/spec-012-v1.md (AC1)
+**Type:** CORRECTION
+
+**Original Spec:**
+AC1 required Σ net payable across the seeded 14 PCs to equal "AED 10,332,972.00 equivalent in fils from the dataset".
+
+**Deviation:**
+Figure corrected to the dataset's verifiable row-sum: 1,033,197,800 fils = AED 10,331,978.00. The v1 figure could not be reproduced from the extracted data (delta exactly AED 994.00) nor found in any of the three source reports, which state only a rounded "10.33M certified".
+
+**Reason:**
+Anti-hallucination principle (instruction_v4 §0), same class as DCL-003: asserting 10,332,972.00 as "from the dataset" would fabricate precision the data does not support. The AC's intent (Σ net ≈ AED 10.33M) is preserved.
+
+**Impact:**
+specs/spec-012-v2.md drafted with corrected constant; integration test asserts the row-sum to the fils. No downstream spec affected (spec-014 anchors reference recovery/utilization ratios, not this absolute total). Pending G1 ratification alongside implementation per DCL-003 precedent.

@@ -12,8 +12,8 @@
 | spec-008 | Job 1571 seed pipeline | v2 | IMPLEMENTED | spec-001, spec-002, spec-005, spec-006, spec-007 | T-014 DONE | v2 ratified at G1 2026-08-23; ≥85 vendors post-canonicalization (DCL-003) |
 | spec-009 | App shell & navigation | v1 | IMPLEMENTED | spec-003 | T-016 DONE | Design tokens now live in globals.css |
 | spec-010 | LPO log screen | v1 | IMPLEMENTED | spec-007, spec-009 | T-017 DONE | Ratified (DCL-002 deliverable) |
-| spec-011 | Budgets module (JCA) | v1 | ACTIVE | spec-004, spec-005 | — | Ratified; queued |
-| spec-012 | Payment certificates module | v1 | ACTIVE | spec-004, spec-005 | — | Ratified; queued |
+| spec-011 | Budgets module (JCA) | v1 | IMPLEMENTED | spec-004, spec-005 | T-018 DONE | Variance v1 counts all non-cancelled LPOs (SWPS exclusion deferred to spec-014, see Memory.md) |
+| spec-012 | Payment certificates module | v2 | ACTIVE — v2 correction DRAFT pending G1 | spec-004, spec-005 | T-019 DONE | AC1 Σ-net figure corrected per DCL-004 (10,331,978.00 AED row-sum); rest identical to ratified v1 |
 | spec-013 | Variation orders module | v1 | ACTIVE | spec-004, spec-005, spec-007 | — | Ratified; queued |
 | spec-014 | Analytics engine & endpoints | v1 | ACTIVE | spec-007, spec-011, spec-012, spec-013 | — | Golden anchors from Job 1571; queued |
 | spec-015 | Dashboard screens (six tabs) | v1 | ACTIVE | spec-009, spec-010, spec-014 | — | Ratified; queued |
