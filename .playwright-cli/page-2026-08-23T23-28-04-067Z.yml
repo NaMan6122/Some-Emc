@@ -1,0 +1,15 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e2]:
+    - complementary [ref=f3e3]:
+      - generic [ref=f3e4]:
+        - paragraph [ref=f3e5]: ProCare
+        - combobox "Project" [ref=f3e7]
+      - generic [ref=f3e8]:
+        - navigation
+      - paragraph [ref=f3e9]: ProCare · Trends EMC
+    - banner [ref=f3e10]:
+      - textbox "Search… (⌘K soon)" [disabled] [ref=f3e11]
+      - button "Toggle dark mode" [ref=f3e13]: Dark
+    - main [ref=f3e14]
+  - button "Open Next.js Dev Tools" [ref=f3e32] [cursor=pointer]
+  - alert [ref=f3e36]

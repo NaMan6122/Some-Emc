@@ -1,0 +1,14 @@
+- generic [active] [ref=f10e1]:
+  - generic [ref=f10e2]:
+    - complementary [ref=f10e3]:
+      - generic [ref=f10e4]:
+        - paragraph [ref=f10e5]: ProCare
+        - combobox "Project" [ref=f10e7]
+      - generic [ref=f10e8]:
+        - navigation
+      - paragraph [ref=f10e9]: ProCare · Trends EMC
+    - banner [ref=f10e10]:
+      - textbox "Search… (⌘K soon)" [disabled] [ref=f10e11]
+      - button "Toggle dark mode" [ref=f10e13]: Dark
+    - main [ref=f10e14]
+  - alert [ref=f10e16]

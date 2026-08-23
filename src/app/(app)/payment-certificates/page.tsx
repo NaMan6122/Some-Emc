@@ -1,11 +1,6 @@
-import { EmptyState } from "@/components/ui/primitives";
+import { PcDashboardClient } from "./PcDashboardClient";
 
-export default function Page() {
-  return (
-    <div className="mx-auto max-w-3xl">
-      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">ProCare</p>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Payment Certificates</h1>
-      <EmptyState title="Payment Certificates" body="Awaiting PCs module — spec-012." />
-    </div>
-  );
+// spec-015 tab 3: live Payment Certificates dashboard.
+export default function PaymentCertificatesPage() {
+  return <PcDashboardClient />;
 }

@@ -16,7 +16,7 @@
 | spec-012 | Payment certificates module | v2 | ACTIVE — v2 correction DRAFT pending G1 | spec-004, spec-005 | T-019 DONE | AC1 Σ-net figure corrected per DCL-004 (10,331,978.00 AED row-sum); rest identical to ratified v1 |
 | spec-013 | Variation orders module | v1 | IMPLEMENTED | spec-004, spec-005, spec-007 | T-020 DONE | Exposure attribution project-level aggregate per Risks limitation; UNAPPROVED_VO_CLAIM flag wired |
 | spec-014 | Analytics engine & endpoints | v2 | ACTIVE — v2 corrections DRAFT pending G1 | spec-007, spec-011, spec-012, spec-013 | T-021 DONE | Golden anchors reproduce at DB-exact precision; DCL-005a/b constants; SWPS exclusion lens in analytics/budget only |
-| spec-015 | Dashboard screens (six tabs) | v1 | ACTIVE | spec-009, spec-010, spec-014 | — | Ratified; queued |
+| spec-015 | Dashboard screens (six tabs) | v1 | IMPLEMENTED | spec-009, spec-010, spec-014 | T-022 DONE | Recharts dashboards live; flags read-only feed (FR-9 triage M3) |
 
 _M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015) drafted, pending Gate G1._
 

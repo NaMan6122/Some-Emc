@@ -27,6 +27,15 @@ export function useProjects() {
   return { projects: data?.items ?? [], isLoading };
 }
 
+/** spec-015: analytics payloads keyed by numeric project id (resolve via useProjects). */
+export function useAnalytics<T>(section: string, projectId: number | null) {
+  const { data, isLoading, error } = useSWR<T>(
+    projectId ? `/api/v1/projects/${projectId}/analytics/${section}` : null,
+    fetcher,
+  );
+  return { data: data ?? null, isLoading: isLoading || !projectId, error };
+}
+
 /** Project context persisted in the URL (?project=CODE), defaulting to first ACTIVE project. */
 export function useProjectContext(): {
   code: string | null;

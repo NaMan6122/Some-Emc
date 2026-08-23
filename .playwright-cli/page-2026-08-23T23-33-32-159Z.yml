@@ -1,0 +1,80 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - complementary [ref=f9e3]:
+      - generic [ref=f9e4]:
+        - paragraph [ref=f9e5]: ProCare
+        - combobox "Project" [ref=f9e7]
+      - generic [ref=f9e8]:
+        - navigation
+      - paragraph [ref=f9e9]: ProCare · Trends EMC
+    - banner [ref=f9e10]:
+      - textbox "Search… (⌘K soon)" [disabled] [ref=f9e11]
+      - button "Toggle dark mode" [ref=f9e13]: Dark
+    - main [ref=f9e14]:
+      - generic [ref=f9e15]:
+        - generic [ref=f9e17]:
+          - paragraph [ref=f9e18]: Analytics
+          - heading "Vendors & LPO Log" [level=1] [ref=f9e19]
+          - paragraph [ref=f9e20]: Local purchase orders incl. 5% VAT · server-computed totals
+        - generic [ref=f9e23]:
+          - generic [ref=f9e24]:
+            - generic [ref=f9e25]:
+              - textbox "Search supplier / material / ref…" [ref=f9e26]
+              - combobox "Status" [ref=f9e27]:
+                - option "All statuses" [selected]
+                - option "DRAFT"
+                - option "ISSUED"
+                - option "CLOSED"
+                - option "CANCELLED"
+              - combobox "Verification" [ref=f9e28]:
+                - option "All verification" [selected]
+                - option "PENDING"
+                - option "VERIFIED"
+                - option "FLAGGED"
+              - textbox "From" [ref=f9e29]
+              - textbox "To" [ref=f9e30]
+              - generic [ref=f9e31]:
+                - checkbox "superseded" [ref=f9e32]
+                - text: superseded
+            - generic [ref=f9e33]:
+              - button "ELECTRICAL ELECTRICAL" [ref=f9e34]:
+                - generic "ELECTRICAL" [ref=f9e35]
+                - text: ELECTRICAL
+              - button "PLUMBING PLUMBING" [ref=f9e36]:
+                - generic "PLUMBING" [ref=f9e37]
+                - text: PLUMBING
+              - button "HVAC HVAC" [ref=f9e38]:
+                - generic "HVAC" [ref=f9e39]
+                - text: HVAC
+              - button "FIRE_FIGHTING FIRE FIGHTING" [ref=f9e40]:
+                - generic "FIRE_FIGHTING" [ref=f9e41]
+                - text: FIRE FIGHTING
+              - button "GENERAL GENERAL" [ref=f9e42]:
+                - generic "GENERAL" [ref=f9e43]
+                - text: GENERAL
+              - button "HSE HSE" [ref=f9e44]:
+                - generic "HSE" [ref=f9e45]
+                - text: HSE
+              - button "OTHER OTHER" [ref=f9e46]:
+                - generic "OTHER" [ref=f9e47]
+                - text: OTHER
+          - generic [ref=f9e48]:
+            - table [ref=f9e50]:
+              - rowgroup [ref=f9e51]:
+                - row [ref=f9e52]:
+                  - columnheader "Ref" [ref=f9e53] [cursor=pointer]
+                  - columnheader "Supplier" [ref=f9e54]
+                  - columnheader "Description" [ref=f9e55]
+                  - columnheader "Trade" [ref=f9e56]
+                  - columnheader "Issued ▼" [ref=f9e57] [cursor=pointer]
+                  - columnheader "Amount" [ref=f9e58] [cursor=pointer]
+                  - columnheader "Status" [ref=f9e59]
+                  - columnheader "Ver." [ref=f9e60]
+                  - columnheader [ref=f9e61]
+              - rowgroup [ref=f9e62]:
+                - row [ref=f9e63]:
+                  - cell "Loading…" [ref=f9e64]
+            - generic [ref=f9e65]:
+              - generic [ref=f9e66]: —
+              - button "Export CSV" [ref=f9e68]
+  - alert [ref=f9e69]

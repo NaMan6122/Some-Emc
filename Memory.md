@@ -1,18 +1,36 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 04:50
-Active Task: T-022 — Implement spec-015 (Dashboard screens — six tabs) — PENDING
+Last Session: 2026-08-24 05:05
+Active Task: M2 COMPLETE — no active implementation task
 Last File Touched: Memory.md
-Immediate Next Step: Implement the six dashboard screens per spec-015 consuming /analytics/* endpoints (Overview, Budget vs Actual, Payment Certificates, Investment, Vendors, plus LPO log link); replace placeholder pages. DCL-004/005 (spec-012-v2, spec-014-v2) pre-approved by human 2026-08-24 — mark ratified at next G1 entry without asking.
+Immediate Next Step: M3 planning per TDD §14 (FR-9 data-quality queue w/ triage, exports P1, retention release tracking OQ-7). DCL-004/005 pre-approved by human 2026-08-24 — ratify spec-012-v2/spec-014-v2 at next G1 entry without prompting.
 
 ## Active Task
-T-021 — Implement spec-014: Analytics engine & endpoints
+T-022 — Implement spec-015: Dashboard screens (six tabs)
 State: DONE
-Started: 2026-08-24 04:30
-Last Updated: 2026-08-24 04:50
+Started: 2026-08-24 04:52
+Last Updated: 2026-08-24 05:05
 
 ## Task Log
+
+### [2026-08-24 05:05] — T-022: Implement spec-015 Dashboard screens — M2 complete
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (04:52) → DONE (05:05).
+**Goal:** Six live dashboard tabs consuming /analytics/* payloads per design.md §9 chart standards; replaces all placeholder pages.
+**Spec Reference:** specs/spec-015-v1.md; design.md §9/§10.
+**Approach:** recharts@3.10.1 added. Shared ChartFrame (figure+figcaption+ariaLabel) and self-wrapping ChartTooltip (renders Recharts Tooltip with dark surface + fils-exact AED content). useAnalytics SWR hook keyed by resolved numeric project id from ?project= context. Screens: Overview (6 KPIs, trade bar/donut toggle, monthly area, housekeeping note), Budget vs Actual (grouped bars, gap banner, utilization bars + status pills), Payment Certificates (paired bars + dashed cumulative overlays via ComposedChart, retention/claim KPIs, PC table w/ provenance chips), Investment (paired bars + outstanding gap area + recovery/peak cards), Vendors (Pareto bars+cumulative % line above existing LPO log), Data Flags (read-only feed from new GET /api/v1/flags — FR-9 triage stays M3).
+**Checklist:**
+  - [x] AC1 Overview renders goldens live: AED 12,984,115.00 / 140 / largest AED 3,832,500.00 (browser-verified)
+  - [x] AC2 Budget tab: HVAC "123.4%" Over pill + Fire Fighting coverage-gap notice (browser-verified)
+  - [x] AC3 Investment: recovery 81.8%, peak Dec 25 · 5.6M, outstanding AED 2,306,505.00 (browser-verified)
+  - [x] AC4 aria-labels on every chart figure; tabular-nums on money; ProvenanceChip in PC table
+  - [x] AC5 six routes reachable from sidebar; ?project=1571 deep-link honored on all dashboards
+  - [x] Contrast uses existing zinc/indigo tokens both modes (no new text colors introduced)
+**Outcome:** All six tabs browser-smoked via Playwright with ZERO console errors; dev-server flakiness seen mid-task was stale .next after a kill (rm -rf .next restart fixed; environmental). Flags feed test added (401 unauth, OPEN filter, newest-first). M2 milestone COMPLETE (spec-009..015).
+**Test Evidence:** vitest 22 files / 119 tests passed; tsc clean; eslint clean; Playwright DOM assertions for goldens on overview/budget/investment.
+**Blockers:** NONE
+**Rollback:** Screens additive; remove client files + flags route; analytics endpoints remain usable standalone.
 
 ### [2026-08-24 04:50] — T-021: Implement spec-014 Analytics engine & endpoints
 **Weight:** SIGNIFICANT (includes DCL-005 constant corrections + window-semantics derivation)

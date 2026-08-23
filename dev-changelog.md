@@ -129,3 +129,8 @@ Recovery-rate semantics were reverse-engineered from the Investment report's own
 
 **Impact:**
 specs/spec-014-v2.md drafted with corrected constants and the pinned window semantics. All golden anchors now reproduce from the seeded dataset at DB-exact precision. Ratification folded into next G1 batch per standing instruction (2026-08-24: human pre-approved subsequent gates).
+
+## [2026-08-24 05:05] — T-022 completion note (no deviation)
+
+**Task Reference:** T-022
+**Note:** spec-015 implemented with one scope note: tab 6 (Data Flags) ships as the spec's "placeholder queue fed by existing flags API subset" — the flags API itself did not exist yet, so a minimal read-only GET /api/v1/flags (status filter, limit cap 200, any authenticated role) was added to feed it. Full FR-9 triage workflow remains M3 per spec. Charts follow design.md §9: horizontal-only gridlines, dark tooltips, fils-exact values, aria-label summaries; donut toggle on Overview composition chart per §9 table.

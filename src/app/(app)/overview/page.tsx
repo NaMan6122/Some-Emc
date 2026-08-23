@@ -1,11 +1,6 @@
-import { EmptyState } from "@/components/ui/primitives";
+import { OverviewClient } from "./OverviewClient";
 
-export default function Page() {
-  return (
-    <div className="mx-auto max-w-3xl">
-      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">ProCare</p>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Overview</h1>
-      <EmptyState title="Overview" body="Live in spec-015 (M2)." />
-    </div>
-  );
+// spec-015 tab 1: live Overview dashboard.
+export default function OverviewPage() {
+  return <OverviewClient />;
 }

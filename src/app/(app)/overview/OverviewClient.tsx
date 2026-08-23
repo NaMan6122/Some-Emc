@@ -1,0 +1,164 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { EmptyState, ErrorBanner, KpiCard } from "@/components/ui/primitives";
+import { ChartFrame, ChartTooltip, CHART_COLORS } from "@/components/charts/themed";
+import { useAnalytics, useProjectContext } from "@/hooks/use-app-data";
+
+type Overview = {
+  totalLpoFils: string;
+  activeCount: number;
+  supplierCount: number;
+  avgLpoFils: string;
+  medianLpoFils: string;
+  largestLpoFils: string;
+  flaggedCount: number;
+  tradeBreakdown: { trade: string; fils: string; count: number; pct: number }[];
+  monthlySeries: { month: string; committedFils: string }[];
+};
+
+export function aed(fils: string): string {
+  const n = BigInt(fils);
+  return `AED ${(n / 100n).toLocaleString("en-US")}.${(n % 100n).toString().padStart(2, "0")}`;
+}
+
+function shortAed(fils: string): string {
+  const v = Number(BigInt(fils)) / 100;
+  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(2)}M`;
+  if (v >= 1_000) return `${(v / 1_000).toFixed(0)}K`;
+  return v.toFixed(0);
+}
+
+function labelForMonth(m: string): string {
+  const [y, mo] = m.split("-");
+  const names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return `${names[Number(mo) - 1]} ${y.slice(2)}`;
+}
+
+const DONUT_COLORS = ["#4f46e5", "#0891b2", "#059669", "#d97706", "#dc2626", "#7c3aed", "#a1a1aa"];
+
+export function OverviewClient() {
+  const { code, projects } = useProjectContext();
+  const projectId = useMemo(() => projects.find((p) => p.code === code)?.id ?? null, [projects, code]);
+  const { data, isLoading, error } = useAnalytics<Overview>("overview", projectId);
+  const [donut, setDonut] = useState(false);
+
+  if (error) return <ErrorBanner message="Could not load analytics." />;
+
+  if (isLoading || !data) {
+    return (
+      <div className="mx-auto max-w-[1200px]" aria-busy="true">
+        <div className="mb-4 h-8 w-40 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-24 animate-pulse rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900" />
+          ))}
+        </div>
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="h-72 animate-pulse rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900" />
+          <div className="h-72 animate-pulse rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900" />
+        </div>
+      </div>
+    );
+  }
+
+  const tradeData = [...data.tradeBreakdown].sort((a, b) => (BigInt(b.fils) > BigInt(a.fils) ? 1 : -1));
+  const peak = data.monthlySeries.reduce((a, b) => (BigInt(b.committedFils) > BigInt(a.committedFils) ? b : a), data.monthlySeries[0]);
+  const monthly = data.monthlySeries.map((m) => ({ ...m, label: labelForMonth(m.month), committed: Number(m.committedFils) / 100 }));
+
+  return (
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
+      <div>
+        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">ProCare{code ? ` · ${code}` : ""}</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Overview</h1>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
+        <KpiCard label="Total LPO value" value={aed(data.totalLpoFils)} sub="active incl. VAT" />
+        <KpiCard label="Active LPOs" value={String(data.activeCount)} sub={`${data.supplierCount} suppliers used`} />
+        <KpiCard label="Avg LPO" value={aed(data.avgLpoFils)} />
+        <KpiCard label="Median LPO" value={aed(data.medianLpoFils)} />
+        <KpiCard label="Largest LPO" value={aed(data.largestLpoFils)} />
+        <KpiCard label="Pending verification" value={String(data.flaggedCount)} sub="awaiting source check" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <ChartFrame
+          title="Spend by trade"
+          unit="AED, active LPOs"
+          ariaLabel={`Spend by trade. ${tradeData.map((t) => `${t.trade.replace(/_/g, " ")} ${shortAed(t.fils)} (${t.pct.toFixed(1)}%)`).join(", ")}.`}
+        >
+          <div className="mb-2 text-right">
+            <button
+              type="button"
+              onClick={() => setDonut(!donut)}
+              className="rounded-md border border-zinc-300 px-2 py-0.5 text-xs font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300"
+            >
+              {donut ? "Show bars" : "Show donut"}
+            </button>
+          </div>
+          <div role="img" aria-label={donut ? `Trade mix donut: ${tradeData.map((t) => `${t.trade} ${t.pct.toFixed(1)}%`).join(", ")}.` : "Trade spend bar chart."}>
+            {donut ? (
+              <ResponsiveContainer width="100%" height={260}>
+                <PieChart>
+                  <Pie data={tradeData} dataKey="fils" nameKey="trade" innerRadius={55} outerRadius={100} paddingAngle={1} isAnimationActive={false}>
+                    {tradeData.map((t, i) => (
+                      <Cell key={t.trade} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <ChartTooltip moneyKeys={["fils"]} />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={tradeData} layout="vertical" margin={{ left: 8, right: 48 }}>
+                  <XAxis type="number" hide domain={[0, "dataMax"]} />
+                  <YAxis type="category" dataKey="trade" width={110} tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v: string) => v.replace(/_/g, " ")} />
+                  <Bar dataKey="fils" name="Spend" fill={CHART_COLORS.bar} radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false}
+                    label={{ position: "right", formatter: (v: unknown) => shortAed(String(v)), fontSize: 10, fill: "#71717a" }} />
+                  <ChartTooltip moneyKeys={["fils"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </ChartFrame>
+
+        <ChartFrame
+          title="Monthly commitments"
+          unit="AED by LPO issue date"
+          ariaLabel={`Monthly commitments ${monthly[0]?.label ?? ""} to ${monthly.at(-1)?.label ?? ""}. Peak month ${peak ? labelForMonth(peak.month) : "n/a"} at ${shortAed(peak?.committedFils ?? "0")}.`}
+        >
+          <ResponsiveContainer width="100%" height={280}>
+            <AreaChart data={monthly} margin={{ top: 4, right: 8, bottom: 0, left: 44 }}>
+              <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
+              <YAxis tickFormatter={(v: number) => shortAed(String(Math.round(v * 100)))} tickLine={false} axisLine={false} fontSize={10} width={52} />
+              <Area type="monotone" dataKey="committed" name="Committed" stroke={CHART_COLORS.committed} fill={CHART_COLORS.committed} fillOpacity={0.08} strokeWidth={2} isAnimationActive={false} />
+              <ChartTooltip moneyKeys={["committed"]} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </ChartFrame>
+      </div>
+
+      {data.flaggedCount === data.activeCount && data.activeCount > 0 && (
+        <EmptyState
+          title="Housekeeping: verification backlog"
+          body="Every seeded LPO is imported from the legacy report and still awaits source verification — see the Data Flags tab."
+        />
+      )}
+    </div>
+  );
+}

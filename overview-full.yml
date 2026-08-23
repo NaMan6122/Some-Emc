@@ -1,0 +1,138 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e2]:
+    - complementary [ref=f3e3]:
+      - generic [ref=f3e4]:
+        - paragraph [ref=f3e5]: ProCare
+        - combobox "Project" [ref=f3e7]:
+          - option "1571 · Mid Island Parkway Phase 1C" [selected]
+          - option "SUmt4y3txk · Suppliers fixture"
+          - option "SUmt4y7z75 · Suppliers fixture"
+      - navigation [ref=f3e37]:
+        - generic [ref=f3e38]:
+          - paragraph [ref=f3e39]: Analytics
+          - list [ref=f3e40]:
+            - listitem [ref=f3e41]:
+              - link "Overview" [ref=f3e42] [cursor=pointer]:
+                - /url: /overview
+            - listitem [ref=f3e43]:
+              - link "Budget vs Actual" [ref=f3e44] [cursor=pointer]:
+                - /url: /budget
+            - listitem [ref=f3e45]:
+              - link "Payment Certificates" [ref=f3e46] [cursor=pointer]:
+                - /url: /payment-certificates
+            - listitem [ref=f3e47]:
+              - link "Investment" [ref=f3e48] [cursor=pointer]:
+                - /url: /investment
+            - listitem [ref=f3e49]:
+              - link "Vendors & LPO Log" [ref=f3e50] [cursor=pointer]:
+                - /url: /vendors
+        - generic [ref=f3e51]:
+          - paragraph [ref=f3e52]: Governance
+          - list [ref=f3e53]:
+            - listitem [ref=f3e54]:
+              - link "Data Flags" [ref=f3e55] [cursor=pointer]:
+                - /url: /flags
+        - generic [ref=f3e56]:
+          - paragraph [ref=f3e57]: Administration
+          - list [ref=f3e58]:
+            - listitem [ref=f3e59]:
+              - link "Projects" [ref=f3e60] [cursor=pointer]:
+                - /url: /admin/projects
+            - listitem [ref=f3e61]:
+              - link "Suppliers" [ref=f3e62] [cursor=pointer]:
+                - /url: /admin/suppliers
+            - listitem [ref=f3e63]:
+              - link "Users" [ref=f3e64] [cursor=pointer]:
+                - /url: /admin/users
+            - listitem [ref=f3e65]:
+              - link "Audit Log" [ref=f3e66] [cursor=pointer]:
+                - /url: /audit
+      - paragraph [ref=f3e9]: ProCare · Trends EMC
+    - banner [ref=f3e10]:
+      - textbox "Search… (⌘K soon)" [disabled] [ref=f3e11]
+      - generic [ref=f3e12]:
+        - button "Toggle dark mode" [ref=f3e13]: Dark
+        - generic [ref=f3e67]:
+          - generic [ref=f3e68]: ProCare Admin · ADMIN
+          - button "Log out" [ref=f3e69]
+    - main [ref=f3e14]:
+      - generic [ref=f3e15]:
+        - generic [ref=f3e16]:
+          - paragraph [ref=f3e70]: ProCare · 1571
+          - heading "Overview" [level=1] [ref=f3e71]
+        - generic [ref=f3e17]:
+          - generic [ref=f3e72]:
+            - paragraph [ref=f3e73]: Total LPO value
+            - paragraph [ref=f3e74]: AED 12,984,115.00
+            - paragraph [ref=f3e75]: active incl. VAT
+          - generic [ref=f3e76]:
+            - paragraph [ref=f3e77]: Active LPOs
+            - paragraph [ref=f3e78]: "140"
+            - paragraph [ref=f3e79]: 90 suppliers used
+          - generic [ref=f3e80]:
+            - paragraph [ref=f3e81]: Avg LPO
+            - paragraph [ref=f3e82]: AED 92,743.67
+          - generic [ref=f3e83]:
+            - paragraph [ref=f3e84]: Median LPO
+            - paragraph [ref=f3e85]: AED 4,799.50
+          - generic [ref=f3e86]:
+            - paragraph [ref=f3e87]: Largest LPO
+            - paragraph [ref=f3e88]: AED 3,832,500.00
+          - generic [ref=f3e89]:
+            - paragraph [ref=f3e90]: Pending verification
+            - paragraph [ref=f3e91]: "140"
+            - paragraph [ref=f3e92]: awaiting source check
+        - generic [ref=f3e24]:
+          - figure "Spend by trade. ELECTRICAL 5.95M (45.8%), PLUMBING 4.19M (32.2%), FIRE FIGHTING 1.58M (12.2%), GENERAL 629K (4.8%), HVAC 617K (4.8%), HSE 8K (0.1%), OTHER 8K (0.1%)." [ref=f3e93]:
+            - generic [ref=f3e94]:
+              - text: Spend by trade
+              - generic [ref=f3e95]: (AED, active LPOs)
+            - button "Show donut" [ref=f3e97]
+            - img "Trade spend bar chart." [ref=f3e98]:
+              - application [ref=f3e101]:
+                - generic [ref=f3e127]:
+                  - generic [ref=f3e128]:
+                    - generic [ref=f3e129]: ELECTRICAL
+                    - generic [ref=f3e131]: PLUMBING
+                    - generic [ref=f3e133]: FIRE FIGHTING
+                    - generic [ref=f3e135]: GENERAL
+                    - generic [ref=f3e137]: HVAC
+                    - generic [ref=f3e139]: HSE
+                    - generic [ref=f3e141]: OTHER
+                  - generic [ref=f3e143]:
+                    - generic [ref=f3e144]: 5.95M
+                    - generic [ref=f3e145]: 4.19M
+                    - generic [ref=f3e146]: 1.58M
+                    - generic [ref=f3e147]: 629K
+                    - generic [ref=f3e148]: 617K
+                    - generic [ref=f3e149]: 8K
+                    - generic [ref=f3e150]: 8K
+          - figure "Monthly commitments Apr 24 to Jul 26. Peak month Jun 25 at 4.35M." [ref=f3e151]:
+            - generic [ref=f3e152]:
+              - text: Monthly commitments
+              - generic [ref=f3e153]: (AED by LPO issue date)
+            - application [ref=f3e156]:
+              - generic [ref=f3e166]:
+                - generic [ref=f3e167]:
+                  - generic [ref=f3e168]: Apr 24
+                  - generic [ref=f3e170]: Mar 25
+                  - generic [ref=f3e172]: May 25
+                  - generic [ref=f3e174]: Jul 25
+                  - generic [ref=f3e176]: Sep 25
+                  - generic [ref=f3e178]: Nov 25
+                  - generic [ref=f3e180]: Jan 26
+                  - generic [ref=f3e182]: Mar 26
+                  - generic [ref=f3e184]: May 26
+                  - generic [ref=f3e186]: Jul 26
+                - generic [ref=f3e188]:
+                  - generic [ref=f3e189]: "0"
+                  - generic [ref=f3e191]: 1.50M
+                  - generic [ref=f3e193]: 3.00M
+                  - generic [ref=f3e195]: 4.50M
+                  - generic [ref=f3e197]: 6.00M
+        - generic [ref=f3e199]:
+          - paragraph [ref=f3e200]: "Housekeeping: verification backlog"
+          - paragraph [ref=f3e201]: Every seeded LPO is imported from the legacy report and still awaits source verification — see the Data Flags tab.
+  - button "Open Next.js Dev Tools" [ref=f3e32] [cursor=pointer]
+  - alert [ref=f3e36]
+  - generic [ref=f3e202]: "0"
