@@ -1,18 +1,36 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 17:16
-Active Task: T-030 — Implement spec-021 Bulk LPO CSV import — PENDING (next)
+Last Session: 2026-08-24 18:10
+Active Task: T-031 — Prod hardening: fail-fast env validation + deploy runbook — IN_PROGRESS (T-030 commit still staged/pending)
 Last File Touched: Memory.md
-Immediate Next Step: On request: POST /projects/:id/lpos/import?dry_run= with fixed-header CSV mapping, all-or-nothing commit, audit-tagged rows per spec-021. Committed through [T-029].
+Immediate Next Step: Ship env fail-fast (AUTH_SECRET/DATABASE_URL), add db:migrate script, give human the prod 500 diagnostic checklist; then commit T-030 + T-031 separately.
 
 ## Active Task
-T-029 — Implement spec-020: Supplier merge UI
-State: DONE
-Started: 2026-08-24 16:48
-Last Updated: 2026-08-24 17:16
+T-031 — Prod hardening: unhandled-config 500 on login
+State: IN_PROGRESS
+Started: 2026-08-24 18:05
+Last Updated: 2026-08-24 18:10
 
 ## Task Log
+
+### [2026-08-24 17:51] — T-030: Implement spec-021 Bulk LPO CSV import
+**Weight:** SIGNIFICANT (includes DCL-006 allocator correction)
+**State transitions:** PENDING → IN_PROGRESS (17:20) → DONE (17:51).
+**Goal:** POST /projects/:id/lpos/import?dry_run= with header-mapped CSV, per-row validation report, all-or-nothing commit.
+**Spec Reference:** specs/spec-021-v1.md; PRD FR-4 P1. Reuses moneyString/trade enums; DCL-006 filed for allocator fix before code change.
+**Approach:** src/lib/csv.ts gained RFC-4180 parseCsv (CsvParseError → 422). validateImportGrid: unknown/missing headers 422 w/ column lists; per-row zod (date-only issueDate, moneyString amountAED); supplier resolution by normalized exact name, merged excluded — misses become row failures. commitImport re-validates then one $transaction: allocateNextRef per row, ISSUED + SOURCE_DOCUMENT, per-row CREATE audit with via=bulk-import. Cap 1000 (IMPORT_TOO_LARGE). Default dry_run=true.
+**Checklist:**
+  - [x] AC1 dry-run 3 valid rows → {valid:3}, zero lpo/audit writes (count deltas asserted)
+  - [x] AC2 mixed batch → exactly rows 2 (amountAED) + 3 (supplierName) failed w/ messages
+  - [x] AC3 mixed commit → 422 IMPORT_REJECTED, zero writes
+  - [x] AC4 full commit → ISSUED rows, generated refs monotonic w/ DCL-006 gaps allowed and no collisions, one audit row each w/ via tag
+  - [x] AC5 PROCUREMENT ok; COMMERCIAL 403; malformed CSV/unknown/missing columns → 422
+  - [x] Live smoke: dry-run flagged nonexistent supplier; all-or-nothing rejection w/ details; successful single-row commit TEMW/REF/LPO//142 ISSUED skipping squatted //141; COMMERCIAL 403
+**Outcome:** All five ACs verified headless AND live. Bug found & fixed: pre-existing ref allocator collision on real data (DCL-006) — manual creation was 409-ing since seeding; now shared collision-aware helper used by both paths. Test-harness note: contiguity assertion replaced by monotonic+collision-free per DCL-006 semantics.
+**Test Evidence:** vitest 27 files / 146 tests passed (incl. new lpo-import.integration, 5 tests); tsc --noEmit clean; eslint clean; live curls in-session.
+**Blockers:** NONE
+**Rollback:** Remove route/service/tests; committed rows persist as ordinary LPOs.
 
 ### [2026-08-24 17:16] — T-029: Implement spec-020 Supplier merge UI
 **Weight:** STANDARD

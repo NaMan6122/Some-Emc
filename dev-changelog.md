@@ -164,3 +164,31 @@ specs/spec-014-v2.md drafted with corrected constants and the pinned window sema
 
 **Task Reference:** T-029
 **Note:** spec-020 implemented to all five ACs, browser-verified end-to-end. One documented interpretation call, not a deviation: the spec's "no service changes" line is honored in spirit — `listSuppliers` gained an ADDITIVE `_count.lpos` include so the table can show LPO counts per AC1; this adds a field to a read response without altering any existing consumer's behavior (same class as prior additive-field notes). Merge UX convention: suggestion "Review" pre-fills source=higher-id/target=lower-id so the older master absorbs the newer. All server guards are deliberately unreachable through normal UI flow (dropdowns exclude merged suppliers; self-merge disabled client-side) — the inline-error path was verified by intercepting the merge call with a mocked 422 and asserting the banner renders without clearing the form. Real-data bonus: the panel surfaced 18 of the 19 open DUPLICATE_SUPPLIER_SUSPECT pairs from the spec-017 scan (one pair fell below the top-20 cut — the exact documented limitation).
+
+## [2026-08-24 17:40] — DCL-006
+
+**Task Reference:** T-030
+**Spec Affected:** specs/spec-007-v2.md (LPO ref allocation behavior)
+**Type:** CORRECTION
+
+**Original Spec:**
+spec-007-v1/v2 AC1: refs auto-generated via per-project sequence (`buildRef(prefix, maxSeq+1)`), unique `(projectId, refNo)` enforced by the DB; creation retried on conflict.
+
+**Deviation:**
+The allocator becomes collision-aware: it advances past seq values whose generated refNo already exists in the project (bounded search), instead of blindly using maxSeq+1 and retrying an identical number five times. Shared helper `allocateNextRef(tx, projectId)` used by both single creation and bulk import.
+
+**Reason:**
+Latent bug exposed by spec-021's integration tests on REAL data: the Job 1571 import kept source-document ref strings verbatim, so ref numbers run AHEAD of seq (e.g. `TEMW/REF/LPO//141` exists at seq 82; max(seq)=140). Any new LPO therefore generated `//141` → P2002 ×5 → SEQ_CONFLICT 409. Manual single-LPO creation on the seeded project has been broken the same way since seeding; bulk import simply hit it first.
+
+**Impact:**
+spec-007-v2 AC1 semantics unchanged (unique refs, per-project sequence) — generation just skips occupied ref slots now. No stored data affected; no downstream contract changed. New refs may be non-contiguous where legacy refs squat slots (visible, deterministic).
+
+**Spec Updated:** NO — no acceptance criterion text changes; behavior hardening documented here per instruction_v4 §5.3
+
+**Human Feedback:**
+**Feedback Applied:**
+
+## [2026-08-24 17:50] — T-030 completion note (no deviation)
+
+**Task Reference:** T-030
+**Note:** spec-021 implemented to all five ACs; the task's headline contribution beyond the feature is DCL-006 — bulk import's first live commit exposed that manual LPO creation on seeded Job 1571 had been silently broken since seeding (any new ref collided with legacy numbers squatting ahead of seq → SEQ_CONFLICT 409). Both paths now share the collision-aware `allocateNextRef`. Import design points: default query is dry_run=true (no accidental writes); commit re-validates suppliers inside the transaction so a mid-flight merge/delete yields a clean 422 IMPORT_REJECTED rather than an FK 500; row cap 1000 with IMPORT_TOO_LARGE. Live smoke: dry-run correctly flagged a nonexistent supplier, all-or-nothing rejection carried field-level failures, successful commit produced TEMW/REF/LPO//142 ISSUED skipping squatted //141, COMMERCIAL 403.

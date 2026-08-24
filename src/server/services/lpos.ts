@@ -31,6 +31,21 @@ export function buildRef(prefix: string, seq: number): string {
   return `${prefix}//${pad3(seq)}`;
 }
 
+// DCL-006 (found by spec-021 tests): legacy imports keep source-document ref
+// strings, so ref numbers run AHEAD of seq on real projects — max(seq)+1 can
+// collide. Allocation now skips occupied ref slots (bounded search).
+export async function allocateNextRef(tx: Tx, projectId: number, prefix = "TEMW/REF/LPO"): Promise<{ seq: number; refNo: string }> {
+  const agg = await tx.lpo.aggregate({ where: { projectId }, _max: { seq: true } });
+  let seq = agg._max.seq ?? 0;
+  for (let guard = 0; guard < 1000; guard++) {
+    seq += 1;
+    const refNo = buildRef(prefix, seq);
+    const clash = await tx.lpo.findFirst({ where: { projectId, refNo }, select: { id: true } });
+    if (!clash) return { seq, refNo };
+  }
+  throw new HttpApiError(409, "SEQ_CONFLICT", "Could not allocate an LPO number");
+}
+
 async function validateVoLink(tx: Tx, projectId: number, kind: string, voId?: string | null) {
   if (kind === "VARIATION" && (voId == null || voId === "")) {
     throw new HttpApiError(422, "VO_REQUIRED", "kind=VARIATION requires a voId");
@@ -61,9 +76,7 @@ export async function createLpo(
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       return await prisma.$transaction(async (tx) => {
-        const agg = await tx.lpo.aggregate({ where: { projectId }, _max: { seq: true } });
-        const seq = (agg._max.seq ?? 0) + 1;
-        const refNo = buildRef(input.refPrefix, seq);
+        const { seq, refNo } = await allocateNextRef(tx, projectId, input.refPrefix);
         const voId = await validateVoLink(tx, projectId, input.kind, input.voId);
         const created = await tx.lpo.create({
           data: {
