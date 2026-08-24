@@ -1,16 +1,16 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 21:30
-Active Task: T-032 — Implement spec-022 Cross-project LPO allocations — IN_PROGRESS
+Last Session: 2026-08-24 22:10
+Active Task: M4 COMPLETE — all four specs IMPLEMENTED; Gate G5 presented, awaiting human ruling
 Last File Touched: Memory.md
-Immediate Next Step: LpoAllocation migration + /lpos/:id/allocation CRUD + additive overview KPIs + drawer rendering; then T-033 print report; then M4 G5.
+Immediate Next Step: On M4 G5 confirmation, v1 scope (M1–M4) is COMPLETE. Open items: users-admin placeholder, OQ backlog (1,2,4,5,6,8), AUTH_SECRET rotation hygiene.
 
 ## Active Task
-T-032 — Implement spec-022: Cross-project LPO allocations
-State: IN_PROGRESS
-Started: 2026-08-24 21:30
-Last Updated: 2026-08-24 21:30
+T-033 — Implement spec-023: Print/PDF report parity
+State: DONE
+Started: 2026-08-24 21:45
+Last Updated: 2026-08-24 22:10
 
 ## Task Log
 
