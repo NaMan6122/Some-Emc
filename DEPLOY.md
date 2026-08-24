@@ -10,6 +10,26 @@ idempotent; re-running after a failed deploy is safe.
 | `DATABASE_URL` | `postgresql://user:pass@host:5432/db?schema=public` — reachable from the app |
 | `AUTH_SECRET` | **required, ≥16 chars** (e.g. `openssl rand -hex 32`) |
 
+### Managed database — Neon (recommended)
+
+1. Create a Neon project (Postgres 16+) and copy the **pooled** connection string
+   (hostname contains `-pooler`).
+2. Append `?sslmode=require` if not present — Neon rejects non-TLS sessions.
+3. Point migrations at it once, from anywhere:
+   ```bash
+   DATABASE_URL="postgresql://…neon.tech…?sslmode=require" npx prisma migrate deploy
+   ```
+4. Bootstrap the first admin against it:
+   ```bash
+   DATABASE_URL="…" npm run user:add        # prints the password once
+   ```
+5. Use the same pooled URL as the app's `DATABASE_URL`.
+
+Notes: long-running containers can also use the direct (non-pooled) hostname;
+serverless/Lambda-style hosting should always use the pooled one. The seed
+pipeline (`seed:job1571`) is demo data — do NOT run it against a production
+database; create real projects through the UI/API instead.
+
 Missing/short values fail fast: API calls return **503 `{code:"SERVER_CONFIG"}`**
 and the server log names the exact variable. An unreachable database returns
 **503 `{code:"DB_UNAVAILABLE"}`**.
