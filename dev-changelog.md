@@ -198,6 +198,11 @@ spec-007-v2 AC1 semantics unchanged (unique refs, per-project sequence) — gene
 **Task Reference:** T-031
 **Note:** The anv headless commit CLI hung/timed out on two consecutive attempts for the T-031 batch (first attempt exceeded 5 min, second was aborted). Commit executed via plain `git commit` instead so the prod hotfix would not stay stranded; message format `[T-031] …` unchanged, branch `main` unchanged, contents identical to the staged review state. Flagging here per §9 transparency rather than retrying silently.
 
+## [2026-08-24 22:05] — T-032/T-033 completion note (no deviation)
+
+**Task Reference:** T-032, T-033
+**Note:** M4 finished in one push for demo readiness. Judgment calls: (1) allocations have no UPDATE path (delete + re-create, both audited) matching the immutable-financial-record convention; "allocated out" is computed through lpo.projectId since Prisma cannot express a back-relation without an FK; allocation KPIs count all referenced LPOs regardless of revision status — superseding an allocated LPO leaves its rows in place (visible in drawer) rather than silently migrating them; (2) /report relies on middleware auth like every other (app) page and calls analytics services directly server-side, guaranteeing figure parity with dashboards; PDF via browser print (documented decision from spec); vendor table shows top-12 + top-8 concentration row. Demo polish shipped alongside: scan trigger button on the queue, CSV export links on PC/Budget/Flags tabs, Printable Report sidebar entry.
+
 ## [2026-08-24 17:50] — T-030 completion note (no deviation)
 
 **Task Reference:** T-030

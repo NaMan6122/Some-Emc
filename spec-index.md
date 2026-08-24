@@ -23,8 +23,8 @@
 | spec-019 | Retention ledger & releases (OQ-7 / FR-6 P1) | v1 | IMPLEMENTED | spec-002, spec-004, spec-014, spec-015 | T-027 DONE | Promoted at G1 2026-08-24; OQ-7 closed same gate; cashflow anchors byte-identical with additive held/released fields |
 | spec-020 | Supplier merge UI (FR-3 P1) | v1 | IMPLEMENTED | spec-006, spec-009 | T-029 DONE | Promoted at G1 2026-08-24; browser-verified incl. inline guard errors; additive _count on suppliers list documented |
 | spec-021 | Bulk LPO CSV import (FR-4 P1) | v1 | IMPLEMENTED | spec-005, spec-007 | T-030 DONE | Promoted at G1 2026-08-24; dry-run + all-or-nothing commit; exposed latent ref-allocator bug → DCL-006 collision-aware allocation |
-| spec-022 | Cross-project LPO allocations ("50% ONLY") | v1 | ACTIVE | spec-002, spec-004, spec-005, spec-007, spec-014 | — | Promoted at G1 2026-08-24 |
-| spec-023 | Print/PDF report parity (FR-10) | v1 | ACTIVE | spec-014, spec-015 | — | Promoted at G1 2026-08-24 |
+| spec-022 | Cross-project LPO allocations ("50% ONLY") | v1 | IMPLEMENTED | spec-002, spec-004, spec-005, spec-007, spec-014 | T-032 DONE | Promoted at G1 2026-08-24; Σ≤100 enforced; additive overview KPIs; drawer panel |
+| spec-023 | Print/PDF report parity (FR-10) | v1 | IMPLEMENTED | spec-014, spec-015 | T-033 DONE | Promoted at G1 2026-08-24; /report server-rendered from analytics services; print CSS verified via emulation |
 
 _M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015): all IMPLEMENTED. M3 batch (016–019): all IMPLEMENTED — ratified at G5 2026-08-24._
 

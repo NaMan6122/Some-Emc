@@ -66,3 +66,16 @@ body {
   background: var(--background);
   color: var(--text-primary);
 }
+
+/* spec-023-v1: print/PDF report — strip app chrome, keep the report column */
+@media print {
+  aside,
+  header {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+}

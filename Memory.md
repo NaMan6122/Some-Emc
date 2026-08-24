@@ -14,6 +14,25 @@ Last Updated: 2026-08-24 21:30
 
 ## Task Log
 
+### [2026-08-24 22:00] — T-032 + T-033: Allocations & Print report — M4 complete
+**Weight:** SIGNIFICANT (two specs, one session push for demo readiness)
+**State transitions:** T-032 PENDING → DONE; T-033 PENDING → DONE.
+**Goal:** Finish M4: allocations (spec-022) and print/PDF report (spec-023), plus demo-polish wiring.
+**Spec Reference:** specs/spec-022-v1.md, specs/spec-023-v1.md; PRD FR-4 P1, FR-10.
+**Approach:** Allocations: LpoAllocation migration (unique lpoId+targetProjectId, Σ≤100 in-tx), GET/POST on /lpos/:id/allocation + DELETE /allocations/:id (ADMIN+COMMERCIAL, audited); overview gains ADDITIVE allocatedOutFils/allocatedInFils (pct×amount floor); drawer AllocationsPanel w/ add/remove for ADMIN+COMMERCIAL. Report: /report server component calling analytics services directly (byte-identical figures by construction), sections cover→exec summary→budget table→PC log w/ Σ row→investment monthly→vendor concentration w/ top-8→flags appendix; @media print strips aside/header (verified via Playwright print emulation); browser-print PDF, zero new infra. Demo polish: "Run data-quality scan" button + flags.csv link on queue page; CSV export links on PC + Budget tabs; "Printable Report" sidebar entry.
+**Checklist:**
+  - [x] AC2 COMMERCIAL 50% post → 201+audit; allocatedOutFils delta = exactly half fixture amount
+  - [x] AC3 target overview allocatedInFils identical fils
+  - [x] AC4 ALLOCATION_EXCEEDS_100 / ALLOCATION_EXISTS verified
+  - [x] AC5 VIEWER 403s; COMMERCIAL delete reverts figures + DELETE audit
+  - [x] Report renders goldens: 12,984,115.00 / 10,331,978.00 / 81.8% / FIRE_FIGHTING note / all sections ordered
+  - [x] Print emulation: aside+header display:none
+  - [x] Flags scan button + export links live; drawer panel renders
+**Outcome:** M4 milestone functionally complete pending G5. Modeling note: LpoAllocation has no projectId column — "allocated out" derives through lpo.projectId (Prisma cannot express that back-relation; computed in service instead).
+**Test Evidence:** vitest 28 files / 149 tests passed (incl. lpo-allocations.integration ×3); tsc clean; eslint clean; build green incl. /report route; Playwright DOM + print-emulation checks with zero console errors.
+**Blockers:** NONE
+**Rollback:** Down-migration drops LpoAllocation; remove routes/service/tests/drawer/report/nav entry.
+
 ### [2026-08-24 19:05] — T-031 addendum: Neon provisioned via agent onboarding; seed data copied with full parity
 **Weight:** SIGNIFICANT
 **State transitions:** DONE → addendum (19:05).
