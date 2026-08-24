@@ -180,7 +180,7 @@ _Entries through T-022 (M1/M2 phases) archived to memory-archive/phase-1-2.md._
 ## Open Questions
 - OQ-1: Is AED the only currency, ever? (Assumed yes in TDD money design.) — raised 2026-08-23
 - OQ-2: Is Arabic UI/localization on any roadmap horizon? (Assumed no for v1.) — raised 2026-08-23
-- OQ-3: Deployment target — cloud provider, on-prem server, or undecided? (Affects ops/backup design.) — raised 2026-08-23
+- OQ-3: ~~Deployment target~~ PARTIALLY RESOLVED 2026-08-24 — human proposed Neon for managed Postgres; docs updated (DEPLOY.md/.env.example, pooled URL + sslmode). App hosting target still open (Vercel vs container/VPS) — needed to finalize build-failure diagnosis.
 - OQ-4: Should invoice/document attachments be stored against LPOs/PCs in v1? (Assumed P1+.) — raised 2026-08-23
 - OQ-5: Do users need per-project access restrictions soon, or company-wide roles suffice? (Assumed company-wide.) — raised 2026-08-23
 - OQ-6: Is a formal LPO approval workflow needed pre-issue, or free issuance matches current practice? (Assumed free issuance + revisions.) — raised 2026-08-23
