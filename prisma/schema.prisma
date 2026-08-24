@@ -104,54 +104,73 @@ model Project {
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
 
-  lpos    Lpo[]
-  pcs     PaymentCertificate[]
-  budgets BudgetLine[]
-  vos     VariationOrder[]
+  lpos              Lpo[]
+  pcs               PaymentCertificate[]
+  budgets           BudgetLine[]
+  vos               VariationOrder[]
   retentionReleases RetentionRelease[]
+  allocationsTo     LpoAllocation[]      @relation("AllocationsTo")
+}
+
+// spec-022-v1 (FR-4 P1): percentage allocation of an LPO's cost to another
+// project ("50% ONLY" case). Multiple rows per LPO allowed while Σpct ≤ 100
+// (server-checked). Analytics consume it ADDITIVELY only.
+model LpoAllocation {
+  id              BigInt   @id @default(autoincrement())
+  lpoId           BigInt
+  lpo             Lpo      @relation(fields: [lpoId], references: [id], onDelete: Restrict)
+  targetProjectId Int
+  targetProject   Project  @relation("AllocationsTo", fields: [targetProjectId], references: [id], onDelete: Restrict)
+  pct             Int
+  note            String?
+  createdAt       DateTime @default(now())
+
+  @@unique([lpoId, targetProjectId])
+  @@index([targetProjectId])
 }
 
 model Supplier {
-  id           Int      @id @default(autoincrement())
-  name         String   @unique
-  aliases      Json     @default("[]")
+  id           Int        @id @default(autoincrement())
+  name         String     @unique
+  aliases      Json       @default("[]")
   mergedIntoId Int?
   mergedInto   Supplier?  @relation("SupplierMerges", fields: [mergedIntoId], references: [id])
   merges       Supplier[] @relation("SupplierMerges")
-  createdAt    DateTime @default(now())
+  createdAt    DateTime   @default(now())
 
   lpos Lpo[]
 }
 
 model Lpo {
-  id             BigInt       @id @default(autoincrement())
+  id             BigInt          @id @default(autoincrement())
   projectId      Int
-  project        Project      @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  project        Project         @relation(fields: [projectId], references: [id], onDelete: Restrict)
   refNo          String
   seq            Int
   revisionOfId   BigInt?
-  revisionOf     Lpo?         @relation("LpoRevisions", fields: [revisionOfId], references: [id], onDelete: Restrict)
-  revisions      Lpo[]        @relation("LpoRevisions")
-  revisionNo     Int          @default(0)
-  supersededById BigInt?      @unique
-  supersededBy   Lpo?         @relation("LpoSupersede", fields: [supersededById], references: [id], onDelete: Restrict)
-  supersedes     Lpo[]        @relation("LpoSupersede")
+  revisionOf     Lpo?            @relation("LpoRevisions", fields: [revisionOfId], references: [id], onDelete: Restrict)
+  revisions      Lpo[]           @relation("LpoRevisions")
+  revisionNo     Int             @default(0)
+  supersededById BigInt?         @unique
+  supersededBy   Lpo?            @relation("LpoSupersede", fields: [supersededById], references: [id], onDelete: Restrict)
+  supersedes     Lpo[]           @relation("LpoSupersede")
   supplierId     Int
-  supplier       Supplier     @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  supplier       Supplier        @relation(fields: [supplierId], references: [id], onDelete: Restrict)
   trade          Trade
   description    String
-  issueDate      DateTime     @db.Date
+  issueDate      DateTime        @db.Date
   amountFils     BigInt
-  vatRate        Decimal      @db.Decimal(5, 4)
-  kind           LpoKind      @default(STANDARD)
-  status         LpoStatus    @default(DRAFT)
-  verification   Verification @default(PENDING)
-  provenance     Provenance   @default(SOURCE_DOCUMENT)
+  vatRate        Decimal         @db.Decimal(5, 4)
+  kind           LpoKind         @default(STANDARD)
+  status         LpoStatus       @default(DRAFT)
+  verification   Verification    @default(PENDING)
+  provenance     Provenance      @default(SOURCE_DOCUMENT)
   remark         String?
   voId           BigInt?
   vo             VariationOrder? @relation(fields: [voId], references: [id], onDelete: Restrict)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  allocations    LpoAllocation[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
   @@unique([projectId, refNo])
   @@unique([projectId, seq])
@@ -160,44 +179,44 @@ model Lpo {
 }
 
 model BudgetLine {
-  id          BigInt   @id @default(autoincrement())
+  id          BigInt    @id @default(autoincrement())
   projectId   Int
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Restrict)
   trade       Trade
-  category    String   @default("MATERIALS")
+  category    String    @default("MATERIALS")
   amountFils  BigInt
   sourceLabel String
   refDate     DateTime?
   note        String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
 
   @@index([projectId, trade])
 }
 
 model PaymentCertificate {
-  id                    BigInt     @id @default(autoincrement())
-  projectId             Int
-  project               Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
-  pcNumber              Int
-  periodLabel           String
-  periodStart           DateTime?
-  periodEnd             DateTime?
-  invoiceDate           DateTime?
-  grossFils             BigInt
-  retentionFils         BigInt
-  netPayableFils        BigInt
-  variationClaimFils    BigInt     @default(0)
-  statedCumulativeFils  BigInt?
-  status                PcStatus   @default(DRAFT)
-  provenance            Provenance
-  notes                 String?
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @updatedAt
+  id                   BigInt     @id @default(autoincrement())
+  projectId            Int
+  project              Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  pcNumber             Int
+  periodLabel          String
+  periodStart          DateTime?
+  periodEnd            DateTime?
+  invoiceDate          DateTime?
+  grossFils            BigInt
+  retentionFils        BigInt
+  netPayableFils       BigInt
+  variationClaimFils   BigInt     @default(0)
+  statedCumulativeFils BigInt?
+  status               PcStatus   @default(DRAFT)
+  provenance           Provenance
+  notes                String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  retentionReleases RetentionRelease[]
 
   @@unique([projectId, pcNumber])
   @@index([projectId])
-
-  retentionReleases RetentionRelease[]
 }
 
 // spec-019-v1 (FR-6 P1 / OQ-7): retention money returned by the client.
@@ -205,34 +224,34 @@ model PaymentCertificate {
 // record: immutable-on-edit — no UPDATE path; mistakes are deleted by ADMIN
 // (audited) or offset with a new entry.
 model RetentionRelease {
-  id          BigInt             @id @default(autoincrement())
-  projectId   Int
-  project     Project            @relation(fields: [projectId], references: [id], onDelete: Restrict)
-  pcId        BigInt?
-  pc          PaymentCertificate? @relation(fields: [pcId], references: [id], onDelete: Restrict)
-  amountFils  BigInt
-  releasedAt  DateTime
-  reference   String?
-  note        String?
-  createdAt   DateTime           @default(now())
+  id         BigInt              @id @default(autoincrement())
+  projectId  Int
+  project    Project             @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  pcId       BigInt?
+  pc         PaymentCertificate? @relation(fields: [pcId], references: [id], onDelete: Restrict)
+  amountFils BigInt
+  releasedAt DateTime
+  reference  String?
+  note       String?
+  createdAt  DateTime            @default(now())
 
   @@index([projectId, releasedAt])
   @@index([pcId])
 }
 
 model VariationOrder {
-  id                  BigInt    @id @default(autoincrement())
-  projectId           Int
-  project             Project   @relation(fields: [projectId], references: [id], onDelete: Restrict)
-  voNumber            Int
-  title               String
-  status              VoStatus  @default(DRAFT)
-  submittedValueFils  BigInt
-  approvedValueFils   BigInt?
-  approvedAt          DateTime?
-  approvalRef         String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  id                 BigInt    @id @default(autoincrement())
+  projectId          Int
+  project            Project   @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  voNumber           Int
+  title              String
+  status             VoStatus  @default(DRAFT)
+  submittedValueFils BigInt
+  approvedValueFils  BigInt?
+  approvedAt         DateTime?
+  approvalRef        String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   lpos Lpo[]
 
@@ -240,14 +259,14 @@ model VariationOrder {
 }
 
 model AuditLog {
-  id        BigInt   @id @default(autoincrement())
-  actorId   Int
-  entity    String
-  entityId  String
-  action    String
-  before    Json?
-  after     Json?
-  at        DateTime @default(now())
+  id       BigInt   @id @default(autoincrement())
+  actorId  Int
+  entity   String
+  entityId String
+  action   String
+  before   Json?
+  after    Json?
+  at       DateTime @default(now())
 
   @@index([entity, entityId])
   @@index([at])

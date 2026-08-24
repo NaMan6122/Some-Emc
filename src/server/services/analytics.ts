@@ -87,6 +87,20 @@ export async function overview(projectId: number) {
     if (l.verification !== "VERIFIED") flagged++;
   }
 
+  const [allocOut, allocIn] = await Promise.all([
+    prisma.lpoAllocation.findMany({
+      where: { lpo: { projectId } },
+      select: { pct: true, lpo: { select: { amountFils: true } } },
+    }),
+    prisma.lpoAllocation.findMany({
+      where: { targetProjectId: projectId },
+      select: { pct: true, lpo: { select: { amountFils: true } } },
+    }),
+  ]);
+  // spec-022-v1: ADDITIVE allocation KPIs (pct × amount, integer floor).
+  const allocatedOutFils = allocOut.reduce((s, a) => s + (a.lpo.amountFils * BigInt(a.pct)) / 100n, 0n);
+  const allocatedInFils = allocIn.reduce((s, a) => s + (a.lpo.amountFils * BigInt(a.pct)) / 100n, 0n);
+
   return {
     totalLpoFils: total,
     activeCount: lpos.length,
@@ -95,6 +109,8 @@ export async function overview(projectId: number) {
     medianLpoFils: median,
     largestLpoFils: amounts.at(-1) ?? 0n,
     flaggedCount: flagged,
+    allocatedOutFils,
+    allocatedInFils,
     tradeBreakdown: [...byTrade.entries()]
       .map(([trade, v]) => ({ trade, fils: v.fils, count: v.count, pct: pct(v.fils, total) }))
       .sort((a, b) => (b.fils > a.fils ? 1 : b.fils < a.fils ? -1 : 0)),

@@ -585,6 +585,9 @@ function DetailDrawer({
           </section>
         )}
 
+        {/* Cross-project allocations (spec-022) */}
+        <AllocationsPanel lpoId={id} role={role} onMsg={(m) => setMsg(m)} />
+
         {/* Revision timeline */}
         <section>
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Revision timeline</p>
@@ -636,6 +639,152 @@ function VOEditor({ lpoId, currentVoId, onSaved }: { lpoId: string; currentVoId:
         Save link
       </button>
     </div>
+  );
+}
+
+// ---------- Allocations (spec-022) ----------
+type Alloc = {
+  id: string;
+  targetProjectId: number;
+  pct: number;
+  note: string | null;
+  targetProject: { id: number; code: string; name: string };
+};
+
+function AllocationsPanel({
+  lpoId,
+  role,
+  onMsg,
+}: {
+  lpoId: string;
+  role: string | null;
+  onMsg: (m: string) => void;
+}) {
+  const canAllocate = role === "ADMIN" || role === "COMMERCIAL";
+  const [items, setItems] = useState<Alloc[] | null>(null);
+  const [totalPct, setTotalPct] = useState(0);
+  const [projects, setProjects] = useState<{ id: number; code: string; name: string }[]>([]);
+  const [pct, setPct] = useState("");
+  const [targetId, setTargetId] = useState("");
+  const [note, setNote] = useState("");
+
+  const load = useCallback(async () => {
+    const res = await fetch(`/api/v1/lpos/${lpoId}/allocation`);
+    if (res.ok) {
+      const b = await res.json();
+      setItems(b.items);
+      setTotalPct(b.totalPct);
+    }
+  }, [lpoId]);
+
+  useEffect(() => {
+    if (canAllocate) {
+      void fetch("/api/v1/projects")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((b) => b && setProjects(b.items));
+    }
+    void load();
+  }, [canAllocate, load]);
+
+  async function add() {
+    const res = await fetch(`/api/v1/lpos/${lpoId}/allocation`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ targetProjectId: Number(targetId), pct: Number(pct), note: note || null }),
+    });
+    if (res.ok) {
+      onMsg("Allocation recorded");
+      setPct("");
+      setTargetId("");
+      setNote("");
+      await load();
+    } else {
+      const b = await res.json().catch(() => null);
+      onMsg(b?.error?.message ?? `Failed (${res.status})`);
+    }
+  }
+
+  async function remove(id: string) {
+    const res = await fetch(`/api/v1/allocations/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      onMsg("Allocation removed");
+      await load();
+    } else {
+      const b = await res.json().catch(() => null);
+      onMsg(b?.error?.message ?? `Failed (${res.status})`);
+    }
+  }
+
+  return (
+    <section>
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        Cross-project allocation{totalPct > 0 && <span className="ml-2 normal-case text-indigo-600">{totalPct}% allocated</span>}
+      </p>
+      {!items ? (
+        <p className="text-sm text-zinc-400">Loading…</p>
+      ) : items.length === 0 && !canAllocate ? (
+        <p className="text-xs text-zinc-400">No allocations.</p>
+      ) : (
+        <>
+          {items.length > 0 && (
+            <ul className="mb-2 flex flex-col gap-1">
+              {items.map((a) => (
+                <li key={a.id} className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-1.5 text-xs dark:border-zinc-800">
+                  <span className="min-w-0 truncate">
+                    → <span className="font-medium">{a.targetProject.code}</span> · {a.pct}%{a.note ? ` · ${a.note}` : ""}
+                  </span>
+                  {canAllocate && (
+                    <button onClick={() => void remove(a.id)} className="ml-3 shrink-0 text-red-500 hover:underline">
+                      Remove
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          {canAllocate && totalPct < 100 && (
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                aria-label="Allocation target project"
+                value={targetId}
+                onChange={(e) => setTargetId(e.target.value)}
+                className="rounded-lg border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-800"
+              >
+                <option value="">Allocate to project…</option>
+                {projects
+                  .filter((p) => !items.some((a) => a.targetProjectId === p.id))
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.code} — {p.name}
+                    </option>
+                  ))}
+              </select>
+              <input
+                aria-label="Percent"
+                placeholder="%"
+                value={pct}
+                onChange={(e) => setPct(e.target.value)}
+                className={`w-16 rounded-lg border px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-800 ${/^\d+$/.test(pct) && Number(pct) >= 1 && Number(pct) <= 100 - totalPct ? "" : pct === "" ? "" : "border-red-400"}`}
+              />
+              <input
+                aria-label="Allocation note"
+                placeholder="Note (optional)"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="flex-1 min-w-[8rem] rounded-lg border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-800"
+              />
+              <button
+                onClick={() => void add()}
+                disabled={!targetId || !/^\d+$/.test(pct) || Number(pct) < 1 || Number(pct) > 100 - totalPct}
+                className="rounded-lg bg-indigo-600 px-3 py-1 text-xs font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+              >
+                Add
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 

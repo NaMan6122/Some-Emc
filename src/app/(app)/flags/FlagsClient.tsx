@@ -1,9 +1,9 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import useSWR from "swr";
 import { EmptyState } from "@/components/ui/primitives";
-import { useProjectContext, useSession } from "@/hooks/use-app-data";
+import { useProjectContext, useProjects, useSession } from "@/hooks/use-app-data";
 
 type Flag = {
   id: string;
@@ -50,6 +50,8 @@ function assigneeLabel(flag: Flag, users: QueueUser[] | undefined): string {
 
 export function FlagsClient() {
   const { code } = useProjectContext();
+  const { projects } = useProjects();
+  const projectId = useMemo(() => projects.find((p) => p.code === code)?.id ?? null, [projects, code]);
   const { session } = useSession();
   const canTriage = !!session && TRIAGE_ROLES.includes(session.role);
   const [showResolved, setShowResolved] = useState(false);
@@ -57,6 +59,25 @@ export function FlagsClient() {
   const [toast, setToast] = useState<{ ok: boolean; text: string } | null>(null);
   const [noteFor, setNoteFor] = useState<{ flagId: string; action: "RESOLVED" | "WONT_FIX"; value: string } | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [scanning, setScanning] = useState(false);
+
+  async function runScan() {
+    if (!projectId) return;
+    setScanning(true);
+    try {
+      const res = await fetch(`/api/v1/projects/${projectId}/flags/scan`, { method: "POST" });
+      if (res.ok) {
+        const b = (await res.json()) as { opened: number; resolved: number };
+        setToast({ ok: true, text: `Scan complete — ${b.opened} opened, ${b.resolved} auto-resolved.` });
+        await flagsSwr.mutate();
+      } else {
+        const err = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
+        setToast({ ok: false, text: err?.error?.message ?? `Scan failed (${res.status})` });
+      }
+    } finally {
+      setScanning(false);
+    }
+  }
 
   const flagsSwr = useSWR<QueueData>("/api/v1/flags?limit=200", (u: string) =>
     fetch(u).then((r) => (r.ok ? r.json() : null)),
@@ -108,8 +129,31 @@ export function FlagsClient() {
     <div className="flex flex-col gap-6">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Governance{code ? ` · ${code}` : ""}</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Data Flags</h1>
-        <p className="mt-0.5 text-sm text-zinc-500">Data-quality review queue{canTriage ? "" : " (read-only)"}.</p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Data Flags</h1>
+          <span className="flex gap-2">
+            {projectId && (
+              <a
+                href={`/api/v1/projects/${projectId}/export/flags.csv`}
+                className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                Export CSV
+              </a>
+            )}
+            {canTriage && projectId && (
+              <button
+                onClick={() => void runScan()}
+                disabled={scanning}
+                className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
+              >
+                {scanning ? "Scanning…" : "Run data-quality scan"}
+              </button>
+            )}
+          </span>
+        </div>
+        <p className="mt-0.5 text-sm text-zinc-500">
+          Data-quality review queue{canTriage ? "" : " (read-only)"}.
+        </p>
       </div>
 
       <div className="flex gap-2" aria-label="Open flags by severity">

@@ -83,7 +83,17 @@ export function PcDashboardClient() {
     <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analytics{code ? ` · ${code}` : ""}</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Payment Certificates</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Payment Certificates</h1>
+          {projectId && (
+            <a
+              href={`/api/v1/projects/${projectId}/export/pcs.csv`}
+              className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            >
+              Export CSV
+            </a>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

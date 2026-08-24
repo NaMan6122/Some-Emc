@@ -56,7 +56,25 @@ export function BudgetDashboardClient() {
     <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analytics{code ? ` · ${code}` : ""}</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Budget vs Actual</h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Budget vs Actual</h1>
+          {projectId && (
+            <span className="flex gap-2">
+              <a
+                href={`/api/v1/projects/${projectId}/export/variance.csv`}
+                className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                Variance CSV
+              </a>
+              <a
+                href={`/api/v1/projects/${projectId}/export/budget-lines.csv`}
+                className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                JCA lines CSV
+              </a>
+            </span>
+          )}
+        </div>
         <p className="mt-0.5 text-sm text-zinc-500">
           Committed vs JCA lines per trade. Storm-water package (AED {(Number(data.excludedFils) / 100).toLocaleString("en-US")}) sits outside the JCA and is excluded here.
         </p>

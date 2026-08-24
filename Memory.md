@@ -1,16 +1,16 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 18:26
-Active Task: T-032 — Implement spec-022 Cross-project LPO allocations — PENDING (next)
+Last Session: 2026-08-24 21:30
+Active Task: T-032 — Implement spec-022 Cross-project LPO allocations — IN_PROGRESS
 Last File Touched: Memory.md
-Immediate Next Step: Await human's deploy-platform/build-log answer; meanwhile T-031 committed. Then T-032 per spec-022. Committed through [T-031].
+Immediate Next Step: LpoAllocation migration + /lpos/:id/allocation CRUD + additive overview KPIs + drawer rendering; then T-033 print report; then M4 G5.
 
 ## Active Task
-T-031 — Prod hardening: fail-fast config + containers + runbook
-State: DONE
-Started: 2026-08-24 18:05
-Last Updated: 2026-08-24 18:26
+T-032 — Implement spec-022: Cross-project LPO allocations
+State: IN_PROGRESS
+Started: 2026-08-24 21:30
+Last Updated: 2026-08-24 21:30
 
 ## Task Log
 
