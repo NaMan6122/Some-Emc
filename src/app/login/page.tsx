@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { LoginForm } from "./LoginForm";
 
 // spec-003-v2: minimal login screen styled from design.md tokens.
@@ -7,7 +8,9 @@ export default function LoginPage() {
       <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">ProCare</h1>
         <p className="mt-1 mb-6 text-sm text-zinc-500">Sign in to continue</p>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </main>
   );

@@ -63,6 +63,6 @@
 }
 
 body {
-  background: var(-ackground);
-  color: var(--b-text-primary);
+  background: var(--background);
+  color: var(--text-primary);
 }
