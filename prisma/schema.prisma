@@ -108,6 +108,7 @@ model Project {
   pcs     PaymentCertificate[]
   budgets BudgetLine[]
   vos     VariationOrder[]
+  retentionReleases RetentionRelease[]
 }
 
 model Supplier {
@@ -195,6 +196,28 @@ model PaymentCertificate {
 
   @@unique([projectId, pcNumber])
   @@index([projectId])
+
+  retentionReleases RetentionRelease[]
+}
+
+// spec-019-v1 (FR-6 P1 / OQ-7): retention money returned by the client.
+// Optional pcId lets a release aggregate across certificates. Financial
+// record: immutable-on-edit — no UPDATE path; mistakes are deleted by ADMIN
+// (audited) or offset with a new entry.
+model RetentionRelease {
+  id          BigInt             @id @default(autoincrement())
+  projectId   Int
+  project     Project            @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  pcId        BigInt?
+  pc          PaymentCertificate? @relation(fields: [pcId], references: [id], onDelete: Restrict)
+  amountFils  BigInt
+  releasedAt  DateTime
+  reference   String?
+  note        String?
+  createdAt   DateTime           @default(now())
+
+  @@index([projectId, releasedAt])
+  @@index([pcId])
 }
 
 model VariationOrder {

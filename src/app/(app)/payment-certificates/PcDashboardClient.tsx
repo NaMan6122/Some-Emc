@@ -20,6 +20,8 @@ type Cashflow = {
   }[];
   carryInFils: string;
   retentionTotalFils: string;
+  retentionReleasedFils?: string;
+  retentionHeldFils?: string;
   variationClaims: { claimedFils: string; unapprovedVoExposureFils: string };
 };
 
@@ -85,7 +87,15 @@ export function PcDashboardClient() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <KpiCard label="Retention held" value={aed(data.retentionTotalFils)} sub="not yet released" />
+        <KpiCard
+          label="Retention held"
+          value={aed(data.retentionHeldFils ?? data.retentionTotalFils)}
+          sub={
+            data.retentionReleasedFils != null && data.retentionReleasedFils !== "0"
+              ? `${aed(data.retentionTotalFils)} certified − ${aed(data.retentionReleasedFils)} released`
+              : "not yet released"
+          }
+        />
         <KpiCard label="Variation claims" value={aed(data.variationClaims.claimedFils)} sub="Σ PC variation claims" />
         <KpiCard
           label="Unapproved VO exposure"

@@ -165,9 +165,21 @@ export async function cashflow(projectId: number) {
   await requireProject(projectId);
   const pcs = await pcMonths(projectId);
   const lpos = await activeLpos(projectId);
+  const releasedTotal = await prisma.retentionRelease.aggregate({
+    where: { projectId },
+    _sum: { amountFils: true },
+  });
 
   if (pcs.length === 0) {
-    return { windowMonths: [], monthly: [], carryInFils: 0n, retentionTotalFils: 0n, variationClaims: { claimedFils: 0n, unapprovedVoExposureFils: 0n } };
+    return {
+      windowMonths: [],
+      monthly: [],
+      carryInFils: 0n,
+      retentionTotalFils: 0n,
+      retentionReleasedFils: releasedTotal._sum.amountFils ?? 0n,
+      retentionHeldFils: -(releasedTotal._sum.amountFils ?? 0n),
+      variationClaims: { claimedFils: 0n, unapprovedVoExposureFils: 0n },
+    };
   }
   const months = enumerateMonths(pcs[0].month, pcs[pcs.length - 1].month);
   const windowStart = months[0];
@@ -192,11 +204,18 @@ export async function cashflow(projectId: number) {
   });
 
   const compliance = await computeCompliance(projectId);
+  const retentionTotalFils = pcs.reduce((s, p) => s + p.retentionFils, 0n);
+  // spec-019-v1: additive fields only — existing golden anchors (incl. the
+  // DCL-004 row-sum) stay byte-identical. Held may go negative on bad input;
+  // honest math beats a silent clamp.
+  const retentionReleasedFils = releasedTotal._sum.amountFils ?? 0n;
   return {
     windowMonths: [months[0], months[months.length - 1]],
     monthly,
     carryInFils: carryIn,
-    retentionTotalFils: pcs.reduce((s, p) => s + p.retentionFils, 0n),
+    retentionTotalFils,
+    retentionReleasedFils,
+    retentionHeldFils: retentionTotalFils - retentionReleasedFils,
     variationClaims: {
       claimedFils: pcs.reduce((s, p) => s + p.variationClaimFils, 0n),
       unapprovedVoExposureFils: compliance.unapprovedVoExposure,

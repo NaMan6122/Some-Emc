@@ -1,18 +1,36 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 16:06
-Active Task: T-027 — Implement spec-019 Retention ledger & releases — PENDING (next)
+Last Session: 2026-08-24 16:21
+Active Task: M3 COMPLETE — all four specs IMPLEMENTED; Gate G5 presented, awaiting human ruling
 Last File Touched: Memory.md
-Immediate Next Step: On request: RetentionRelease migration + /projects/:id/retention-releases API + additive cashflow fields per spec-019 (last M3 spec). T-026 committed through [T-026].
+Immediate Next Step: On G5 confirmation, M4 planning per TDD §14 (FR-10 print/PDF parity, allocations, merges UI, bulk CSV import). Committed through [T-027].
 
 ## Active Task
 T-027 — Implement spec-019: Retention ledger & releases (OQ-7)
-State: PENDING
-Started: —
-Last Updated: 2026-08-24 16:06
+State: DONE
+Started: 2026-08-24 16:07
+Last Updated: 2026-08-24 16:21
 
 ## Task Log
+
+### [2026-08-24 16:21] — T-027: Implement spec-019 Retention ledger & releases — M3 complete
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (16:07) → DONE (16:21).
+**Goal:** RetentionRelease migration + FINANCE-gated release API with admin-only audited delete + additive cashflow fields, anchors untouched.
+**Spec Reference:** specs/spec-019-v1.md; PRD FR-6 P1 / OQ-7 (closed at G1 2026-08-24).
+**Approach:** New RetentionRelease model (optional pcId aggregates across certificates; Restrict FKs; index projectId+releasedAt). POST+GET under /projects/:id/retention-releases, DELETE top-level /retention-releases/:id ADMIN-only; NO PATCH (immutable financial record). Validation: positive moneyString, ISO releasedAt, pcId must belong to the project. cashflow() gains retentionReleasedFils + retentionHeldFils (= total − released, honest negative allowed) as ADDITIVE fields only. PC dashboard "Retention held" card splits certified − released when releases exist.
+**Checklist:**
+  - [x] Migration applied; migrate status up to date; seed rerun idempotent (0 new rows)
+  - [x] AC2 FINANCE post vs PC13 "50,000.00" → 201 fils-exact + CREATE audit; GET newest-first
+  - [x] AC3 cashflow: total 48909700 unchanged, released 5000000, held 43909700 (anchors byte-identical)
+  - [x] AC4 COMMERCIAL/VIEWER POST 403; FINANCE DELETE 403; ADMIN DELETE 200 + audit; held returns to 48909700
+  - [x] AC5 zero/negative/malformed amounts → 422
+  - [x] Live HTTP smoke mirrors headless results exactly (incl. correction-path delete)
+**Outcome:** All five ACs verified headless AND live. M3 milestone COMPLETE: spec-016..019 all IMPLEMENTED (triage queue, rules engine, exports, retention ledger).
+**Test Evidence:** vitest 26 files / 141 tests passed (incl. new retention.integration); tsc --noEmit clean; eslint clean; prisma migrate status clean; live curls in-session.
+**Blockers:** NONE
+**Rollback:** Down-migration drops table; remove routes/service/validation/tests/dashboard tweak.
 
 ### [2026-08-24 16:06] — T-026: Implement spec-018 CSV exports
 **Weight:** STANDARD
