@@ -80,13 +80,13 @@ export function OverviewClient() {
   const monthly = data.monthlySeries.map((m) => ({ ...m, label: labelForMonth(m.month), committed: Number(m.committedFils) / 100 }));
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-6 px-1 sm:px-0">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">ProCare{code ? ` · ${code}` : ""}</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Overview</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">Overview</h1>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <KpiCard label="Total LPO value" value={aed(data.totalLpoFils)} sub="active incl. VAT" />
         <KpiCard label="Active LPOs" value={String(data.activeCount)} sub={`${data.supplierCount} suppliers used`} />
         <KpiCard label="Avg LPO" value={aed(data.avgLpoFils)} />
@@ -110,7 +110,7 @@ export function OverviewClient() {
               {donut ? "Show bars" : "Show donut"}
             </button>
           </div>
-          <div role="img" aria-label={donut ? `Trade mix donut: ${tradeData.map((t) => `${t.trade} ${t.pct.toFixed(1)}%`).join(", ")}.` : "Trade spend bar chart."}>
+          <div role="img" aria-label={donut ? `Trade mix donut: ${tradeData.map((t) => `${t.trade} ${t.pct.toFixed(1)}%`).join(", ")}.` : "Trade spend bar chart."} className="w-full min-w-0">
             {donut ? (
               <ResponsiveContainer width="100%" height={260}>
                 <PieChart>
@@ -123,15 +123,19 @@ export function OverviewClient() {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={tradeData} layout="vertical" margin={{ left: 8, right: 48 }}>
-                  <XAxis type="number" hide domain={[0, "dataMax"]} />
-                  <YAxis type="category" dataKey="trade" width={110} tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v: string) => v.replace(/_/g, " ")} />
-                  <Bar dataKey="fils" name="Spend" fill={CHART_COLORS.bar} radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false}
-                    label={{ position: "right", formatter: (v: unknown) => shortAed(String(v)), fontSize: 10, fill: "#71717a" }} />
-                  <ChartTooltip moneyKeys={["fils"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
-                </BarChart>
-              </ResponsiveContainer>
+              <div className="w-full overflow-x-auto">
+                <div className="min-w-[320px]">
+                  <ResponsiveContainer width="100%" height={260}>
+                    <BarChart data={tradeData} layout="vertical" margin={{ left: 8, right: 48 }}>
+                      <XAxis type="number" hide domain={[0, "dataMax"]} />
+                      <YAxis type="category" dataKey="trade" width={90} tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v: string) => v.replace(/_/g, " ")} />
+                      <Bar dataKey="fils" name="Spend" fill={CHART_COLORS.bar} radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false}
+                        label={{ position: "right", formatter: (v: unknown) => shortAed(String(v)), fontSize: 10, fill: "#71717a" }} />
+                      <ChartTooltip moneyKeys={["fils"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             )}
           </div>
         </ChartFrame>
@@ -141,15 +145,19 @@ export function OverviewClient() {
           unit="AED by LPO issue date"
           ariaLabel={`Monthly commitments ${monthly[0]?.label ?? ""} to ${monthly.at(-1)?.label ?? ""}. Peak month ${peak ? labelForMonth(peak.month) : "n/a"} at ${shortAed(peak?.committedFils ?? "0")}.`}
         >
-          <ResponsiveContainer width="100%" height={280}>
-            <AreaChart data={monthly} margin={{ top: 4, right: 8, bottom: 0, left: 44 }}>
-              <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
-              <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
-              <YAxis tickFormatter={(v: number) => shortAed(String(Math.round(v * 100)))} tickLine={false} axisLine={false} fontSize={10} width={52} />
-              <Area type="monotone" dataKey="committed" name="Committed" stroke={CHART_COLORS.committed} fill={CHART_COLORS.committed} fillOpacity={0.08} strokeWidth={2} isAnimationActive={false} />
-              <ChartTooltip moneyKeys={["committed"]} />
-            </AreaChart>
-          </ResponsiveContainer>
+          <div className="w-full overflow-x-auto">
+            <div className="min-w-[420px]">
+              <ResponsiveContainer width="100%" height={280}>
+                <AreaChart data={monthly} margin={{ top: 4, right: 8, bottom: 0, left: 44 }}>
+                  <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+                  <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
+                  <YAxis tickFormatter={(v: number) => shortAed(String(Math.round(v * 100)))} tickLine={false} axisLine={false} fontSize={10} width={52} />
+                  <Area type="monotone" dataKey="committed" name="Committed" stroke={CHART_COLORS.committed} fill={CHART_COLORS.committed} fillOpacity={0.08} strokeWidth={2} isAnimationActive={false} />
+                  <ChartTooltip moneyKeys={["committed"]} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </ChartFrame>
       </div>
 

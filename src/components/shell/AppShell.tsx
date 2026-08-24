@@ -136,7 +136,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main className="px-6 py-6 lg:pl-64">{children}</main>
+      <main className="px-4 py-4 sm:px-6 sm:py-6 lg:pl-64">{children}</main>
     </div>
   );
 }

@@ -10,10 +10,11 @@ import { readSessionCookie, verifySessionToken } from "./jwt";
 //  - Authenticated visitors of /login → redirect to /
 
 const PUBLIC_PREFIXES = ["/login", "/api/v1/auth/", "/api/health"];
+const PUBLIC_EXACT = new Set<string>(["/"]);
 
 export async function guard(request: NextRequest): Promise<NextResponse | undefined> {
   const { pathname } = request.nextUrl;
-  if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) {
+  if (PUBLIC_EXACT.has(pathname) || PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) {
     // Signed-in users skip the login page; auth API stays open for everyone.
     if (pathname === "/login" && (await isValid(request))) {
       return NextResponse.redirect(new URL("/", request.url));

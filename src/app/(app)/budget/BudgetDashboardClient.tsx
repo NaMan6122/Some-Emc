@@ -53,13 +53,13 @@ export function BudgetDashboardClient() {
     }));
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-6 px-1 sm:px-0">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analytics{code ? ` · ${code}` : ""}</p>
-        <div className="flex items-center justify-between gap-3">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Budget vs Actual</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">Budget vs Actual</h1>
           {projectId && (
-            <span className="flex gap-2">
+            <span className="flex flex-wrap gap-2">
               <a
                 href={`/api/v1/projects/${projectId}/export/variance.csv`}
                 className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
@@ -85,17 +85,21 @@ export function BudgetDashboardClient() {
         unit="AED"
         ariaLabel={`Grouped bars of budget versus committed per trade. ${data.items.map((r) => `${r.trade}: budget ${aed(r.budgetFils)}, committed ${aed(r.committedFils)} (${r.utilizationPct.toFixed(1)}%)`).join("; ")}.`}
       >
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData} margin={{ top: 4, right: 8, left: 48 }}>
-            <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
-            <XAxis dataKey="trade" tickLine={false} axisLine={false} fontSize={10} />
-            <YAxis tickLine={false} axisLine={false} fontSize={10} width={52}
-              tickFormatter={(v: number) => `${v >= 1_000_000 ? `${(v / 1_000_000).toFixed(1)}M` : v >= 1000 ? `${Math.round(v / 1000)}K` : v}`} />
-            <Bar dataKey="budget" name="JCA budget" fill={CHART_COLORS.cumulative} radius={[3, 3, 0, 0]} barSize={18} isAnimationActive={false} />
-            <Bar dataKey="committed" name="Committed" fill={CHART_COLORS.committed} radius={[3, 3, 0, 0]} barSize={18} isAnimationActive={false} />
-            <ChartTooltip moneyKeys={["budget", "committed"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[480px]">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData} margin={{ top: 4, right: 8, left: 48 }}>
+                <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+                <XAxis dataKey="trade" tickLine={false} axisLine={false} fontSize={10} />
+                <YAxis tickLine={false} axisLine={false} fontSize={10} width={52}
+                  tickFormatter={(v: number) => `${v >= 1_000_000 ? `${(v / 1_000_000).toFixed(1)}M` : v >= 1000 ? `${Math.round(v / 1000)}K` : v}`} />
+                <Bar dataKey="budget" name="JCA budget" fill={CHART_COLORS.cumulative} radius={[3, 3, 0, 0]} barSize={18} isAnimationActive={false} />
+                <Bar dataKey="committed" name="Committed" fill={CHART_COLORS.committed} radius={[3, 3, 0, 0]} barSize={18} isAnimationActive={false} />
+                <ChartTooltip moneyKeys={["budget", "committed"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </ChartFrame>
 
       {gaps.length > 0 && (
@@ -106,10 +110,11 @@ export function BudgetDashboardClient() {
       )}
 
       <section className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto">
         {data.items.length === 0 ? (
           <div className="p-4"><EmptyState title="No budget data" body="Add JCA lines under Administration → Projects → Budget." /></div>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[560px] text-sm">
             <thead className="bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-800/60">
               <tr>
                 <th className="px-4 py-3">Trade</th>
@@ -150,6 +155,7 @@ export function BudgetDashboardClient() {
             </tbody>
           </table>
         )}
+        </div>
       </section>
     </div>
   );

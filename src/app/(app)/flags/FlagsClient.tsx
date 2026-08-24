@@ -202,7 +202,8 @@ export function FlagsClient() {
         <EmptyState title="No matching flags" body="Nothing needs attention." />
       ) : (
         <section className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-sm">
             <thead className="bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-800/60">
               <tr>
                 <th className="px-4 py-3" aria-label="Severity"><span className="sr-only">Severity</span></th>
@@ -338,6 +339,7 @@ export function FlagsClient() {
               ))}
             </tbody>
           </table>
+          </div>
         </section>
       )}
     </div>

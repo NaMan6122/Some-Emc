@@ -69,16 +69,16 @@ export function InvestmentClient() {
   })();
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-6 px-1 sm:px-0">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analytics{code ? ` · ${code}` : ""}</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Investment</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">Investment</h1>
         <p className="mt-0.5 text-sm text-zinc-500">
           Matched window {data.windowMonths[0]} → {data.windowMonths[1]}; pre-window commitments carried in ({aed(data.carryInFils)}).
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         <KpiCard label="Recovery rate" value={`${data.recoveryRatePct.toFixed(1)}%`} sub="certified ÷ invested" />
         <KpiCard label="Outstanding" value={aed(data.outstandingFinalFils)} sub={`invested ${aed(data.investedTotalFils)}`} />
         <KpiCard
@@ -93,16 +93,20 @@ export function InvestmentClient() {
         unit="AED"
         ariaLabel={`Paired monthly bars. Invested total ${aed(data.investedTotalFils)}, recovered ${aed(data.recoveredTotalFils)}, recovery rate ${data.recoveryRatePct.toFixed(1)} percent.`}
       >
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={paired} margin={{ top: 4, right: 8, left: 48 }}>
-            <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
-            <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} />
-            <YAxis tickFormatter={shortAed} tickLine={false} axisLine={false} fontSize={10} width={52} />
-            <Bar dataKey="invested" name="Invested (LPOs)" fill={CHART_COLORS.committed} radius={[3, 3, 0, 0]} barSize={12} isAnimationActive={false} />
-            <Bar dataKey="recovered" name="Recovered (PCs)" fill={CHART_COLORS.certified} radius={[3, 3, 0, 0]} barSize={12} isAnimationActive={false} />
-            <ChartTooltip moneyKeys={["invested", "recovered"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[520px]">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={paired} margin={{ top: 4, right: 8, left: 48 }}>
+                <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
+                <YAxis tickFormatter={shortAed} tickLine={false} axisLine={false} fontSize={10} width={52} />
+                <Bar dataKey="invested" name="Invested (LPOs)" fill={CHART_COLORS.committed} radius={[3, 3, 0, 0]} barSize={12} isAnimationActive={false} />
+                <Bar dataKey="recovered" name="Recovered (PCs)" fill={CHART_COLORS.certified} radius={[3, 3, 0, 0]} barSize={12} isAnimationActive={false} />
+                <ChartTooltip moneyKeys={["invested", "recovered"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </ChartFrame>
 
       <ChartFrame
@@ -110,15 +114,19 @@ export function InvestmentClient() {
         unit="AED"
         ariaLabel={`Cumulative investment minus cumulative certified. Ends at ${aed(data.outstandingFinalFils)}. Peak ${data.peakExposureMonth ? labelForMonth(data.peakExposureMonth) : "n/a"} at ${aed(data.peakExposureFils)}.`}
       >
-        <ResponsiveContainer width="100%" height={260}>
-          <ComposedChart data={gapCurve} margin={{ top: 4, right: 8, left: 48 }}>
-            <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
-            <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} />
-            <YAxis tickFormatter={shortAed} tickLine={false} axisLine={false} fontSize={10} width={52} />
-            <Area type="monotone" dataKey="outstanding" name="Outstanding" stroke={CHART_COLORS.outstanding} fill={CHART_COLORS.outstanding} fillOpacity={0.07} strokeWidth={2} isAnimationActive={false} />
-            <ChartTooltip moneyKeys={["outstanding"]} />
-          </ComposedChart>
-        </ResponsiveContainer>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[520px]">
+            <ResponsiveContainer width="100%" height={260}>
+              <ComposedChart data={gapCurve} margin={{ top: 4, right: 8, left: 48 }}>
+                <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
+                <YAxis tickFormatter={shortAed} tickLine={false} axisLine={false} fontSize={10} width={52} />
+                <Area type="monotone" dataKey="outstanding" name="Outstanding" stroke={CHART_COLORS.outstanding} fill={CHART_COLORS.outstanding} fillOpacity={0.07} strokeWidth={2} isAnimationActive={false} />
+                <ChartTooltip moneyKeys={["outstanding"]} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </ChartFrame>
     </div>
   );

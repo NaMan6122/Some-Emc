@@ -80,11 +80,11 @@ export function PcDashboardClient() {
   }));
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-6 px-1 sm:px-0">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analytics{code ? ` · ${code}` : ""}</p>
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Payment Certificates</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">Payment Certificates</h1>
           {projectId && (
             <a
               href={`/api/v1/projects/${projectId}/export/pcs.csv`}
@@ -96,7 +96,7 @@ export function PcDashboardClient() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         <KpiCard
           label="Retention held"
           value={aed(data.retentionHeldFils ?? data.retentionTotalFils)}
@@ -124,22 +124,27 @@ export function PcDashboardClient() {
         unit="AED per month; dashed lines cumulative"
         ariaLabel={`Monthly bars of committed versus certified amounts with dashed cumulative overlays. Certified to date ${aed(data.monthly.at(-1)?.cumulativeCertifiedFils ?? "0")}.`}
       >
-        <ResponsiveContainer width="100%" height={320}>
-          <ComposedChart data={chartData} margin={{ top: 4, right: 8, left: 48 }}>
-            <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
-            <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} />
-            <YAxis tickFormatter={shortAed} tickLine={false} axisLine={false} fontSize={10} width={52} />
-            <Bar dataKey="committed" name="LPOs committed" fill={CHART_COLORS.committed} radius={[3, 3, 0, 0]} barSize={12} opacity={0.35} isAnimationActive={false} />
-            <Bar dataKey="certified" name="PC net certified" fill={CHART_COLORS.certified} radius={[3, 3, 0, 0]} barSize={12} isAnimationActive={false} />
-            <Line type="monotone" dataKey="cumCommitted" name="Cumulative committed" stroke={CHART_COLORS.committed} strokeWidth={2} strokeDasharray="5 4" dot={false} isAnimationActive={false} />
-            <Line type="monotone" dataKey="cumCertified" name="Cumulative certified" stroke={CHART_COLORS.certified} strokeWidth={2} strokeDasharray="5 4" dot={false} isAnimationActive={false} />
-            <ChartTooltip moneyKeys={["committed", "certified", "cumCommitted", "cumCertified"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
-          </ComposedChart>
-        </ResponsiveContainer>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[560px]">
+            <ResponsiveContainer width="100%" height={320}>
+              <ComposedChart data={chartData} margin={{ top: 4, right: 8, left: 48 }}>
+                <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
+                <YAxis tickFormatter={shortAed} tickLine={false} axisLine={false} fontSize={10} width={52} />
+                <Bar dataKey="committed" name="LPOs committed" fill={CHART_COLORS.committed} radius={[3, 3, 0, 0]} barSize={12} opacity={0.35} isAnimationActive={false} />
+                <Bar dataKey="certified" name="PC net certified" fill={CHART_COLORS.certified} radius={[3, 3, 0, 0]} barSize={12} isAnimationActive={false} />
+                <Line type="monotone" dataKey="cumCommitted" name="Cumulative committed" stroke={CHART_COLORS.committed} strokeWidth={2} strokeDasharray="5 4" dot={false} isAnimationActive={false} />
+                <Line type="monotone" dataKey="cumCertified" name="Cumulative certified" stroke={CHART_COLORS.certified} strokeWidth={2} strokeDasharray="5 4" dot={false} isAnimationActive={false} />
+                <ChartTooltip moneyKeys={["committed", "certified", "cumCommitted", "cumCertified"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </ChartFrame>
 
       <section className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[640px] text-sm">
           <thead className="bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-800/60">
             <tr>
               <th className="px-4 py-3">PC</th>
@@ -165,6 +170,7 @@ export function PcDashboardClient() {
             ))}
           </tbody>
         </table>
+        </div>
       </section>
     </div>
   );

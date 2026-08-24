@@ -1,6 +1,8 @@
-import { redirect } from "next/navigation";
+import { LandingClient } from "./LandingClient";
 
-// spec-009-v1: authenticated landing goes to Overview.
+// Landing is the public default. Authenticated users see a Dashboard CTA;
+// the overview remains at /overview. No redirect here — middleware keeps
+// /overview and other app routes protected.
 export default function Home() {
-  redirect("/overview");
+  return <LandingClient />;
 }
