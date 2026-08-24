@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.env
+.env.*
+!.env.example
+playwright-report
+test-results
+.playwright-cli
+memory-archive
+*.md
+!README.md
+midisland_*.html

@@ -2,6 +2,9 @@
   "name": "procare-platform",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,7 +15,9 @@
     "format": "prettier --write .",
     "user:add": "node scripts/user-add.mjs",
     "extract:job1571": "node scripts/extract-seed.mjs",
-    "seed:job1571": "node --env-file=.env prisma/seed.mjs"
+    "seed:job1571": "node --env-file=.env prisma/seed.mjs",
+    "db:migrate": "prisma migrate deploy",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.1.0",

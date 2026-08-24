@@ -1,18 +1,34 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 18:10
-Active Task: T-031 — Prod hardening: fail-fast env validation + deploy runbook — IN_PROGRESS (T-030 commit still staged/pending)
+Last Session: 2026-08-24 18:26
+Active Task: T-032 — Implement spec-022 Cross-project LPO allocations — PENDING (next)
 Last File Touched: Memory.md
-Immediate Next Step: Ship env fail-fast (AUTH_SECRET/DATABASE_URL), add db:migrate script, give human the prod 500 diagnostic checklist; then commit T-030 + T-031 separately.
+Immediate Next Step: Await human's deploy-platform/build-log answer; meanwhile T-031 committed. Then T-032 per spec-022. Committed through [T-031].
 
 ## Active Task
-T-031 — Prod hardening: unhandled-config 500 on login
-State: IN_PROGRESS
+T-031 — Prod hardening: fail-fast config + containers + runbook
+State: DONE
 Started: 2026-08-24 18:05
-Last Updated: 2026-08-24 18:10
+Last Updated: 2026-08-24 18:26
 
 ## Task Log
+
+### [2026-08-24 18:26] — T-031: Prod hardening — fail-fast config, containers, runbook
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (18:05) → DONE (18:26).
+**Goal:** Eliminate the deployed-login opaque 500 and the platform build failure class.
+**Spec Reference:** TDD §12; PRD NFR §11; DCL-006 (same session).
+**Approach:** src/server/env.ts (requireEnv/authSecret with ConfigError naming itself); jwt.ts uses it lazily per request; db.ts intentionally stays import-safe for env-less builds; apiHandler maps ConfigError → 503 SERVER_CONFIG and PrismaClientInitializationError → 503 DB_UNAVAILABLE (details only in logs); Dockerfile multi-stage (openssl + schema present wherever npm ci runs prisma generate — our own smoke caught generate-without-schema as a build-breaker), .dockerignore, DEPLOY.md runbook w/ triage table, engines>=20.9, postinstall generate, db:migrate script.
+**Checklist:**
+  - [x] Reproduce prod symptom locally: valid creds + missing AUTH_SECRET → previously 500 INTERNAL
+  - [x] Fix verified in real container: same scenario → 503 SERVER_CONFIG; wrong password → 401; health {"db":"ok"}
+  - [x] Image builds with NO secrets at build time (env-less `next build` confirmed twice)
+  - [x] DEPLOY.md: required envs, container path, bare-node path, login-500 triage table
+**Outcome:** Deployed-login failure mode is now impossible to hit silently — misconfig returns named 503 envelopes and logs the exact missing variable. Remaining unknown: the human's actual platform/build log (asked in-session).
+**Test Evidence:** vitest 27 files / 146 tests passed; tsc clean; eslint clean; docker image built + runtime smoke incl. 503/401/health checks.
+**Blockers:** NONE
+**Rollback:** Revert http-error/jwt/env/db deltas + delete Dockerfile/.dockerignore/DEPLOY.md.
 
 ### [2026-08-24 17:51] — T-030: Implement spec-021 Bulk LPO CSV import
 **Weight:** SIGNIFICANT (includes DCL-006 allocator correction)

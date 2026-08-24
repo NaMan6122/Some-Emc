@@ -1,4 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
+import { authSecret } from "@/server/env";
 
 // Edge-safe session primitives (no Prisma import here) — used by middleware and guards.
 export const SESSION_COOKIE = "procare_session";
@@ -7,9 +8,7 @@ const SEVEN_DAYS_S = 7 * 24 * 60 * 60;
 export type SessionClaims = { uid: number; role: string; tv: number };
 
 function secret(): Uint8Array {
-  const s = process.env.AUTH_SECRET;
-  if (!s || s.length < 16) throw new Error("AUTH_SECRET missing or too short");
-  return new TextEncoder().encode(s);
+  return authSecret();
 }
 
 export async function signSessionToken(claims: SessionClaims): Promise<string> {
