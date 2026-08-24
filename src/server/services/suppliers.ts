@@ -17,6 +17,9 @@ export async function listSuppliers(q?: string) {
   return prisma.supplier.findMany({
     where: q ? { name: { contains: namePart } } : undefined,
     orderBy: { name: "asc" },
+    // spec-020-v1: additive LPO-count column for the admin screen (no existing
+    // consumer breaks — response shape only gains a field).
+    include: { _count: { select: { lpos: true } } },
   });
 }
 

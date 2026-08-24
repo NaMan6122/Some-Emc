@@ -1,18 +1,45 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 16:32
-Active Task: T-028 — Draft M4 atomic spec batch (spec-020..023) — IN_PROGRESS
+Last Session: 2026-08-24 17:16
+Active Task: T-030 — Implement spec-021 Bulk LPO CSV import — PENDING (next)
 Last File Touched: Memory.md
-Immediate Next Step: Present spec-020..023 at Gate G1; on promotion implement in order 020→021→022→023. Committed through [T-027]. Archive: memory-archive/phase-1-2.md (through T-022).
+Immediate Next Step: On request: POST /projects/:id/lpos/import?dry_run= with fixed-header CSV mapping, all-or-nothing commit, audit-tagged rows per spec-021. Committed through [T-029].
 
 ## Active Task
-T-028 — Draft M4 atomic spec batch (spec-020..023)
-State: IN_PROGRESS
-Started: 2026-08-24 16:32
-Last Updated: 2026-08-24 16:32
+T-029 — Implement spec-020: Supplier merge UI
+State: DONE
+Started: 2026-08-24 16:48
+Last Updated: 2026-08-24 17:16
 
 ## Task Log
+
+### [2026-08-24 17:16] — T-029: Implement spec-020 Supplier merge UI
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (16:48) → DONE (17:16).
+**Goal:** /admin/suppliers vendor-master screen — searchable table with counts/aliases/merged-indicator, scored suggestions panel, ADMIN merge form surfacing API guards inline.
+**Spec Reference:** specs/spec-020-v1.md; PRD FR-3 P1.
+**Approach:** Pure client screen over existing spec-006 endpoints (suggestions + merge); zero API contract change; listSuppliers gained additive `_count.lpos` include for the count column (documented in changelog). Review button pre-fills source=higher-id/target=lower-id. Non-ADMIN roles get read-only rendering; nav entry pre-existed.
+**Checklist:**
+  - [x] AC1 ADMIN view: 186-row table + 19 scored suggestion cards incl fixture pair @0.96
+  - [x] AC2 UI merge round-trip: DB mergedIntoId set, survivor alias holds absorbed name, MERGE audit row (actor 9), row shows "merged into", pair left suggestions
+  - [x] AC3 guard error inline: mocked 422 ALREADY_MERGED → banner text renders, form intact (server guards unreachable via normal flow by design)
+  - [x] AC4 VIEWER: read-only note, zero controls, table renders; direct API 403 covered by spec-006 suite
+  - [x] AC5 sidebar Administration entry live; unauth → /login?next=/admin/suppliers
+**Outcome:** All five ACs verified in-browser with ZERO console errors. Fixture pair purged post-smoke. Real-data note: panel surfaced 18/19 open scan pairs; one fell below the top-20 suggestions cut (spec-006 documented limitation, unchanged).
+**Test Evidence:** vitest 26 files / 141 tests passed; tsc clean; eslint clean incl. hooks warnings fixed; Playwright transcript in-session.
+**Blockers:** NONE
+**Rollback:** Remove page/client files; restore listSuppliers without _count; APIs untouched.
+
+### [2026-08-24 16:48] — Gate G1 closure: M4 batch ratified
+**Weight:** STANDARD
+**State transitions:** BLOCKED → DONE (2026-08-24 16:48) — human ruled "Promote all 4".
+**Checklist:**
+  - [x] spec-020..023 promoted DRAFT → ACTIVE (order 020→021→022→023)
+**Outcome:** M4 implementation authorized starting with the supplier merge UI.
+**Test Evidence:** Manual sign-off by human on 2026-08-24 via gate question.
+**Blockers:** NONE
+**Rollback:** NONE.
 
 ### [2026-08-24 16:40] — T-028: Draft M4 atomic spec batch (spec-020..023)
 **Weight:** SIGNIFICANT
