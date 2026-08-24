@@ -1,6 +1,6 @@
 # spec-023-v1: Print/PDF report parity (FR-10)
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-24
 **Version:** 1
 **Depends On:** spec-014, spec-015
 **Blocks:** NONE

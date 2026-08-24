@@ -1,10 +1,10 @@
 # spec-020-v1: Supplier merge UI
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-24
 **Version:** 1
 **Depends On:** spec-006, spec-009
 **Blocks:** NONE
-**Task Reference:** —
+**Task Reference:** T-029
 
 ## What
 PRD FR-3 P1 UI half: the merge API (spec-006) gets its admin screen at `/admin/suppliers`. Layout: searchable supplier table (name, aliases count, LPO count, merged-into indicator) + a "Suspected duplicates" panel fed by `GET /suppliers/duplicates/suggestions` (top-20, score shown). Selecting a suggestion pair pre-fills the merge form (source → target, either direction swappable); ADMIN-only submit calls `POST /suppliers/:id/merge {targetId}` with the existing 422 guards surfaced inline (SELF_MERGE / ALREADY_MERGED / TARGET_MERGED); success toast names the surviving master and re-validates both lists. Non-ADMIN roles see the data read-only with no action column. No new endpoints; no service changes.

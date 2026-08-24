@@ -1,6 +1,6 @@
 # spec-021-v1: Bulk LPO CSV import
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-24
 **Version:** 1
 **Depends On:** spec-005, spec-007
 **Blocks:** NONE

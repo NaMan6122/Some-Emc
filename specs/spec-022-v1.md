@@ -1,6 +1,6 @@
 # spec-022-v1: Cross-project LPO allocations ("50% ONLY")
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-24
 **Version:** 1
 **Depends On:** spec-002, spec-004, spec-005, spec-007, spec-014
 **Blocks:** NONE
