@@ -30,7 +30,7 @@ export function LandingClient() {
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-sm font-bold text-white">P</div>
             <span className="text-lg font-semibold tracking-tight">ProCare</span>
-            <span className="hidden rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 sm:inline">Trends EMC</span>
+            <span className="hidden rounded-full bg-zinc-900 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-white dark:bg-white dark:text-zinc-900 sm:inline">HyveMindx</span>
           </div>
           <nav className="hidden items-center gap-6 text-sm font-medium text-zinc-600 dark:text-zinc-300 sm:flex">
             <a href="#features" className="hover:text-zinc-900 dark:hover:text-zinc-100">Features</a>
@@ -80,14 +80,14 @@ export function LandingClient() {
         <div className="mx-auto grid w-full max-w-7xl gap-10 px-6 pb-12 pt-28 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700 dark:border-indigo-900 dark:bg-indigo-950 dark:text-indigo-300">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" /> Live on Neon · Project 1571 seeded
+              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" /> Built by HyveMindx · Live & Audited
             </div>
             <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-[56px] lg:leading-[1.02]">
               Procurement
               <span className="block bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">that balances.</span>
             </h1>
             <p className="mt-4 max-w-xl text-[15px] leading-6 text-zinc-600 dark:text-zinc-300">
-              ProCare turns your LPO log, JCA budgets, payment certificates and variation orders into a single source of truth — with live variance, cash-flow and vendor analytics. The source of truth stays audited, the reports stay reproducible, the flags stay visible.
+              ProCare is the procurement & contract analytics platform by HyveMindx — LPOs, budgets, certificates and variations in one validated, audited workspace. Live dashboards, reproducible reports, and a triageable data-quality queue. No spreadsheets, no hand-maintained totals.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               {isAuthed ? (
@@ -104,16 +104,16 @@ export function LandingClient() {
               </a>
             </div>
 
-            {/* Pill stats — real seeded anchors */}
+            {/* Pill stats — product-level, not client-specific */}
             <dl className="mt-8 grid max-w-xl grid-cols-3 gap-3">
               {[
-                ["AED 12.98M", "LPOs committed"],
-                ["AED 10.33M", "Certified net"],
-                ["81.8%", "Recovery rate"],
+                ["Multi-project", "One workspace"],
+                ["6 dashboards", "Live analytics"],
+                ["Audited", "Every money move"],
               ].map(([v, k]) => (
                 <div key={k} className="rounded-2xl border border-zinc-200 bg-white/80 p-3 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/60">
                   <dt className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500">{k}</dt>
-                  <dd className="mt-1 font-mono text-sm font-semibold tabular-nums">{v}</dd>
+                  <dd className="mt-1 text-sm font-semibold tracking-tight">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -133,22 +133,22 @@ export function LandingClient() {
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {[
-                  ["Budget variance", "FIRE_FIGHTING — no JCA line", "AED 1,583,925"],
-                  ["Retention", "Held vs released", "AED 489,097"],
-                  ["Vendors", "14 near-duplicates flagged", "18 findings"],
-                  ["Import", "CSV dry-run + bulk", "All-or-nothing"],
+                  ["Budget variance", "Per-trade utilisation & coverage gaps", "Watch / Over"],
+                  ["Retention ledger", "Held vs released — additive & honest", "Live KPI"],
+                  ["Vendors", "Pareto, concentration & duplicate merge", "Top-8 share"],
+                  ["Import & Exports", "CSV dry-run + bulk, every list", "Audited"],
                 ].map(([t, s, v]) => (
                   <div key={t} className="rounded-2xl border border-zinc-200 p-3 dark:border-zinc-800">
                     <p className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">{t}</p>
                     <p className="mt-1 line-clamp-2 text-[12px] leading-4 text-zinc-500">{s}</p>
-                    <p className="mt-2 font-mono text-xs font-semibold tabular-nums">{v}</p>
+                    <p className="mt-2 text-xs font-semibold tabular-nums text-indigo-600 dark:text-indigo-400">{v}</p>
                   </div>
                 ))}
               </div>
               <div className="mt-4 flex items-center justify-between rounded-xl bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-800">
-                <span className="text-zinc-500">Mid Island Parkway · 1571</span>
-                <Link href={isAuthed ? "/report?project=1571" : "/login"} className="font-semibold text-indigo-600 hover:underline dark:text-indigo-400">
-                  {isAuthed ? "Open printable report →" : "Sign in to view →"}
+                <span className="text-zinc-500">ProCare · by HyveMindx</span>
+                <Link href={isAuthed ? "/overview" : "/login"} className="font-semibold text-indigo-600 hover:underline dark:text-indigo-400">
+                  {isAuthed ? "Open dashboard →" : "Sign in to view →"}
                 </Link>
               </div>
             </div>
@@ -195,7 +195,7 @@ export function LandingClient() {
               ["Payment Certificates", "/payment-certificates"],
               ["Investment", "/investment"],
               ["Vendors", "/vendors"],
-              ["Printable Report", "/report?project=1571"],
+              ["Printable Report", "/report"],
             ].map(([label, href]) => (
               <Link
                 key={label}
@@ -230,9 +230,22 @@ export function LandingClient() {
       </section>
 
       <footer className="border-t border-zinc-200 py-8 dark:border-zinc-800">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} Trends Electro-Mechanical Works LLC · ProCare Platform</span>
-          <span className="font-mono text-[11px]">AED-only · Neon Postgres · Next.js 15</span>
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-semibold tracking-tight text-zinc-700 dark:text-zinc-200">HyveMindx — built by Naman</span>
+            <div className="flex items-center gap-3 text-xs">
+              <a href="https://github.com/NaMan6122" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">GitHub</a>
+              <span className="text-zinc-300">·</span>
+              {/* TODO: replace with your real URLs */}
+              <a href="https://linkedin.com/in/naman" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">LinkedIn</a>
+              <span className="text-zinc-300">·</span>
+              <a href="https://x.com/naman" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">X</a>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">ProCare Platform</p>
+            <p className="font-mono text-[11px] text-zinc-500">Neon Postgres · Next.js 15 · Tailwind v4</p>
+          </div>
         </div>
       </footer>
     </div>
