@@ -210,13 +210,13 @@ export function LpoLogClient() {
     <div className="flex flex-col gap-4">
       {/* Filter bar */}
       <section className="rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <input
             value={qRaw}
             onChange={(e) => setQRaw(e.target.value)}
             placeholder="Search supplier / material / ref…"
             data-testid="lpo-q"
-            className="min-w-[220px] flex-1 rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-800"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-800 sm:min-w-[220px] sm:flex-1"
           />
           <select
             aria-label="Status"
@@ -254,12 +254,12 @@ export function LpoLogClient() {
             </button>
           )}
         </div>
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-nowrap gap-1.5 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
           {TRADES.map((t) => (
             <button
               key={t}
               onClick={() => setTrade(trade === t ? "" : t)}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs ${
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs ${
                 trade === t
                   ? "border-indigo-600 bg-indigo-50 font-medium text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
                   : "border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300"

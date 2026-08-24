@@ -91,9 +91,10 @@ export default async function ReportPage({
       </section>
 
       {/* Trade mix + Budget variance */}
-      <section className="mb-10">
+      <section className="mb-10 overflow-hidden">
         <h2 className="mb-3 border-b border-zinc-300 pb-1 text-lg font-bold uppercase tracking-wide">Budget vs Actual by Trade</h2>
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[520px]">
           <thead>
             <tr>
               <th className={th}>Trade</th>
@@ -120,12 +121,14 @@ export default async function ReportPage({
             Note: out-of-scope packages totalling {aed(budget.excludedFils)} are excluded from the committed column above.
           </p>
         )}
+        </div>
       </section>
 
       {/* Payment certificates log */}
-      <section className="mb-10">
+      <section className="mb-10 overflow-hidden">
         <h2 className="mb-3 border-b border-zinc-300 pb-1 text-lg font-bold uppercase tracking-wide">Payment Certificates</h2>
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[520px]">
           <thead>
             <tr>
               <th className={th}>PC</th>
@@ -153,12 +156,14 @@ export default async function ReportPage({
             </tr>
           </tbody>
         </table>
+        </div>
       </section>
 
       {/* Investment & recovery */}
-      <section className="mb-10">
+      <section className="mb-10 overflow-hidden">
         <h2 className="mb-3 border-b border-zinc-300 pb-1 text-lg font-bold uppercase tracking-wide">Investment &amp; Recovery</h2>
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[520px]">
           <thead>
             <tr>
               <th className={th}>Month</th>
@@ -178,12 +183,14 @@ export default async function ReportPage({
             ))}
           </tbody>
         </table>
+        </div>
       </section>
 
       {/* Vendors concentration */}
-      <section className="mb-10">
+      <section className="mb-10 overflow-hidden">
         <h2 className="mb-3 border-b border-zinc-300 pb-1 text-lg font-bold uppercase tracking-wide">Vendor Concentration</h2>
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[520px]">
           <thead>
             <tr>
               <th className={th}>Supplier</th>
@@ -207,6 +214,7 @@ export default async function ReportPage({
             </tr>
           </tbody>
         </table>
+        </div>
       </section>
 
       {/* Flags appendix */}
