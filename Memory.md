@@ -1,18 +1,36 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 10:30
-Active Task: T-025 — Implement spec-017 Data-quality rules engine (project scan) — PENDING (next)
+Last Session: 2026-08-24 10:46
+Active Task: T-026 — Implement spec-018 CSV exports (FR-10 P1 subset) — PENDING (next)
 Last File Touched: Memory.md
-Immediate Next Step: Start T-025 on request: POST /api/v1/projects/:id/flags/scan (NO_BUDGET_LINE golden FIRE_FIGHTING AED 1,583,925; DUPLICATE_SUPPLIER_SUSPECT via duplicates.ts ≥0.6; idempotent reconcile). Committed through 8c029d6 ([T-024]).
+Immediate Next Step: On request: build /projects/:id/export/{pcs,vos,budget-lines,variance,flags}.csv + /suppliers/export.csv + /audit.csv per spec-018 (clone lpos/export conventions). Committed through [T-025].
 
 ## Active Task
-T-024 — Implement spec-016: Flag triage workflow
+T-025 — Implement spec-017: Data-quality rules engine (project scan)
 State: DONE
-Started: 2026-08-24 10:05
-Last Updated: 2026-08-24 10:26
+Started: 2026-08-24 10:32
+Last Updated: 2026-08-24 10:46
 
 ## Task Log
+
+### [2026-08-24 10:46] — T-025: Implement spec-017 Data-quality rules engine
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (10:32) → DONE (10:46).
+**Goal:** POST /api/v1/projects/:id/flags/scan evaluating NO_BUDGET_LINE + DUPLICATE_SUPPLIER_SUSPECT idempotently with condition-based reconciliation.
+**Spec Reference:** specs/spec-017-v1.md; PRD FR-9; reuses budgets.computeVariance semantics + duplicates.findDuplicatePairs heuristic.
+**Approach:** NO_BUDGET_LINE = variance rows status "no_budget" (committed>0 ∧ no line), one Project-flag per trade; message leads with trade token for matching. Pair flags are Supplier-entity with entityId composite "smallerId:largerId". Reconciliation is CONDITION-based: each OPEN flag re-checked against current data (budget line appeared / side merged / similarity dropped) → RESOLVED w/ note "Auto-resolved by scan"; creation side dedupes on entityId. Roles ADMIN/PROCUREMENT/COMMERCIAL/FINANCE via requireRole.
+**Checklist:**
+  - [x] AC1 seeded scan: exactly one FIRE_FIGHTING flag @ AED 1,583,925.00; qualifying set == variance no_budget trades; budgeted trades absent
+  - [x] AC2 second scan opened 0 / resolved 0; flag ids unchanged
+  - [x] AC3 adding FIRE_FIGHTING budget line → flag RESOLVED w/ auto-note; GENERAL stays OPEN
+  - [x] AC4 SCAN17 typo-pair fixtures → one pair flag naming both; after merge → auto-RESOLVED
+  - [x] AC5 VIEWER 403; unauth 401 envelope
+  - [x] Live HTTP smoke: unauth 401 → first scan {opened:18} → rescan {0,0}
+**Outcome:** First real scan surfaced 4 budget-gap flags + 14 supplier-pair flags — the pairs are overwhelmingly genuine near-duplicates missed by the seed's conservative canonicalization (TECHNALCO/TECNALCO, MUSANDUM/MUSANDAM, M/S-prefix variants); a few borderline LOWs are advisory by design (WONT_FIX path). Canonicalization map expansion deliberately NOT done here (spec-008 territory). The 18 flags left OPEN in dev DB as genuine day-one queue items. Test bug caught en route: suite initially assumed only 4 openings and used wrong PROCUREMENT login email (actual: purchase@trends.local).
+**Test Evidence:** vitest 24 files / 131 tests passed (incl. new flags-scan.integration, 5 tests); tsc --noEmit clean; eslint clean; live curls in-session.
+**Blockers:** NONE
+**Rollback:** Remove scan route/service/tests; DataFlag rows persist harmlessly.
 
 ### [2026-08-24 10:26] — T-024: Implement spec-016 Flag triage workflow
 **Weight:** STANDARD
