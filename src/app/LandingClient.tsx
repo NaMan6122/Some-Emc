@@ -236,10 +236,9 @@ export function LandingClient() {
             <div className="flex items-center gap-3 text-xs">
               <a href="https://github.com/NaMan6122" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">GitHub</a>
               <span className="text-zinc-300">·</span>
-              {/* TODO: replace with your real URLs */}
-              <a href="https://linkedin.com/in/naman" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/namangupta2510/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">LinkedIn</a>
               <span className="text-zinc-300">·</span>
-              <a href="https://x.com/naman" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">X</a>
+              <a href="https://x.com/HyveMindx1" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">X</a>
             </div>
           </div>
           <div className="text-right">
