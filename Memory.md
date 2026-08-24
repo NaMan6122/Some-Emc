@@ -14,6 +14,19 @@ Last Updated: 2026-08-24 22:20
 
 ## Task Log
 
+### [2026-08-24 22:45] — T-031 addendum 2: prod overview 500 fixed (missed migration sync)
+**Weight:** STANDARD
+**State transitions:** addendum (22:45).
+**Goal:** Diagnose human-reported prod 500 on /analytics/overview + slow page loads.
+**Approach/Diagnosis:** Spec-022's LpoAllocation migration postdated the Neon data copy, so prod lacked the table; M4's new additive KPIs query it → P2021 → unhandled 500. Fixed by running `prisma migrate deploy` against `.env.production`. Verified: table exists, lpoAllocation.count() OK, projects intact.
+**Checklist:**
+  - [x] Pending migration applied to Neon
+  - [x] Table presence + count probe OK (transient local-network flap noted, unrelated)
+**Outcome:** Overview 500 resolves on next request — no redeploy required (schema-side fix). Slowness guidance issued to human: set Vercel function region to sin1 (Singapore) matching Neon ap-southeast-1 — cross-region RTT is the dominant cost; Neon autosuspend adds first-hit latency after idle.
+**Test Evidence:** prisma migrate deploy output; node probe with retries.
+**Blockers:** NONE
+**Rollback:** N/A.
+
 ### [2026-08-24 22:20] — Gate G5 closure: M4 milestone complete — v1 scope done
 **Weight:** STANDARD
 **State transitions:** BLOCKED → DONE (2026-08-24 22:20) — human ruled "Please proceed"; Arabic localization explicitly deferred.
