@@ -1,10 +1,10 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 10:26
+Last Session: 2026-08-24 10:30
 Active Task: T-025 — Implement spec-017 Data-quality rules engine (project scan) — PENDING (next)
 Last File Touched: Memory.md
-Immediate Next Step: Start T-025: POST /api/v1/projects/:id/flags/scan with NO_BUDGET_LINE + DUPLICATE_SUPPLIER_SUSPECT rules, idempotent open/auto-resolve reconciliation, FIRE_FIGHTING golden anchor.
+Immediate Next Step: Start T-025 on request: POST /api/v1/projects/:id/flags/scan (NO_BUDGET_LINE golden FIRE_FIGHTING AED 1,583,925; DUPLICATE_SUPPLIER_SUSPECT via duplicates.ts ≥0.6; idempotent reconcile). Committed through 8c029d6 ([T-024]).
 
 ## Active Task
 T-024 — Implement spec-016: Flag triage workflow
