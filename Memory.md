@@ -14,6 +14,21 @@ Last Updated: 2026-08-24 18:26
 
 ## Task Log
 
+### [2026-08-24 19:05] — T-031 addendum: Neon provisioned via agent onboarding; seed data copied with full parity
+**Weight:** SIGNIFICANT
+**State transitions:** DONE → addendum (19:05).
+**Goal:** Human-directed: local stays Docker, prod = Neon; copy local Trends source data to prod as-is.
+**Approach:** `neonctl init --agent` onboarding executed (skipped its serverless-driver step deliberately — long-running container uses plain TCP over pooled URL; would need DCL if edge hosting chosen). Env split after `neon env pull` hijacked `.env`: `.env`→local Docker restored, `.env.production`→Neon pooled. Schema via `prisma migrate deploy`; data via `pg_dump --data-only --exclude-table=_prisma_migrations | psql` into pooled endpoint.
+**Checklist:**
+  - [x] Neon project linked (branch production, ap-southeast-1)
+  - [x] All migrations applied to Neon
+  - [x] Data restored; sequences auto-synced by pg_dump setvals
+  - [x] FULL PARITY: 10/10 tables row-exact; Σ LPO amountFils = 1,298,411,500 byte-equal both sides
+**Outcome:** Prod DB live on Neon with the exact Trends dataset incl. users (password hashes carried — existing logins work), flags (18 scan findings), audit trail. Gotchas recorded: Neon psql sessions can show empty search_path (schema-qualify raw SQL); `neon env pull` rewrites `.env` DATABASE_URL — re-split after running it.
+**Test Evidence:** parity table in-session (local docker vs Neon counts + golden sum).
+**Blockers:** NONE
+**Rollback:** N/A (additive infra).
+
 ### [2026-08-24 18:26] — T-031: Prod hardening — fail-fast config, containers, runbook
 **Weight:** SIGNIFICANT
 **State transitions:** PENDING → IN_PROGRESS (18:05) → DONE (18:26).
@@ -180,7 +195,7 @@ _Entries through T-022 (M1/M2 phases) archived to memory-archive/phase-1-2.md._
 ## Open Questions
 - OQ-1: Is AED the only currency, ever? (Assumed yes in TDD money design.) — raised 2026-08-23
 - OQ-2: Is Arabic UI/localization on any roadmap horizon? (Assumed no for v1.) — raised 2026-08-23
-- OQ-3: ~~Deployment target~~ PARTIALLY RESOLVED 2026-08-24 — human proposed Neon for managed Postgres; docs updated (DEPLOY.md/.env.example, pooled URL + sslmode). App hosting target still open (Vercel vs container/VPS) — needed to finalize build-failure diagnosis.
+- OQ-3: ~~Deployment target~~ RESOLVED 2026-08-24 — DB = Neon (pooled URL, sslmode=require, branch production); local dev stays Docker; app container per TDD §12/Dockerfile. Local seed dataset copied to Neon with FULL PARITY verified (all 10 tables row-exact; golden Σ LPO 1,298,411,500 fils byte-equal). Env split: `.env`=local Docker, `.env.production`=Neon (both gitignored). Neon caveat: its psql sessions may show empty search_path — always schema-qualify raw SQL.
 - OQ-4: Should invoice/document attachments be stored against LPOs/PCs in v1? (Assumed P1+.) — raised 2026-08-23
 - OQ-5: Do users need per-project access restrictions soon, or company-wide roles suffice? (Assumed company-wide.) — raised 2026-08-23
 - OQ-6: Is a formal LPO approval workflow needed pre-issue, or free issuance matches current practice? (Assumed free issuance + revisions.) — raised 2026-08-23

@@ -1,7 +1,18 @@
 # Deployment Runbook (T-031)
 
-Target per TDD §12: single Node container + PostgreSQL 16. Everything below is
-idempotent; re-running after a failed deploy is safe.
+Target per TDD §12: single Node container + managed PostgreSQL 16 (**Neon**, resolved 2026-08-24).
+
+## 0. Environment split (IMPORTANT)
+
+| File | Points at | Use |
+|---|---|---|
+| `.env` | local Docker (`localhost:5433`) | `npm run dev`, tests |
+| `.env.production` | Neon pooled URL | prod deploys, migrations against prod |
+
+`neon env pull` OVERWRITES `DATABASE_URL` in `.env` — re-check it afterwards and
+keep local dev on Docker. Both files are gitignored; never commit credentials.
+All commands below read the URL from the environment: `set -a && source
+.env.production && set +a` for prod operations.
 
 ## 1. Required runtime environment
 
