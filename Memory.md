@@ -1,18 +1,33 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 22:20
-Active Task: NONE — v1 scope (M1–M4) COMPLETE, ratified at G5 2026-08-24
+Last Session: 2026-08-24 22:35
+Active Task: T-034 — Draft spec-024 User administration — DONE; G1 presented, awaiting ruling
 Last File Touched: Memory.md
-Immediate Next Step: Await human direction. Known deferred items: users-admin placeholder screen; OQ backlog (1 currency, 4 attachments, 5 per-project access, 6 approval workflow, 8 admin ownership); Arabic i18n explicitly deferred; AUTH_SECRET rotation once demo passed; Vercel redeploy to ship M4 UI.
+Immediate Next Step: On promotion, implement T-035 (spec-024): active-column migration, users CRUD API + guardrails, /admin/users UI, login USER_INACTIVE.
 
 ## Active Task
-NONE
-State: —
-Started: —
-Last Updated: 2026-08-24 22:20
+T-034 — Draft spec-024 User administration
+State: DONE
+Started: 2026-08-24 22:30
+Last Updated: 2026-08-24 22:35
 
 ## Task Log
+
+### [2026-08-24 22:35] — T-034: Draft spec-024 User administration
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS → DONE (22:35); G1 presented.
+**Goal:** Close the last admin-batch gap — user lifecycle management (create/role/deactivate/reset) replacing the /admin/users placeholder.
+**Spec Reference:** PRD FR-1; TDD §7 Users row (ADMIN RW); extends spec-003 auth + spec-016 users picker.
+**Approach:** `active` column migration (no hard deletes — audit attribution); role-aware GET shape; one-time-password create/reset returned once and never audited; tokenVersion bumps on every rights/credential change for instant revocation; server guardrails CANNOT_MODIFY_SELF + LAST_ADMIN; login 403 USER_INACTIVE while inactive.
+**Checklist:**
+  - [x] specs/spec-024-v1.md drafted (six ACs)
+  - [x] spec-index row added (DRAFT)
+  - [x] Gate G1 presented
+**Outcome:** Awaiting promotion ruling before implementation (T-035).
+**Test Evidence:** N/A — drafting task.
+**Blockers:** NONE — gate pending.
+**Rollback:** Delete specs/spec-024-v1.md; revert index.
 
 ### [2026-08-24 22:45] — T-031 addendum 2: prod overview 500 fixed (missed migration sync)
 **Weight:** STANDARD

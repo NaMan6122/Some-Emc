@@ -25,6 +25,7 @@
 | spec-021 | Bulk LPO CSV import (FR-4 P1) | v1 | IMPLEMENTED | spec-005, spec-007 | T-030 DONE | Promoted at G1 2026-08-24; dry-run + all-or-nothing commit; exposed latent ref-allocator bug → DCL-006 collision-aware allocation |
 | spec-022 | Cross-project LPO allocations ("50% ONLY") | v1 | IMPLEMENTED | spec-002, spec-004, spec-005, spec-007, spec-014 | T-032 DONE | Promoted at G1 2026-08-24; Σ≤100 enforced; additive overview KPIs; drawer panel |
 | spec-023 | Print/PDF report parity (FR-10) | v1 | IMPLEMENTED | spec-014, spec-015 | T-033 DONE | Promoted at G1 2026-08-24; /report server-rendered from analytics services; print CSS verified via emulation |
+| spec-024 | User administration (admin batch closure) | v1 | DRAFT | spec-003, spec-004, spec-016 | — | Post-v1 addendum batch, awaiting Gate G1 |
 
 _M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015): all IMPLEMENTED. M3 batch (016–019): all IMPLEMENTED — ratified at G5 2026-08-24._
 
