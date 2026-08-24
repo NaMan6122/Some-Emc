@@ -203,6 +203,11 @@ spec-007-v2 AC1 semantics unchanged (unique refs, per-project sequence) — gene
 **Task Reference:** T-032, T-033
 **Note:** M4 finished in one push for demo readiness. Judgment calls: (1) allocations have no UPDATE path (delete + re-create, both audited) matching the immutable-financial-record convention; "allocated out" is computed through lpo.projectId since Prisma cannot express a back-relation without an FK; allocation KPIs count all referenced LPOs regardless of revision status — superseding an allocated LPO leaves its rows in place (visible in drawer) rather than silently migrating them; (2) /report relies on middleware auth like every other (app) page and calls analytics services directly server-side, guaranteeing figure parity with dashboards; PDF via browser print (documented decision from spec); vendor table shows top-12 + top-8 concentration row. Demo polish shipped alongside: scan trigger button on the queue, CSV export links on PC/Budget/Flags tabs, Printable Report sidebar entry.
 
+## [2026-08-24 23:30] — T-035 completion note (no deviation)
+
+**Task Reference:** T-035
+**Note:** spec-024 implemented to all six ACs, browser-verified end-to-end. Judgment calls: (1) deactivation also blocks stale tokens at the session-guard level (`getSession` rejects inactive users) — belt-and-braces on top of the tokenVersion bump; (2) triage-role GET now returns only ACTIVE users (assignee picker shouldn't offer deactivated staff) while ADMIN GET lists everyone; (3) role changes bump tokenVersion so the new role applies on the next request without waiting for expiry; (4) LAST_ADMIN's zero-case is guarded in-tx by counting other active admins — the integration suite exercises the pass-path plus unit-level count semantics rather than mutating the shared dev DB's many legacy admin accounts. Admin batch is now CLOSED: no placeholder screens remain in Administration.
+
 ## [2026-08-24 17:50] — T-030 completion note (no deviation)
 
 **Task Reference:** T-030

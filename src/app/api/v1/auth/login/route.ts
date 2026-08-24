@@ -42,6 +42,10 @@ export const POST = apiHandler(async (request) => {
     recordFailure(key);
     return Response.json(apiError("INVALID_CREDENTIALS", "Invalid email or password"), { status: 401 });
   }
+  // spec-024-v1: deactivated accounts are locked out with a distinct signal.
+  if (!user.active) {
+    return Response.json(apiError("USER_INACTIVE", "This account has been deactivated — contact an administrator"), { status: 403 });
+  }
 
   clearFailures(key);
   const token = await signSessionToken({ uid: user.id, role: user.role, tv: user.tokenVersion });

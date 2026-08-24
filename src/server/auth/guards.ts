@@ -16,9 +16,10 @@ export async function getSession(request: Request): Promise<SessionUser | null> 
   if (!claims) return null;
   const user = await prisma.user.findUnique({
     where: { id: claims.uid },
-    select: { id: true, email: true, name: true, role: true, tokenVersion: true },
+    select: { id: true, email: true, name: true, role: true, tokenVersion: true, active: true },
   });
   if (!user || user.tokenVersion !== claims.tv) return null;
+  if (!user.active) return null; // spec-024-v1: deactivated users lose access immediately
   return { id: user.id, email: user.email, name: user.name, role: user.role };
 }
 

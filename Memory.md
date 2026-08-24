@@ -1,18 +1,36 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 22:35
-Active Task: T-034 — Draft spec-024 User administration — DONE; G1 presented, awaiting ruling
+Last Session: 2026-08-24 23:30
+Active Task: T-036 — Landing page (GIF hero, default route) — QUEUED (next); then T-037 README.md; T-038 mobile responsiveness spec+impl
 Last File Touched: Memory.md
-Immediate Next Step: On promotion, implement T-035 (spec-024): active-column migration, users CRUD API + guardrails, /admin/users UI, login USER_INACTIVE.
+Immediate Next Step: T-036 landing page per human directive (modern UI, fullscreen GIF background, default route replaces login-as-home). Then README, then responsiveness spec-025.
 
 ## Active Task
-T-034 — Draft spec-024 User administration
+T-035 — Implement spec-024 User administration
 State: DONE
-Started: 2026-08-24 22:30
-Last Updated: 2026-08-24 22:35
+Started: 2026-08-24 22:40
+Last Updated: 2026-08-24 23:30
 
 ## Task Log
+
+### [2026-08-24 23:30] — T-035: Implement spec-024 User administration — admin batch closed
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (22:40) → DONE (23:30).
+**Goal:** Full user lifecycle: create w/ one-time password, role change, deactivate/reactivate, password reset — ADMIN-only, instant revocation, guardrails.
+**Spec Reference:** specs/spec-024-v1.md; PRD FR-1; TDD §7 Users row.
+**Approach:** `active` column migration; users-admin service (create/patch) with CANNOT_MODIFY_SELF + LAST_ADMIN in-tx guards, tokenVersion bump on any revoking change, OTP returned once and never audited/stored clear; GET role-aware (ADMIN rich / triage minimal active-only); login 403 USER_INACTIVE; guards.getSession rejects inactive. UI replaces placeholder: create form → copy-once OTP banner, inline role select, reset/deactivate actions w/ confirm.
+**Checklist:**
+  - [x] AC1 create → 201 + OTP; audit free of credential material; dup 409 EMAIL_TAKEN
+  - [x] AC2 role change persists + tokenVersion bump kills prior session + audit before/after w/ sessionsRevoked
+  - [x] AC3 deactivate → session dead, login 403 USER_INACTIVE, reactivate restores
+  - [x] AC4 self-deactivate/demote 422 CANNOT_MODIFY_SELF; non-last admin demote OK
+  - [x] AC5 FINANCE POST/PATCH 403; triage GET shape {id,name,role} intact; VIEWER GET 403; unauth 401
+  - [x] AC6 browser lifecycle: created via form → OTP revealed → login 200 → role dropdown persisted → Deactivate confirm → Inactive pill → login 403
+**Outcome:** All six ACs verified headless AND in-browser. Admin batch CLOSED — no placeholders left in the Administration area.
+**Test Evidence:** vitest 29 files / 155 tests passed (incl. users-admin.integration ×6); tsc clean; eslint clean; Playwright transcript in-session.
+**Blockers:** NONE
+**Rollback:** Down-migration drops `active`; remove routes/service/UI/tests.
 
 ### [2026-08-24 22:35] — T-034: Draft spec-024 User administration
 **Weight:** STANDARD
