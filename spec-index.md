@@ -21,9 +21,13 @@
 | spec-017 | Data-quality rules engine (project scan) | v1 | IMPLEMENTED | spec-006, spec-007, spec-011, spec-016 | T-025 DONE | Promoted at G1 2026-08-24; scan opens 4 NO_BUDGET_LINE + 14 DUPLICATE_SUPPLIER_SUSPECT on seeded data — all genuine |
 | spec-018 | CSV exports (FR-10 P1 subset) | v1 | IMPLEMENTED | spec-007, spec-011, spec-012, spec-013, spec-004 | T-026 DONE | Promoted at G1 2026-08-24; seven exporters via shared src/lib/csv.ts; variance CSV documents v1 basis in changelog (meta column skipped) |
 | spec-019 | Retention ledger & releases (OQ-7 / FR-6 P1) | v1 | IMPLEMENTED | spec-002, spec-004, spec-014, spec-015 | T-027 DONE | Promoted at G1 2026-08-24; OQ-7 closed same gate; cashflow anchors byte-identical with additive held/released fields |
+| spec-020 | Supplier merge UI (FR-3 P1) | v1 | DRAFT | spec-006, spec-009 | — | M4 batch, awaiting Gate G1 |
+| spec-021 | Bulk LPO CSV import (FR-4 P1) | v1 | DRAFT | spec-005, spec-007 | — | M4 batch, awaiting Gate G1 |
+| spec-022 | Cross-project LPO allocations ("50% ONLY") | v1 | DRAFT | spec-002, spec-004, spec-005, spec-007, spec-014 | — | M4 batch, awaiting Gate G1 |
+| spec-023 | Print/PDF report parity (FR-10) | v1 | DRAFT | spec-014, spec-015 | — | M4 batch, awaiting Gate G1 |
 
-_M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015): all IMPLEMENTED._
+_M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015): all IMPLEMENTED. M3 batch (016–019): all IMPLEMENTED — ratified at G5 2026-08-24._
 
-_M3 batch (spec-016..019) promoted ACTIVE at Gate G1 on 2026-08-24 ("Promote all 4 + close OQ-7") — implementation order 016→017→018→019._
+_M4 batch (spec-020..023) drafted 2026-08-24 — pending Gate G1 promotion before implementation (order 020→021→022→023)._
 
 _Promoted DRAFT → ACTIVE by human at Gate G1 on 2026-08-23 (all eight). design.md v0.1 ACCEPTED in the same checkpoint._
