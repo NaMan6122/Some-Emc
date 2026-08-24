@@ -43,7 +43,10 @@ export function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <div>
-        <label htmlFor="email" className="mb-1 block text-xs font-medium uppercase tracking-wide text-zinc-500">
+        <label
+          htmlFor="email"
+          className="mb-1 block text-xs font-medium uppercase tracking-wide text-zinc-500"
+        >
           Email
         </label>
         <input
@@ -77,7 +80,10 @@ export function LoginForm() {
       </div>
 
       {error && (
-        <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+        >
           {error}
         </p>
       )}

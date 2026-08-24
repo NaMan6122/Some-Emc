@@ -1,18 +1,52 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 10:46
-Active Task: T-026 — Implement spec-018 CSV exports (FR-10 P1 subset) — PENDING (next)
+Last Session: 2026-08-24 16:06
+Active Task: T-027 — Implement spec-019 Retention ledger & releases — PENDING (next)
 Last File Touched: Memory.md
-Immediate Next Step: On request: build /projects/:id/export/{pcs,vos,budget-lines,variance,flags}.csv + /suppliers/export.csv + /audit.csv per spec-018 (clone lpos/export conventions). Committed through [T-025].
+Immediate Next Step: On request: RetentionRelease migration + /projects/:id/retention-releases API + additive cashflow fields per spec-019 (last M3 spec). T-026 committed through [T-026].
 
 ## Active Task
-T-025 — Implement spec-017: Data-quality rules engine (project scan)
-State: DONE
-Started: 2026-08-24 10:32
-Last Updated: 2026-08-24 10:46
+T-027 — Implement spec-019: Retention ledger & releases (OQ-7)
+State: PENDING
+Started: —
+Last Updated: 2026-08-24 16:06
 
 ## Task Log
+
+### [2026-08-24 16:06] — T-026: Implement spec-018 CSV exports
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (10:50) → BLOCKED (11:30, docker storage) → IN_PROGRESS (11:35) → DONE (16:06).
+**Goal:** CSV export everywhere a filter exists: pcs/vos/budget-lines/variance/flags + suppliers + audit.csv, cloning lpos/export conventions.
+**Spec Reference:** specs/spec-018-v1.md; PRD FR-10 P1; print/PDF stays M4.
+**Approach:** Shared src/lib/csv.ts (csvEscape/toCsv/csvResponse); seven route files with literal ".csv" path segments matching spec URLs; read gates mirror JSON counterparts (requireAuth; audit ADMIN); money as fils-exact formatMoney strings; bounded takes (5000). flags filter builder extracted to services/flags.ts flagListWhere for parity with the JSON feed. Variance CSV reuses computeVariance directly so cells byte-match the JSON endpoint.
+**Checklist:**
+  - [x] AC1 pcs.csv: header exact, 14 rows, PC03 retention "AED 0.00", PC07 claim "AED 55,665.00", statuses match DB
+  - [x] AC2 variance.csv figures byte-match GET /variance for all 7 trades (ELECTRICAL under golden)
+  - [x] AC3 budget-lines.csv carries 3 JCA lines incl "AED 7,000,000.00"; vos.csv header-only on empty register
+  - [x] AC4 suppliers.csv?q=SILVER filtered rows w/ aliases JSON + lpoCount; full export larger than filtered
+  - [x] AC5 VIEWER audit.csv 403; ADMIN entity filter honored; unauth 401 all endpoints; malformed from= 422
+  - [x] Live HTTP smoke: all seven endpoints correct content-type/rows; unauth 401
+**Outcome:** All five ACs verified headless + live. Environmental interruption logged separately (docker volume I/O error → Docker Desktop restart healed it, zero data loss). Three test-harness bugs caught and fixed en route (dynamic import vs vite alias; default-param cookie masking an unauth negative; suite-order dependence replaced by hermetic stamped fixture).
+**Test Evidence:** vitest 25 files / 137 tests passed (incl. new csv-export.integration, 6 tests); tsc --noEmit clean; eslint clean; live curls in-session.
+**Blockers:** NONE
+**Rollback:** Remove src/lib/csv.ts + seven export routes + test; JSON endpoints unaffected.
+
+### [2026-08-24 11:35] — T-026 unblocked: Docker restart healed the volume
+**Weight:** TRIVIAL (blocker-resolution log)
+**State transitions:** BLOCKED → IN_PROGRESS (11:35) after Gate G4 self-clear via human "Continue" directive.
+**Resolution:** Quit + reopened Docker Desktop via osascript; VM came back healthy; `procare-db` restarted clean; first query succeeded (797 users intact). Volume recreation NOT needed.
+**Blockers:** NONE
+
+### [2026-08-24 11:30] — T-026 BLOCKED: dev Postgres storage failure
+**Weight:** STANDARD (blocker log per §11)
+**State transitions:** IN_PROGRESS → BLOCKED (11:30).
+**Blocker:** Every DB query fails with `FATAL: could not open file "global/pg_filenode.map": I/O error` — the Docker Desktop VM's storage layer is failing. `docker ps` / `docker compose ps` hang indefinitely; port 5433 still accepts TCP. First observed when the csv-export suite's seed step failed mid-run.
+**Progress before blocker (safe):** All seven exporters written (shared src/lib/csv.ts + pcs/vos/budget-lines/variance/flags/suppliers/audit.csv routes) with role gates mirroring JSON counterparts; tsc --noEmit clean after fixing CsvCell typings on jsonSafe output.
+**Recovery assessment:** Dev volume worst-case recreation loses NOTHING irreplaceable — schema re-applies via prisma migrations, Job 1571 reseeds via npm run seed:job1571, scanned flags regenerate via one POST scan. No production data exists anywhere in this stack.
+**Unblock path:** Human restarts Docker Desktop (or authorizes agent to via osascript); then G4: verify container, migrate status, reseed, resume test run.
+**Blockers:** THIS (docker VM storage).
+**Rollback:** N/A.
 
 ### [2026-08-24 10:46] — T-025: Implement spec-017 Data-quality rules engine
 **Weight:** STANDARD

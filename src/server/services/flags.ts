@@ -99,3 +99,23 @@ export async function patchFlag(actor: SessionUser, rawId: string, patch: PatchF
     return updated;
   });
 }
+
+// spec-018-v1: shared filter builder so the CSV export honors exactly the
+// same query parameters as GET /api/v1/flags.
+export const FLAG_STATUSES = ["OPEN", "RESOLVED", "WONT_FIX"] as const;
+const SEVERITIES = ["HIGH", "MEDIUM", "LOW"] as const;
+
+export function flagListWhere(p: URLSearchParams) {
+  const status = p.get("status");
+  const severity = p.get("severity");
+  const ruleCode = p.get("ruleCode");
+  const entityType = p.get("entityType");
+  const assigneeRaw = p.get("assigneeId");
+  return {
+    ...(FLAG_STATUSES.includes(status as (typeof FLAG_STATUSES)[number]) ? { status: status! } : {}),
+    ...(SEVERITIES.includes(severity as (typeof SEVERITIES)[number]) ? { severity: severity! } : {}),
+    ...(ruleCode ? { ruleCode } : {}),
+    ...(entityType ? { entityType } : {}),
+    ...(assigneeRaw && /^\d+$/.test(assigneeRaw) ? { assigneeId: Number(assigneeRaw) } : {}),
+  };
+}
