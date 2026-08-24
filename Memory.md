@@ -1,18 +1,30 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 22:10
-Active Task: M4 COMPLETE — all four specs IMPLEMENTED; Gate G5 presented, awaiting human ruling
+Last Session: 2026-08-24 22:20
+Active Task: NONE — v1 scope (M1–M4) COMPLETE, ratified at G5 2026-08-24
 Last File Touched: Memory.md
-Immediate Next Step: On M4 G5 confirmation, v1 scope (M1–M4) is COMPLETE. Open items: users-admin placeholder, OQ backlog (1,2,4,5,6,8), AUTH_SECRET rotation hygiene.
+Immediate Next Step: Await human direction. Known deferred items: users-admin placeholder screen; OQ backlog (1 currency, 4 attachments, 5 per-project access, 6 approval workflow, 8 admin ownership); Arabic i18n explicitly deferred; AUTH_SECRET rotation once demo passed; Vercel redeploy to ship M4 UI.
 
 ## Active Task
-T-033 — Implement spec-023: Print/PDF report parity
-State: DONE
-Started: 2026-08-24 21:45
-Last Updated: 2026-08-24 22:10
+NONE
+State: —
+Started: —
+Last Updated: 2026-08-24 22:20
 
 ## Task Log
+
+### [2026-08-24 22:20] — Gate G5 closure: M4 milestone complete — v1 scope done
+**Weight:** STANDARD
+**State transitions:** BLOCKED → DONE (2026-08-24 22:20) — human ruled "Please proceed"; Arabic localization explicitly deferred.
+**Checklist:**
+  - [x] M4 milestone confirmed COMPLETE (spec-020..023 IMPLEMENTED)
+  - [x] OQ-2 (Arabic UI) confirmed out of scope for now — human directive, revisit later
+  - [x] Reconciliation pass: all 23 specs IMPLEMENTED in spec-index; no ACTIVE-but-unreferenced specs; no orphaned tasks
+**Outcome:** v1 scope per PRD/TDD fully delivered across M1–M4. Known deferred items recorded below (users-admin placeholder, OQ backlog).
+**Test Evidence:** Manual sign-off by human on 2026-08-24 via in-session directive.
+**Blockers:** NONE
+**Rollback:** NONE.
 
 ### [2026-08-24 22:00] — T-032 + T-033: Allocations & Print report — M4 complete
 **Weight:** SIGNIFICANT (two specs, one session push for demo readiness)
@@ -213,7 +225,7 @@ _Entries through T-022 (M1/M2 phases) archived to memory-archive/phase-1-2.md._
 
 ## Open Questions
 - OQ-1: Is AED the only currency, ever? (Assumed yes in TDD money design.) — raised 2026-08-23
-- OQ-2: Is Arabic UI/localization on any roadmap horizon? (Assumed no for v1.) — raised 2026-08-23
+- OQ-2: ~~Is Arabic UI/localization on any roadmap horizon?~~ DEFERRED by human 2026-08-24 — revisit later; v1 is English-only.
 - OQ-3: ~~Deployment target~~ RESOLVED 2026-08-24 — DB = Neon (pooled URL, sslmode=require, branch production); local dev stays Docker; app container per TDD §12/Dockerfile. Local seed dataset copied to Neon with FULL PARITY verified (all 10 tables row-exact; golden Σ LPO 1,298,411,500 fils byte-equal). Env split: `.env`=local Docker, `.env.production`=Neon (both gitignored). Neon caveat: its psql sessions may show empty search_path — always schema-qualify raw SQL.
 - OQ-4: Should invoice/document attachments be stored against LPOs/PCs in v1? (Assumed P1+.) — raised 2026-08-23
 - OQ-5: Do users need per-project access restrictions soon, or company-wide roles suffice? (Assumed company-wide.) — raised 2026-08-23
