@@ -1,18 +1,67 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 05:05
-Active Task: M2 COMPLETE — no active implementation task
+Last Session: 2026-08-24 10:26
+Active Task: T-025 — Implement spec-017 Data-quality rules engine (project scan) — PENDING (next)
 Last File Touched: Memory.md
-Immediate Next Step: M3 planning per TDD §14 (FR-9 data-quality queue w/ triage, exports P1, retention release tracking OQ-7). DCL-004/005 pre-approved by human 2026-08-24 — ratify spec-012-v2/spec-014-v2 at next G1 entry without prompting.
+Immediate Next Step: Start T-025: POST /api/v1/projects/:id/flags/scan with NO_BUDGET_LINE + DUPLICATE_SUPPLIER_SUSPECT rules, idempotent open/auto-resolve reconciliation, FIRE_FIGHTING golden anchor.
 
 ## Active Task
-T-022 — Implement spec-015: Dashboard screens (six tabs)
+T-024 — Implement spec-016: Flag triage workflow
 State: DONE
-Started: 2026-08-24 04:52
-Last Updated: 2026-08-24 05:05
+Started: 2026-08-24 10:05
+Last Updated: 2026-08-24 10:26
 
 ## Task Log
+
+### [2026-08-24 10:26] — T-024: Implement spec-016 Flag triage workflow
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS (10:05) → DONE (10:26).
+**Goal:** PATCH /api/v1/flags/:id assign/resolve/wont-fix with domain-scoped role gates + audit; users picker endpoint; flags list filters; queue UI triage actions.
+**Spec Reference:** specs/spec-016-v1.md; PRD FR-9; TDD §7 flags-resolve row.
+**Approach:** entityType→role domain map as a single constant in the service (Lpo|Supplier→PROCUREMENT, BudgetLine|VariationOrder→COMMERCIAL, PaymentCertificate→FINANCE, Project-level→all three; ADMIN bypasses). Transitions forward-only OPEN→RESOLVED|WONT_FIX, both note-mandatory (422 w/ field detail otherwise); assignment follows the same domain gate. Audit via shared service (UPDATE rows carry changed keys only). GET /users returns {id,name,role} to triage roles for the picker. List endpoint gained severity/ruleCode/entityType/assigneeId filters + openBySeverity meta. UI: severity chips, "Show closed"/"Assigned to me" toggles, inline assignee select, Resolve/Won't-fix with per-row note editor, toast surfacing server 403 domain messages.
+**Checklist:**
+  - [x] AC1 ADMIN assign → 200 + audit (before null → after financeUserId)
+  - [x] AC2 FINANCE resolve PC-domain flag → RESOLVED + resolvedAt + note + audit
+  - [x] AC3 COMMERCIAL resolves BudgetLine flag OK; PC-domain flag → 403 FLAG_DOMAIN_FORBIDDEN, flag stays OPEN
+  - [x] AC4 WONT_FIX sans note → 422; terminal flag re-triage → 422 INVALID_TRANSITION
+  - [x] AC5 VIEWER 403; unauth PATCH/GET 401 envelopes
+  - [x] AC6 ruleCode+OPEN filter isolates seeded SOURCE_NEEDS_CHECK; assigneeId scoping verified
+  - [x] AC7 users picker shape {id,name,role}; VIEWER 403; browser round-trip: Resolve → note → Confirm → toast "Flag resolved" → status RESOLVED (scratch flag, then purged)
+**Outcome:** All seven ACs verified headless AND in-browser (Playwright against live dev server on seeded Job 1571). Environmental root cause found for recurring dev-server flakiness: multiple zombie `next dev` processes sharing one `.next` corrupt each other's manifests (ENOENT prerender-manifest / missing chunks / HTML 500s) — kill all next processes, wipe .next, run exactly one instance; recorded in dev-changelog completion note. Dev-DB observation (not a defect): ~76 OPEN flags incl. historical test leakage, and several stale test users named "ADMIN" pollute the assignee dropdown — cleanup candidate if it bothers anyone.
+**Test Evidence:** vitest 23 files / 126 tests passed (incl. new flags.integration, 7 tests); tsc --noEmit clean; eslint clean; Playwright DOM assertions + zero console errors.
+**Blockers:** NONE
+**Rollback:** Remove [id]/users routes + validation/service/tests; revert FlagsClient to read-only feed; DataFlag rows persist.
+
+### [2026-08-24 10:05] — Gate G1 closure: M3 batch ratified
+**Weight:** STANDARD
+**State transitions:** BLOCKED → DONE (2026-08-24 10:05) — human ruled "Promote all 4 + close OQ-7".
+**Checklist:**
+  - [x] spec-016..019 promoted DRAFT → ACTIVE
+  - [x] OQ-7 closed (retention release tracking confirmed in-scope M3/P1)
+**Outcome:** M3 implementation authorized in order 016→017→018→019. spec-012-v2/spec-014-v2 ratification already recorded at this gate entry per standing instruction.
+**Test Evidence:** Manual sign-off by human on 2026-08-24 via gate question.
+**Blockers:** NONE
+**Rollback:** NONE.
+
+### [2026-08-24 10:00] — T-023: Draft M3 atomic spec batch (spec-016..019)
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS (09:56) → DONE (10:00).
+**Goal:** Decompose M3 per TDD §14 (FR-9 flag rules + triage queue, CSV exports P1, retention release tracking OQ-7) into atomic dependency-ordered specs and present at Gate G1.
+**Spec Reference:** PRD FR-9/FR-10/FR-6-P1; TDD §7 flags-resolve matrix row, §8 API design, §14 milestones.
+**Approach:** Audited existing flag surface first: 9 ruleCodes already raised inline by services (VERIFICATION_FLAGGED, PC_GAP, CUMULATIVE_MISMATCH, UNAPPROVED_VO_CLAIM, BUDGET_DUPLICATE_LINE + four seed flags), read-only GET /flags from T-022. Gap analysis against FR-9's rule list left exactly two unwired rules (no-budget-line trades; fuzzy supplier duplicates) → scan spec. Triage spec implements TDD §7's "(proc.)/(comm.)/(fin.)" annotations as an explicit entityType→role domain map with ADMIN bypass. Exports spec clones the proven /lpos/export conventions. Retention spec adds RetentionRelease table with additive-only analytics fields so every spec-014 golden anchor stays byte-identical.
+**Checklist:**
+  - [x] spec-016-v1 Flag triage workflow (PATCH /flags/:id assign/resolve/wont_fix, domain map, users picker endpoint, queue UI upgrade)
+  - [x] spec-017-v1 Data-quality rules engine (POST /projects/:id/flags/scan; NO_BUDGET_LINE + DUPLICATE_SUPPLIER_SUSPECT, idempotent reconcile)
+  - [x] spec-018-v1 CSV exports (pcs/vos/budget-lines/variance/flags/suppliers/audit.csv honoring identical filters+gates; print/PDF stays M4)
+  - [x] spec-019-v1 Retention ledger & releases (RetentionRelease migration, FINANCE write / ADMIN delete, cashflow additive fields)
+  - [x] spec-index updated (four DRAFT rows); spec-012-v2/spec-014-v2 ratification recorded per standing instruction
+  - [x] dev-changelog G1-entry ratification note appended (append-only)
+  - [x] Gate G1 presented to human (promotion of 016..019 + OQ-7 closure proposal)
+**Outcome:** Four DRAFT specs filed; awaiting Gate G1 ruling before any implementation (§4.2 promotion rule). Ratification of DCL-004/005 executed without prompting as instructed. OQ-7 proposed for closure upon promotion (retention release tracking confirmed in-scope M3).
+**Test Evidence:** N/A — spec drafting task; verification happens at implementation tasks T-024+.
+**Blockers:** NONE — gate ruling pending.
+**Rollback:** Delete specs/spec-016..019-v1.md; revert spec-index.md rows and the changelog note stands (append-only).
 
 ### [2026-08-24 05:05] — T-022: Implement spec-015 Dashboard screens — M2 complete
 **Weight:** SIGNIFICANT
@@ -487,5 +536,5 @@ Last Updated: 2026-08-24 05:05
 - OQ-4: Should invoice/document attachments be stored against LPOs/PCs in v1? (Assumed P1+.) — raised 2026-08-23
 - OQ-5: Do users need per-project access restrictions soon, or company-wide roles suffice? (Assumed company-wide.) — raised 2026-08-23
 - OQ-6: Is a formal LPO approval workflow needed pre-issue, or free issuance matches current practice? (Assumed free issuance + revisions.) — raised 2026-08-23
-- OQ-7: Retention release tracking — confirm it belongs in fast-follow (P1). — raised 2026-08-23
+- OQ-7: ~~Retention release tracking — confirm it belongs in fast-follow (P1).~~ CLOSED 2026-08-24 — human confirmed in-scope M3 at G1; implemented via spec-019.
 - OQ-8: Who is the bootstrap admin account for, and what email should own it at first login? — raised 2026-08-23

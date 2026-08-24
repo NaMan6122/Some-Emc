@@ -134,3 +134,13 @@ specs/spec-014-v2.md drafted with corrected constants and the pinned window sema
 
 **Task Reference:** T-022
 **Note:** spec-015 implemented with one scope note: tab 6 (Data Flags) ships as the spec's "placeholder queue fed by existing flags API subset" — the flags API itself did not exist yet, so a minimal read-only GET /api/v1/flags (status filter, limit cap 200, any authenticated role) was added to feed it. Full FR-9 triage workflow remains M3 per spec. Charts follow design.md §9: horizontal-only gridlines, dark tooltips, fils-exact values, aria-label summaries; donut toggle on Overview composition chart per §9 table.
+
+## [2026-08-24 10:00] — G1-entry ratification note (no deviation)
+
+**Task Reference:** T-023
+**Note:** Per standing human instruction of 2026-08-24 ("DCL-004/005 pre-approved — ratify spec-012-v2/spec-014-v2 at next G1 entry without prompting"), spec-012-v2 and spec-014-v2 are hereby recorded as RATIFIED at the M3 G1 entry; spec-index rows moved to IMPLEMENTED with ratification notes. For completeness of the DCL-002..005 trail: DCL-002/spec-007-v2 and DCL-003/spec-008-v2 were already ratified at G1 2026-08-23 ("Yes" at combined checkpoint). No new deviations are introduced by this note.
+
+## [2026-08-24 10:25] — T-024 completion note (no deviation)
+
+**Task Reference:** T-024
+**Note:** spec-016 implemented to all seven ACs. Two documented judgment calls, neither a deviation: (1) assignment follows the same domain gate as resolution (TDD §7's matrix row governs "flags resolve"; applying it to assignment too keeps read-only roles from routing work — ADMIN bypasses both); (2) UPDATE audit rows carry only the triage change (changed-top-level-keys convention from spec-004), so an assign-only patch records just assigneeId before/after. Environmental finding worth keeping: repeated "stale .next / HTML 500" flakiness across sessions is caused by MULTIPLE `next dev` processes for this repo sharing one `.next` directory (zombie servers from earlier sessions survived on ports 3000/3001 and corrupted each other's webpack manifests). Symptom: ENOENT prerender-manifest.json / missing chunk modules / HTML error bodies. Fix that worked: kill ALL node processes matching `.bin/next` + `next-server`, `rm -rf .next`, start exactly one server.
