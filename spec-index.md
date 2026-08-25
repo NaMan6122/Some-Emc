@@ -28,10 +28,10 @@
 | spec-024 | User administration (admin batch closure) | v1 | IMPLEMENTED | spec-003, spec-004, spec-016 | T-035 DONE | Promoted at G1 2026-08-24; active-flag migration, guardrails, one-time passwords, full UI |
 | spec-025 | Budget corrections, VAT-net KPI, utilised/balance boxes (Review A) | v1 | ACTIVE | spec-002, spec-008, spec-011, spec-014 | T-040 IN_PROGRESS | Promoted at G1 2026-08-25; Gen/HSE/Others figures awaited from client |
 | spec-026 | Interactive drill-downs & downloads (Review B) | v1 | ACTIVE | spec-014, spec-015, spec-018 | — | Promoted at G1 2026-08-25; XLSX deferred → CSV+print PDF |
-| spec-027 | Payment cycle analytics (Review C) | v1 | ACTIVE | spec-002, spec-004, spec-012, spec-015 | — | Promoted at G1 2026-08-25 |
-| spec-028 | Cost overviews: Labour/Supervision/Admin/DLP (Review D) | v1 | ACTIVE | spec-002, spec-004, spec-014 | — | Promoted at G1 2026-08-25 |
-| spec-029 | Cost actuals ledger (Phase 1) | v1 | ACTIVE | spec-002, spec-004, spec-028 | — | Promoted at G1 2026-08-25 |
-| spec-030 | Cost-to-complete, forecast & margin (Phase 2) | v1 | ACTIVE | spec-002, spec-011, spec-014, spec-028, spec-029 | — | Promoted at G1 2026-08-25 |
+| spec-027 | Payment cycle analytics (Review C) | v1 | ACTIVE | spec-002, spec-004, spec-012, spec-015 | T-044 DONE | Promoted at G1 2026-08-25; ledger kind INVOICE/PAYMENT + supplier/LPO linkage; costs analytics endpoint + tab |
+| spec-028 | Cost overviews: Labour/Supervision/Admin/DLP (Review D) | v1 | ACTIVE | spec-002, spec-004, spec-014 | T-044 DONE | Promoted at G1 2026-08-25; ledger kind INVOICE/PAYMENT + supplier/LPO linkage; costs analytics endpoint + tab |
+| spec-029 | Cost actuals ledger (Phase 1) | v1 | IMPLEMENTED | spec-002, spec-004, spec-028 | T-044 DONE | Promoted at G1 2026-08-25; ledger kind INVOICE/PAYMENT + supplier/LPO linkage; costs analytics endpoint + tab |
+| spec-030 | Cost-to-complete, forecast & margin (Phase 2) | v1 | IMPLEMENTED | spec-002, spec-011, spec-014, spec-028, spec-029 | T-044 DONE | Promoted at G1 2026-08-25; definitions pinned in service; Cost Control tab + margin KPI |
 
 _M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015): all IMPLEMENTED. M3 batch (016–019): all IMPLEMENTED — ratified at G5 2026-08-24._
 
