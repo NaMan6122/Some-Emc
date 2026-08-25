@@ -82,12 +82,15 @@ enum VoStatus {
 }
 
 // spec-028-v1: cost-control categories (Labour/Supervision/Admin/DLP overviews).
+// spec-029: MATERIAL/OTHER extend the ledger to full project actual costs.
 enum CostCategory {
   LABOUR_INHOUSE
   LABOUR_SUBCONTRACT
   SUPERVISION
   ADMIN
   DLP
+  MATERIAL
+  OTHER
 }
 
 model User {
@@ -158,17 +161,30 @@ model CostLine {
 }
 
 model CostEntry {
-  id          BigInt       @id @default(autoincrement())
+  id          BigInt        @id @default(autoincrement())
   projectId   Int
-  project     Project      @relation("CostEntries", fields: [projectId], references: [id], onDelete: Restrict)
+  project     Project       @relation("CostEntries", fields: [projectId], references: [id], onDelete: Restrict)
   category    CostCategory
-  entryDate   DateTime     @db.Date
+  entryDate   DateTime      @db.Date
   amountFils  BigInt
+  // spec-029-v1: actuals-ledger extensions.
+  kind        CostEntryKind @default(INVOICE)
+  supplierId  Int?
+  supplier    Supplier?     @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  lpoId       BigInt?
+  lpo         Lpo?          @relation(fields: [lpoId], references: [id], onDelete: Restrict)
   description String?
   reference   String?
-  createdAt   DateTime     @default(now())
+  createdAt   DateTime      @default(now())
 
   @@index([projectId, category, entryDate])
+  @@index([supplierId])
+  @@index([lpoId])
+}
+
+enum CostEntryKind {
+  INVOICE
+  PAYMENT
 }
 
 model Supplier {
@@ -180,7 +196,8 @@ model Supplier {
   merges       Supplier[] @relation("SupplierMerges")
   createdAt    DateTime   @default(now())
 
-  lpos Lpo[]
+  lpos        Lpo[]
+  costEntries CostEntry[]
 }
 
 model Lpo {
@@ -197,12 +214,13 @@ model Lpo {
   supersededBy   Lpo?            @relation("LpoSupersede", fields: [supersededById], references: [id], onDelete: Restrict)
   supersedes     Lpo[]           @relation("LpoSupersede")
   supplierId     Int
+  costEntries    CostEntry[]
   supplier       Supplier        @relation(fields: [supplierId], references: [id], onDelete: Restrict)
   trade          Trade
   description    String
-  issueDate      DateTime     @db.Date
-  indentDate     DateTime?    @db.Date
-  deliveryDate   DateTime?    @db.Date
+  issueDate      DateTime        @db.Date
+  indentDate     DateTime?       @db.Date
+  deliveryDate   DateTime?       @db.Date
   amountFils     BigInt
   vatRate        Decimal         @db.Decimal(5, 4)
   kind           LpoKind         @default(STANDARD)
@@ -238,18 +256,18 @@ model BudgetLine {
 }
 
 model PaymentCertificate {
-  id                    BigInt     @id @default(autoincrement())
-  projectId             Int
-  project               Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
-  pcNumber              Int
-  periodLabel           String
-  periodStart           DateTime?
-  periodEnd             DateTime?
-  invoiceDate           DateTime?
-  applicationDate       DateTime?
-  dueDate               DateTime?
-  paymentReceivedDate   DateTime?
-  grossFils             BigInt
+  id                   BigInt     @id @default(autoincrement())
+  projectId            Int
+  project              Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  pcNumber             Int
+  periodLabel          String
+  periodStart          DateTime?
+  periodEnd            DateTime?
+  invoiceDate          DateTime?
+  applicationDate      DateTime?
+  dueDate              DateTime?
+  paymentReceivedDate  DateTime?
+  grossFils            BigInt
   retentionFils        BigInt
   netPayableFils       BigInt
   variationClaimFils   BigInt     @default(0)

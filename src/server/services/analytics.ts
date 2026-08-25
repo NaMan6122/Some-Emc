@@ -350,3 +350,71 @@ export async function vendors(projectId: number) {
     curve,
   };
 }
+
+// ---------------------------------------------------------------------------
+// spec-030-v1: project cost control — budget → committed → actual → forecast
+// → margin. Pure computation over existing data; no new entry points.
+// Definitions PINNED here (any change = spec version bump):
+//   originalBudget  = Σ JCA/CostLine budgets (all categories)
+//   committedFils   = Σ active LPO amounts (spec-007 semantics)
+//   actualCostFils  = Σ CostEntry amounts (INVOICE + PAYMENT, all categories)
+//   costToComplete  = max(0, originalBudget − committed − actual)
+//   forecastFinal   = actual + remaining commitments + CTC remainder
+//   marginPct       = (contractValue − forecastFinal) ÷ contractValue × 100
+// ---------------------------------------------------------------------------
+
+export async function costControl(projectId: number) {
+  await requireProject(projectId);
+  const [project, lpos, costLines, costEntries] = await Promise.all([
+    prisma.project.findUniqueOrThrow({
+      where: { id: projectId },
+      select: { contractValueFils: true },
+    }),
+    activeLpos(projectId),
+    prisma.costLine.findMany({ where: { projectId }, select: { category: true, amountFils: true } }),
+    prisma.costEntry.findMany({ where: { projectId }, select: { category: true, amountFils: true } }),
+  ]);
+
+  const jcaBudget = (
+    await prisma.budgetLine.aggregate({ where: { projectId }, _sum: { amountFils: true } })
+  )._sum.amountFils ?? 0n;
+  const costLineBudget = costLines.reduce((s, c) => s + c.amountFils, 0n);
+  const originalBudget = jcaBudget + costLineBudget;
+
+  const committedFils = lpos.reduce((s, l) => s + l.amountFils, 0n);
+  const actualCostFils = costEntries.reduce((s, e) => s + e.amountFils, 0n);
+
+  const openCommitments = committedFils > actualCostFils ? committedFils - actualCostFils : 0n;
+  const costToCompleteFils =
+    originalBudget > committedFils + actualCostFils
+      ? originalBudget - committedFils - actualCostFils
+      : 0n;
+  const forecastFinalFils = actualCostFils + openCommitments + costToCompleteFils;
+
+  const contractValue = project.contractValueFils;
+  const profitFils = contractValue - forecastFinalFils;
+  const marginPct = contractValue > 0n ? Number((profitFils * 10000n) / contractValue) / 100 : null;
+
+  // Per-category breakdown of actuals.
+  const byCategoryMap = new Map<string, bigint>();
+  for (const e of costEntries) {
+    const k = e.category as string;
+    byCategoryMap.set(k, (byCategoryMap.get(k) ?? 0n) + e.amountFils);
+  }
+  const actualsByCategory = [...byCategoryMap.entries()]
+    .map(([category, fils]) => ({ category, fils }))
+    .sort((a, b) => (b.fils > a.fils ? 1 : -1));
+
+  return {
+    contractValueFils: contractValue,
+    originalBudgetFils: originalBudget,
+    committedFils,
+    actualCostFils,
+    openCommitmentsFils: openCommitments,
+    costToCompleteFils,
+    forecastFinalFils,
+    profitFils,
+    marginPct,
+    actualsByCategory,
+  };
+}

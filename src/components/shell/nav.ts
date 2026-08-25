@@ -16,6 +16,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "Payment Certificates", href: "/payment-certificates", roles: ALL },
       { label: "Investment", href: "/investment", roles: ALL },
       { label: "Vendors & LPO Log", href: "/vendors", roles: ALL },
+      { label: "Cost Control", href: "/cost-control", roles: ALL },
       { label: "Printable Report", href: "/report", roles: ALL },
     ],
   },
