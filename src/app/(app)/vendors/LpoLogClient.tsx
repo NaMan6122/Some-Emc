@@ -627,7 +627,7 @@ function VOEditor({ lpoId, currentVoId, onSaved }: { lpoId: string; currentVoId:
         <input
           value={voId}
           onChange={(e) => setVoId(e.target.value.replace(/[^\d]/g, ""))}
-          placeholder="database VO id"
+          placeholder="VO # (e.g. 12)"
           className="mt-0.5 w-full rounded-lg border border-zinc-300 px-2 py-1 text-sm dark:border-zinc-700 dark:bg-zinc-800"
         />
       </label>

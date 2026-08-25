@@ -117,10 +117,6 @@ export function LandingClient() {
                 </div>
               ))}
             </dl>
-
-            <p className="mt-4 text-xs text-zinc-500">
-              Drop your GIF at <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-[11px] dark:bg-zinc-800">public/hero.gif</code> to replace the gradient — no code change needed.
-            </p>
           </div>
 
           {/* Right — preview card stack */}

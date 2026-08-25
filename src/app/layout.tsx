@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ProCare",
-  description: "Procurement & contract analytics for Trends Electro-Mechanical Works LLC",
+  description: "Procurement & contract analytics platform by HyveMindx",
 };
 
 export default function RootLayout({

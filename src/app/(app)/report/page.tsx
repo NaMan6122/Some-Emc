@@ -47,7 +47,7 @@ export default async function ReportPage({
       <section className="mb-10 border-b-2 border-zinc-900 pb-6">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-700">ProCare · Trends Electro-Mechanical Works LLC</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-700">ProCare Platform · by HyveMindx</p>
             <h1 className="mt-2 text-3xl font-bold tracking-tight">{project.name}</h1>
             <p className="mt-1 text-sm text-zinc-600">
               Job {project.code} · Main contractor {project.mainContractor} · Status {project.status}

@@ -44,3 +44,7 @@ next-env.d.ts
 
 # Playwright CLI session artifacts
 .playwright-cli/
+
+# local working artifacts (client evidence / scratch notes)
+midisland_*.html
+last_copied_card.txt
