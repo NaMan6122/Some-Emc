@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { EmptyState, ErrorBanner, KpiCard } from "@/components/ui/primitives";
 import { ChartFrame, ChartTooltip, CHART_COLORS } from "@/components/charts/themed";
+import { DrillDownDrawer } from "@/components/charts/DrillDownDrawer";
 import { useAnalytics, useProjectContext } from "@/hooks/use-app-data";
 
 type Overview = {
@@ -57,6 +58,27 @@ export function OverviewClient() {
   const projectId = useMemo(() => projects.find((p) => p.code === code)?.id ?? null, [projects, code]);
   const { data, isLoading, error } = useAnalytics<Overview>("overview", projectId);
   const [donut, setDonut] = useState(false);
+  const [drill, setDrill] = useState<{ title: string; endpoint: string; csvUrl?: string } | null>(null);
+
+  function openTrade(trade: string) {
+    if (!projectId) return;
+    setDrill({
+      title: `Trade — ${trade.replace(/_/g, " ")}`,
+      endpoint: `/api/v1/projects/${projectId}/lpos?trade=${trade}&limit=200`,
+      csvUrl: `/api/v1/projects/${projectId}/lpos/export?trade=${trade}`,
+    });
+  }
+  function openMonth(month: string) {
+    if (!projectId) return;
+    const start = `${month}-01`;
+    const [y, m] = month.split("-").map(Number);
+    const end = new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);
+    setDrill({
+      title: `LPOs issued — ${month}`,
+      endpoint: `/api/v1/projects/${projectId}/lpos?from=${start}T00:00:00Z&to=${end}T23:59:59Z&limit=200`,
+      csvUrl: `/api/v1/projects/${projectId}/lpos/export?from=${start}T00:00:00Z&to=${end}T23:59:59Z`,
+    });
+  }
 
   if (error) return <ErrorBanner message="Could not load analytics." />;
 
@@ -148,11 +170,16 @@ export function OverviewClient() {
               {donut ? "Show bars" : "Show donut"}
             </button>
           </div>
-          <div role="img" aria-label={donut ? `Trade mix donut: ${tradeData.map((t) => `${t.trade} ${t.pct.toFixed(1)}%`).join(", ")}.` : "Trade spend bar chart."} className="w-full min-w-0">
+          <div role="img" aria-label={donut ? `Trade mix donut: ${tradeData.map((t) => `${t.trade} ${t.pct.toFixed(1)}%`).join(", ")}.` : "Trade spend bar chart. Click a bar for its LPOs."} className="w-full min-w-0">
             {donut ? (
               <ResponsiveContainer width="100%" height={260}>
-                <PieChart>
-                  <Pie data={tradeData} dataKey="fils" nameKey="trade" innerRadius={55} outerRadius={100} paddingAngle={1} isAnimationActive={false}>
+                <PieChart
+                  onClick={(e) => {
+                    const t = (e as { name?: string })?.name;
+                    if (t) openTrade(t);
+                  }}
+                >
+                  <Pie data={tradeData} dataKey="fils" nameKey="trade" innerRadius={55} outerRadius={100} paddingAngle={1} isAnimationActive={false} className="cursor-pointer">
                     {tradeData.map((t, i) => (
                       <Cell key={t.trade} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
                     ))}
@@ -164,10 +191,18 @@ export function OverviewClient() {
               <div className="w-full overflow-x-auto">
                 <div className="min-w-[320px]">
                   <ResponsiveContainer width="100%" height={260}>
-                    <BarChart data={tradeData} layout="vertical" margin={{ left: 8, right: 48 }}>
+                    <BarChart
+                      data={tradeData}
+                      layout="vertical"
+                      margin={{ left: 8, right: 48 }}
+                      onClick={(e) => {
+                        const t = (e as { activeLabel?: string })?.activeLabel;
+                        if (t) openTrade(t.toUpperCase().replace(/ /g, "_"));
+                      }}
+                    >
                       <XAxis type="number" hide domain={[0, "dataMax"]} />
-                      <YAxis type="category" dataKey="trade" width={90} tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v: string) => v.replace(/_/g, " ")} />
-                      <Bar dataKey="fils" name="Spend" fill={CHART_COLORS.bar} radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false}
+                      <YAxis type="category" dataKey="trade" width={90} tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v: string) => v.replace(/_/g, " ")} className="cursor-pointer" />
+                      <Bar dataKey="fils" name="Spend" fill={CHART_COLORS.bar} radius={[0, 4, 4, 0]} barSize={14} isAnimationActive={false} className="cursor-pointer"
                         label={{ position: "right", formatter: (v: unknown) => shortAed(String(v)), fontSize: 10, fill: "#71717a" }} />
                       <ChartTooltip moneyKeys={["fils"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
                     </BarChart>
@@ -186,7 +221,15 @@ export function OverviewClient() {
           <div className="w-full overflow-x-auto">
             <div className="min-w-[420px]">
               <ResponsiveContainer width="100%" height={280}>
-                <AreaChart data={monthly} margin={{ top: 4, right: 8, bottom: 0, left: 44 }}>
+                <AreaChart
+                  data={monthly}
+                  margin={{ top: 4, right: 8, bottom: 0, left: 44 }}
+                  onClick={(e) => {
+                    const label = (e as { activeLabel?: string })?.activeLabel;
+                    const hit = monthly.find((m) => m.label === label);
+                    if (hit) openMonth(hit.month);
+                  }}
+                >
                   <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
                   <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
                   <YAxis tickFormatter={(v: number) => shortAed(String(Math.round(v * 100)))} tickLine={false} axisLine={false} fontSize={10} width={52} />
@@ -198,6 +241,22 @@ export function OverviewClient() {
           </div>
         </ChartFrame>
       </div>
+
+      {drill && (
+        <DrillDownDrawer<{ id: string; refNo: string; supplier: { name: string }; amountFils: string; status: string }>
+          title={drill.title}
+          endpoint={drill.endpoint}
+          csvUrl={drill.csvUrl}
+          sumKey="amountFils"
+          columns={[
+            { key: "refNo", label: "Ref" },
+            { key: "supplier", label: "Supplier", render: (r) => r.supplier?.name ?? "—" },
+            { key: "amountFils", label: "Amount", right: true, render: (r) => aed(r.amountFils) },
+            { key: "status", label: "Status" },
+          ]}
+          onClose={() => setDrill(null)}
+        />
+      )}
 
       {data.flaggedCount === data.activeCount && data.activeCount > 0 && (
         <EmptyState

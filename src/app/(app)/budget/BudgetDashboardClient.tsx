@@ -4,7 +4,9 @@ import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { EmptyState, ErrorBanner } from "@/components/ui/primitives";
 import { ChartFrame, ChartTooltip, CHART_COLORS } from "@/components/charts/themed";
+import { DrillDownDrawer } from "@/components/charts/DrillDownDrawer";
 import { useAnalytics, useProjectContext } from "@/hooks/use-app-data";
+import { useState } from "react";
 
 type BudgetRow = {
   trade: string;
@@ -31,6 +33,7 @@ export function BudgetDashboardClient() {
   const { code, projects } = useProjectContext();
   const projectId = useMemo(() => projects.find((p) => p.code === code)?.id ?? null, [projects, code]);
   const { data, isLoading, error } = useAnalytics<{ items: BudgetRow[]; excludedRefs: string[]; excludedFils: string }>("budget", projectId);
+  const [drill, setDrill] = useState<string | null>(null);
 
   if (error) return <ErrorBanner message="Could not load budget analytics." />;
 
@@ -88,7 +91,14 @@ export function BudgetDashboardClient() {
         <div className="w-full overflow-x-auto">
           <div className="min-w-[480px]">
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData} margin={{ top: 4, right: 8, left: 48 }}>
+              <BarChart
+                data={chartData}
+                margin={{ top: 4, right: 8, left: 48 }}
+                onClick={(e) => {
+                  const t = (e as { activeLabel?: string })?.activeLabel;
+                  if (t && projectId) setDrill(t.toUpperCase().replace(/ /g, "_"));
+                }}
+              >
                 <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
                 <XAxis dataKey="trade" tickLine={false} axisLine={false} fontSize={10} />
                 <YAxis tickLine={false} axisLine={false} fontSize={10} width={52}
@@ -101,6 +111,22 @@ export function BudgetDashboardClient() {
           </div>
         </div>
       </ChartFrame>
+
+      {drill && projectId && (
+        <DrillDownDrawer<{ id: string; refNo: string; supplier: { name: string }; amountFils: string; status: string }>
+          title={`Trade — ${drill.replace(/_/g, " ")}`}
+          endpoint={`/api/v1/projects/${projectId}/lpos?trade=${drill}&limit=200`}
+          csvUrl={`/api/v1/projects/${projectId}/lpos/export?trade=${drill}`}
+          sumKey="amountFils"
+          columns={[
+            { key: "refNo", label: "Ref" },
+            { key: "supplier", label: "Supplier", render: (r) => r.supplier?.name ?? "—" },
+            { key: "amountFils", label: "Amount", right: true, render: (r) => `AED ${(BigInt(r.amountFils) / 100n).toLocaleString("en-US")}` },
+            { key: "status", label: "Status" },
+          ]}
+          onClose={() => setDrill(null)}
+        />
+      )}
 
       {gaps.length > 0 && (
         <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300">

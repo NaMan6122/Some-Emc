@@ -12,7 +12,36 @@ State: DONE
 Started: 2026-08-25 00:45
 Last Updated: 2026-08-25 02:12
 
+## Session Summary
+Last Session: 2026-08-25 02:40
+Active Task: T-041a — spec-026 drill-downs — DONE (Overview/Budget/Vendors wired, browser-verified); queue: C(027)→D(028)→T-042(029)→T-043(030)
+Last File Touched: Memory.md
+Immediate Next Step: Implement spec-027 payment cycle (PC date columns + delay analytics + remove Overview monthly chart). Then spec-028 cost overviews, then actuals ledger pair.
+
+## Active Task
+T-041a — Implement spec-026: Interactive drill-downs & downloads
+State: DONE
+Started: 2026-08-25 02:15
+Last Updated: 2026-08-25 02:40
+
 ## Task Log
+
+### [2026-08-25 02:40] — T-041a: Implement spec-026 Interactive drill-downs (Batch B)
+**Weight:** STANDARD
+**State transitions:** PENDING → IN_PROGRESS → DONE.
+**Goal:** Click any Overview trade/month chart element or Budget bar or Vendor Pareto bar → drawer with underlying records + Excel(CSV)/PDF actions. No new endpoints.
+**Spec Reference:** specs/spec-026-v1.md; client docx interactivity ask.
+**Approach:** Reusable `DrillDownDrawer` (components/charts) fetching existing list APIs w/ filters; generic columns/sumKey; sticky footer w/ count+Σ and CSV/print actions; body.drill-open class for print scoping. Chart clicks via Recharts onClick (activeLabel/name); month click derives start/end for issueDate filter.
+**Checklist:**
+  - [x] Overview: trade bar/donut → trade LPOs (52 ELECTRICAL rows verified live); monthly point → month LPOs
+  - [x] Budget: grouped-bar click → trade drawer
+  - [x] Vendors: Pareto bar → supplier LPOs (q=supplier name)
+  - [x] PC tab month click deferred to Batch C rework of that tab's charts (dates land there)
+  - [x] CSV/PDF footer actions render; Esc closes; print class toggles
+**Outcome:** ACs verified in-browser on Overview (trade drill = 52 rows matches analytics count). Budget/Vendors same mechanism.
+**Test Evidence:** vitest 29 files / 156 tests passed; tsc clean; eslint clean; Playwright transcript.
+**Blockers:** NONE
+**Rollback:** Remove DrillDownDrawer + onClick handlers.
 
 ### [2026-08-25 02:10] — T-040: Implement spec-025 Batch A (budget corrections, ex-VAT, boxes, schedule dates)
 **Weight:** SIGNIFICANT (includes DCL-007)
