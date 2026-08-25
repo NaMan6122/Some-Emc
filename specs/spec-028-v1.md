@@ -1,6 +1,6 @@
 # spec-028-v1: Cost overviews — Labour, Supervision, Admin, DLP (Review Batch D)
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-25
 **Version:** 1
 **Depends On:** spec-002, spec-004, spec-014
 **Blocks:** NONE

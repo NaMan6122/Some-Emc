@@ -1,18 +1,44 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-25 00:35
-Active Task: T-039 — Draft client-review batch spec-025..028 — DONE; G1 presented, awaiting ruling
+Last Session: 2026-08-25 00:45
+Active Task: T-040 — Implement spec-025 Batch A (budget corrections, VAT-net KPI, boxes, schedule dates) — IN_PROGRESS
 Last File Touched: Memory.md
-Immediate Next Step: On promotion, implement in order A (spec-025) → B (026) → C (027) → D (028). Open items for human: struck-off icons list, Gen/HSE/Others JCA figures, utilised-definition confirm.
+Immediate Next Step: Finish T-040 (spec-025 Batch A). Then, per T-041 ruling: implement spec-026..028, then spec-029/030 if promoted. PRD v0.2 scope amendment proposed for next gate.
 
 ## Active Task
-T-039 — Draft client-review batch spec-025..028
-State: DONE
-Started: 2026-08-25 00:20
-Last Updated: 2026-08-25 00:30
+T-040 — Implement spec-025: Budget corrections & Review Batch A
+State: IN_PROGRESS
+Started: 2026-08-25 00:45
+Last Updated: 2026-08-25 00:45
 
 ## Task Log
+
+### [2026-08-25 01:10] — T-041: Ideation & feasibility — project cost management suite; draft spec-029/030
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS → DONE; G1 presented.
+**Goal:** Human asked for feasibility/impact analysis of 13 cost-management capabilities (original budget, actuals, labour/material/subcontractor costs, POs, commitments, change orders, CTC, forecast, margin, resources/crews/equipment, progress).
+**Spec Reference:** New specs/spec-029-v1.md (cost actuals ledger), specs/spec-030-v1.md (CTC/forecast/margin computation + Cost Control tab).
+**Approach:** Coverage-mapped all 13 against existing modules: 6 already covered (budget, POs=LPOs, commitments, change orders=VOs, labour/subcontractor via spec-028), 1 true data gap (supplier-cost actuals) closed by generalizing spec-028's CostEntry with kind INVOICE/PAYMENT + optional supplier/LPO linkage; derived analytics (spec-030) are pure math over it. Phased recommendation delivered: Phase 1+2 greenlit path, Phase 3 (progress/EV) parked behind client commitment to monthly updates, Phase 4 (resources/equipment) deferred — recorded as OQ-9 style backlog note.
+**Checklist:**
+  - [x] Feasibility/impact analysis delivered in-session
+  - [x] spec-029-v1 drafted (actuals ledger: kind INVOICE|PAYMENT, supplier/lpo linkage, FINANCE+ADMIN, CSV)
+  - [x] spec-030-v1 drafted (costs analytics endpoint: budget→committed→actual→forecast waterfall, margin KPI; definitions pinned)
+  - [x] spec-index rows added (DRAFT); G1 presented
+**Outcome:** Awaiting promotion ruling. PRD v0.2 scope amendment (procurement → project financials) proposed for next gate rather than silent creep.
+**Test Evidence:** N/A — analysis/drafting task.
+**Blockers:** NONE — gate pending.
+**Rollback:** Delete two spec files; revert index.
+
+### [2026-08-25 00:40] — Gate G1 closure: client-review batch promoted
+**Weight:** STANDARD
+**State transitions:** BLOCKED → DONE (00:40) — human ruled "Promote all 4".
+**Checklist:**
+  - [x] spec-025..028 promoted DRAFT → ACTIVE (order A→B→C→D)
+**Outcome:** Implementation begins with T-040 (spec-025 Batch A).
+**Test Evidence:** Manual sign-off by human on 2026-08-25 via gate question.
+**Blockers:** NONE
+**Rollback:** NONE.
 
 ### [2026-08-25 00:30] — T-039: Draft client-review batch spec-025..028 (Review & Betterments)
 **Weight:** SIGNIFICANT

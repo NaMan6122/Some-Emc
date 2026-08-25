@@ -1,6 +1,6 @@
 # spec-027-v1: Payment cycle analytics (Review Batch C)
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-25
 **Version:** 1
 **Depends On:** spec-002, spec-004, spec-012, spec-015
 **Blocks:** NONE

@@ -26,10 +26,12 @@
 | spec-022 | Cross-project LPO allocations ("50% ONLY") | v1 | IMPLEMENTED | spec-002, spec-004, spec-005, spec-007, spec-014 | T-032 DONE | Promoted at G1 2026-08-24; Σ≤100 enforced; additive overview KPIs; drawer panel |
 | spec-023 | Print/PDF report parity (FR-10) | v1 | IMPLEMENTED | spec-014, spec-015 | T-033 DONE | Promoted at G1 2026-08-24; /report server-rendered from analytics services; print CSS verified via emulation |
 | spec-024 | User administration (admin batch closure) | v1 | IMPLEMENTED | spec-003, spec-004, spec-016 | T-035 DONE | Promoted at G1 2026-08-24; active-flag migration, guardrails, one-time passwords, full UI |
-| spec-025 | Budget corrections, VAT-net KPI, utilised/balance boxes (Review A) | v1 | DRAFT | spec-002, spec-008, spec-011, spec-014 | — | Client-review batch; pending G1. Gen/HSE/Others figures awaited from client |
-| spec-026 | Interactive drill-downs & downloads (Review B) | v1 | DRAFT | spec-014, spec-015, spec-018 | — | Client-review batch; pending G1. XLSX deferred → CSV+print PDF |
-| spec-027 | Payment cycle analytics (Review C) | v1 | DRAFT | spec-002, spec-004, spec-012, spec-015 | — | Client-review batch; pending G1 |
-| spec-028 | Cost overviews: Labour/Supervision/Admin/DLP (Review D) | v1 | DRAFT | spec-002, spec-004, spec-014 | — | Client-review batch; pending G1 |
+| spec-025 | Budget corrections, VAT-net KPI, utilised/balance boxes (Review A) | v1 | ACTIVE | spec-002, spec-008, spec-011, spec-014 | T-040 IN_PROGRESS | Promoted at G1 2026-08-25; Gen/HSE/Others figures awaited from client |
+| spec-026 | Interactive drill-downs & downloads (Review B) | v1 | ACTIVE | spec-014, spec-015, spec-018 | — | Promoted at G1 2026-08-25; XLSX deferred → CSV+print PDF |
+| spec-027 | Payment cycle analytics (Review C) | v1 | ACTIVE | spec-002, spec-004, spec-012, spec-015 | — | Promoted at G1 2026-08-25 |
+| spec-028 | Cost overviews: Labour/Supervision/Admin/DLP (Review D) | v1 | ACTIVE | spec-002, spec-004, spec-014 | — | Promoted at G1 2026-08-25 |
+| spec-029 | Cost actuals ledger (Phase 1) | v1 | DRAFT | spec-002, spec-004, spec-028 | — | Phase 1+2 ideation batch; pending G1 |
+| spec-030 | Cost-to-complete, forecast & margin (Phase 2) | v1 | DRAFT | spec-002, spec-011, spec-014, spec-028, spec-029 | — | Phase 1+2 ideation batch; pending G1 |
 
 _M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015): all IMPLEMENTED. M3 batch (016–019): all IMPLEMENTED — ratified at G5 2026-08-24._
 

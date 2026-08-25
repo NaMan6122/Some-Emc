@@ -1,10 +1,10 @@
 # spec-025-v1: Budget corrections, VAT-net KPI, utilised/balance boxes (Review Batch A)
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-25
 **Version:** 1
 **Depends On:** spec-002, spec-008, spec-011, spec-014
 **Blocks:** NONE
-**Task Reference:** —
+**Task Reference:** T-040
 
 ## What
 Implements the client review's factual corrections. (1) JCA additions per client: BudgetLine `FIRE_FIGHTING` **AED 1,440,000.00** (Fire Fighting/Fire Alarm/Emergency Lighting/LHD, sourceLabel "JCA Appendix – Fire Fighting & FLS") and `OTHER` **AED 3,600,000.00** ("JCA Appendix – Storm Water Pumping Station"); General/HSE/Others figures are AWAITED from client — deliberately NOT created, their NO_BUDGET_LINE flags stay open until then (documented). (2) The SWPS exclusion lens (`EXCLUDED_REFS`) is REMOVED from budget analytics — client confirms SWPS sits inside JCA utilisation. This invalidates spec-014's excl-SWPS golden anchors → DCL-007 files the anchor recomputation and spec-014 tests are updated to inclusive-lens values read from the live dataset. (3) Overview gains KPI **Total LPO value excl. VAT** (`Σ(amountFils ÷ (1+vatRate))`, BigInt-rounded) plus an info tooltip on "Pending verification" explaining flagged semantics and linking to /flags. (4) Three new Overview boxes per client: **Actual LPOs Utilized** (= committed total, current definition), **Balance vs JCA** (= Σ budget lines − committed, floored at 0 displayed, negative shown in red as overrun), and **Procurement Schedule** box linking to a new schedule table on the Vendors tab driven by two new nullable Lpo columns `indentDate`, `deliveryDate` (editable via PATCH, shown in drawer, included in CSV import/export). ASSUMPTION recorded: "utilized" = committed-to-date; refine when client confirms delivery-based semantics.

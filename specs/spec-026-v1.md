@@ -1,6 +1,6 @@
 # spec-026-v1: Interactive drill-downs & downloads (Review Batch B)
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-25
 **Version:** 1
 **Depends On:** spec-014, spec-015, spec-018
 **Blocks:** NONE
