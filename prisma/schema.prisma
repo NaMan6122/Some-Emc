@@ -81,6 +81,15 @@ enum VoStatus {
   REJECTED
 }
 
+// spec-028-v1: cost-control categories (Labour/Supervision/Admin/DLP overviews).
+enum CostCategory {
+  LABOUR_INHOUSE
+  LABOUR_SUBCONTRACT
+  SUPERVISION
+  ADMIN
+  DLP
+}
+
 model User {
   id           Int      @id @default(autoincrement())
   email        String   @unique
@@ -111,6 +120,8 @@ model Project {
   vos               VariationOrder[]
   retentionReleases RetentionRelease[]
   allocationsTo     LpoAllocation[]      @relation("AllocationsTo")
+  costLines         CostLine[]           @relation("CostLines")
+  costEntries       CostEntry[]          @relation("CostEntries")
 }
 
 // spec-022-v1 (FR-4 P1): percentage allocation of an LPO's cost to another
@@ -128,6 +139,36 @@ model LpoAllocation {
 
   @@unique([lpoId, targetProjectId])
   @@index([targetProjectId])
+}
+
+// spec-028-v1: generic cost-control module. Budget side (CostLine) vs actuals
+// (CostEntry) per category — powers Labour / Supervision / Admin / DLP
+// overviews and the monthly expenses-booked series.
+model CostLine {
+  id          BigInt       @id @default(autoincrement())
+  projectId   Int
+  project     Project      @relation("CostLines", fields: [projectId], references: [id], onDelete: Restrict)
+  category    CostCategory
+  amountFils  BigInt
+  sourceLabel String
+  note        String?
+  createdAt   DateTime     @default(now())
+
+  @@index([projectId, category])
+}
+
+model CostEntry {
+  id          BigInt       @id @default(autoincrement())
+  projectId   Int
+  project     Project      @relation("CostEntries", fields: [projectId], references: [id], onDelete: Restrict)
+  category    CostCategory
+  entryDate   DateTime     @db.Date
+  amountFils  BigInt
+  description String?
+  reference   String?
+  createdAt   DateTime     @default(now())
+
+  @@index([projectId, category, entryDate])
 }
 
 model Supplier {

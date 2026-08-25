@@ -4,18 +4,18 @@ import { canAccess, filterNav } from "./nav";
 describe("spec-009-v1 role-aware navigation", () => {
   it("ADMIN sees all three groups incl. Administration", () => {
     const nav = filterNav("ADMIN");
-    expect(nav.map((g) => g.group)).toEqual(["Analytics", "Governance", "Administration"]);
+    expect(nav.map((g) => g.group)).toEqual(["Analytics", "Governance", "Cost Control", "Administration"]);
     const adminItems = nav.find((g) => g.group === "Administration")!.items.map((i) => i.label);
     expect(adminItems).toEqual(["Projects", "Suppliers", "Users", "Audit Log"]);
   });
 
   it("VIEWER sees Analytics + Governance but no Administration", () => {
     const groups = filterNav("VIEWER").map((g) => g.group);
-    expect(groups).toEqual(["Analytics", "Governance"]);
+    expect(groups).toEqual(["Analytics", "Governance", "Cost Control"]);
   });
 
   it("PROCUREMENT sees no Administration entries either (admin batch is ADMIN-only)", () => {
-    expect(filterNav("PROCUREMENT").map((g) => g.group)).toEqual(["Analytics", "Governance"]);
+    expect(filterNav("PROCUREMENT").map((g) => g.group)).toEqual(["Analytics", "Governance", "Cost Control"]);
   });
 
   it("unknown role yields empty nav", () => {

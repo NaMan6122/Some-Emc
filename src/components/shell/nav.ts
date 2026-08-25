@@ -24,6 +24,15 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [{ label: "Data Flags", href: "/flags", roles: ALL }],
   },
   {
+    group: "Cost Control",
+    items: [
+      { label: "Labour", href: "/costs?category=LABOUR_INHOUSE", roles: ALL },
+      { label: "Supervision", href: "/costs?category=SUPERVISION", roles: ALL },
+      { label: "Admin Cost", href: "/costs?category=ADMIN", roles: ALL },
+      { label: "DLP", href: "/costs?category=DLP", roles: ALL },
+    ],
+  },
+  {
     group: "Administration",
     items: [
       { label: "Projects", href: "/admin/projects", roles: ["ADMIN"] },

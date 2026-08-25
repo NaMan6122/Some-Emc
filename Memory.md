@@ -26,6 +26,22 @@ Last Updated: 2026-08-25 02:40
 
 ## Task Log
 
+### [2026-08-25 03:30] — T-041d: Implement spec-028 Cost overviews (Batch D)
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → DONE (03:30).
+**Goal:** Generic cost-control module: CostCategory enum + CostLine/CostEntry models, CRUD routes, /costs page with category tabs.
+**Spec Reference:** specs/spec-028-v1.md; client docx (Labour/Supervision/Admin/DLP overviews).
+**Approach:** Budget writes ADMIN+COMMERCIAL; entry writes ADMIN+FINANCE; reads any auth. costOverview() aggregates budget/actual/variance/utilisation + monthly booked series. Sidebar "Cost Control" group with four deep-links (?category=). Schema fixes en route: Trade enum formatting repaired; Project back-relations for both cost models added.
+**Checklist:**
+  - [x] Migration cost_overviews applied; status clean
+  - [x] COMMERCIAL line + FINANCE entries → aggregated overview (250k budget / 105k actual / 42% utilisation asserted)
+  - [x] Category isolation proven; VIEWER read-only; PROCUREMENT 403; malformed 422
+  - [x] /costs page renders tabs, KPI cards, monthly bars, entry table w/ remove
+**Outcome:** Client-review batch A–D fully implemented. Actuals-ledger pair (spec-029/030) remains.
+**Test Evidence:** vitest 30 files / 160 tests passed; tsc clean; eslint clean.
+**Blockers:** NONE
+**Rollback:** Down-migration drops enum+tables; remove routes/page/tests/sidebar group.
+
 ### [2026-08-25 03:10] — T-041b: Implement spec-027 Payment cycle analytics (Batch C)
 **Weight:** SIGNIFICANT
 **State transitions:** PENDING → DONE (03:10).
@@ -41,7 +57,7 @@ Last Updated: 2026-08-25 02:40
 **Blockers:** NONE
 **Rollback:** Down-migration drops three columns; remove charts/KPI block.
 
-### [2026-08-25 02:40] — T-041a: Implement spec-026 Interactive drill-downs (Batch B)
+### [T-041a] spec-026 drill-downs — see prior entry (Batch B)
 **Weight:** STANDARD
 **State transitions:** PENDING → IN_PROGRESS → DONE.
 **Goal:** Click any Overview trade/month chart element or Budget bar or Vendor Pareto bar → drawer with underlying records + Excel(CSV)/PDF actions. No new endpoints.
