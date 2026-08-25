@@ -1,18 +1,34 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-24 23:30
-Active Task: T-036 — Landing page (GIF hero, default route) — QUEUED (next); then T-037 README.md; T-038 mobile responsiveness spec+impl
+Last Session: 2026-08-25 00:35
+Active Task: T-039 — Draft client-review batch spec-025..028 — DONE; G1 presented, awaiting ruling
 Last File Touched: Memory.md
-Immediate Next Step: T-036 landing page per human directive (modern UI, fullscreen GIF background, default route replaces login-as-home). Then README, then responsiveness spec-025.
+Immediate Next Step: On promotion, implement in order A (spec-025) → B (026) → C (027) → D (028). Open items for human: struck-off icons list, Gen/HSE/Others JCA figures, utilised-definition confirm.
 
 ## Active Task
-T-035 — Implement spec-024 User administration
+T-039 — Draft client-review batch spec-025..028
 State: DONE
-Started: 2026-08-24 22:40
-Last Updated: 2026-08-24 23:30
+Started: 2026-08-25 00:20
+Last Updated: 2026-08-25 00:30
 
 ## Task Log
+
+### [2026-08-25 00:30] — T-039: Draft client-review batch spec-025..028 (Review & Betterments)
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → IN_PROGRESS → DONE; G1 presented.
+**Goal:** Convert the client docx "Review and Betterments" into four atomic specs: A) budget corrections + VAT-net + utilised/balance boxes + procurement-schedule dates; B) interactive drill-downs w/ CSV+print-PDF downloads; C) payment-cycle date fields + delay analytics + remove Overview monthly graph; D) generic cost-overview module (Labour/Supervision/Admin/DLP).
+**Spec Reference:** Client docx (Downloads/Review and Betterments.docx); PRD FR-4/5/6/8 extensions.
+**Approach:** Batch A removes the SWPS exclusion lens per client correction → DCL-007 will re-anchor spec-014 tests from live dataset. FF 1.44M + SWPS 3.60M JCA lines added via seed; Gen/HSE/Others figures AWAITED — flags stay open deliberately. "Utilised" defined as committed-to-date (assumption recorded). Drill-downs reuse existing endpoints only; XLSX deferred to CSV+print-PDF. Payment cycle adds three nullable PC dates, null-safe metrics. Cost overviews = one generic module (CostCategory enum + CostLine/CostEntry) reused ×4.
+**Checklist:**
+  - [x] specs/spec-025..028-v1.md drafted
+  - [x] spec-index rows (DRAFT)
+  - [x] Open items surfaced to human: struck-off icons list, Gen/HSE/Others amounts, utilised-definition confirmation, on-prem install ask (DEPLOY.md covers container path)
+  - [x] Gate G1 presented
+**Outcome:** Awaiting promotion ruling; implementation order A→B→C→D on approval.
+**Test Evidence:** N/A — drafting task.
+**Blockers:** NONE — gate pending.
+**Rollback:** Delete four spec files; revert index.
 
 ### [2026-08-24 23:30] — T-035: Implement spec-024 User administration — admin batch closed
 **Weight:** SIGNIFICANT
