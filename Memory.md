@@ -1,18 +1,38 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-25 04:20
-Active Task: NONE — client-review batch (A–D) + actuals ledger + cost analytics ALL IMPLEMENTED; prod migration applied
+Last Session: 2026-08-25 19:05
+Active Task: NONE — T-045 ghost-hunt fixes (f7ba551) + T-046 demo seeder & backfill importer (7a5c0a3) DONE; demo data seeded to Neon; prod migrations re-synced
 Last File Touched: Memory.md
-Immediate Next Step: Await human direction. Open: struck-off icons, Gen/HSE/Others JCA figures, PRD v0.2 amendment gate, Vercel redeploy to ship everything.
+Immediate Next Step: Await human direction. Open: struck-off icons, Gen/HSE/Others JCA figures, PRD v0.2 amendment gate, Vercel redeploy, test-residue purge decision.
 
 ## Active Task
-T-045 — Implement spec-029/030 (actuals ledger + cost analytics)
+T-046 — Data-population tooling + product ghost-hunt fixes
 State: DONE
-Started: 2026-08-25 03:40
-Last Updated: 2026-08-25 04:20
+Started: 2026-08-25 18:30
+Last Updated: 2026-08-25 19:05
 
 ## Task Log
+
+### [2026-08-25 19:05] — T-046: Ghost fixes + demo/backfill tooling — complete
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → DONE (19:05).
+**Goal:** Close out the ghost-hunt audit findings and give the new features both a demo-data channel and a real-backfill channel.
+**Approach:** (1) Real /audit screen (AuditClient.tsx: entity/date filters, cursor pagination over spec-004 API) replacing the stale placeholder. (2) De-cliented remaining branding leaks (AppShell footer, layout metadata, report cover → "by HyveMindx"). (3) Removed ghost UI: ⌘K search stub, public hero.gif dev-hint, "database VO id" placeholder → "VO # (e.g. 12)". (4) Untracked last_copied_card.txt + 3 midisland_*.html evidence files (accidentally swept into c748940 by an earlier git add -A); .gitignore patterns added, files kept on disk. (5) flags route test decoupled from fixture-specific rule codes (TOTALS_MISMATCH resolved by full JCA seeding; VO_BACKFILL since backfilled) — now asserts invariants. (6) scripts/seed-demo.mjs: labelled DEMO seed (5 cost lines, 80 entries Jan–Aug INVOICE+PAYMENT pairs, PC cycle dates on PCs 1–5 with realistic delays incl. one unpaid, LPO schedules ×12) + manifest-based --purge that reverses exactly those rows. (7) scripts/import-backfill.mjs: real client CSV importer, kinds costs|pc-dates|lpo-schedule, DRY-RUN default, validates category enum/supplier/LPO existence, AED→fils.
+**Commits:** f7ba551 (ghosts+audit), 7a5c0a3 (tooling) — BOTH via `anv --no-tui --yolo` headless per human directive; plain git commit is now FORBIDDEN for task work.
+**Prod actions:** prisma migrate deploy vs .env.production applied the pending pc_cycle_dates migration (P2022-class failure caught by importer dry-run — same missed-migration pattern); demo seed executed against Neon (5/80/5/12 rows verified). Purge command documented in README.
+**Checklist:**
+  - [x] /audit real screen shipped
+  - [x] Branding leaks cleared (shell/metadata/report)
+  - [x] Ghost UI removed (search stub, hero hint, VO placeholder)
+  - [x] Evidence files untracked + ignored
+  - [x] Flags test re-anchored on invariants; suite green
+  - [x] Demo seeder + purge (manifest-driven)
+  - [x] Backfill importer (dry-run validated all 3 kinds vs Neon)
+  - [x] README Scripts section documents both channels
+**Test Evidence:** vitest 30 files / 160 tests passed; tsc clean; importer smoke: valid row resolved supplier 237/LPO 292, bad rows rejected cleanly.
+**Blockers:** Local Docker Desktop still wedged post-restart attempt (docker ps hangs >20 s) — local-DB verification deferred.
+**Rollback:** Revert commits; npm run seed:demo -- --purge removes demo rows from any environment.
 
 ### [2026-08-25 04:20] — T-042/T-043: Cost actuals ledger + Cost Control tab — Phase 1+2 complete
 **Weight:** SIGNIFICANT
