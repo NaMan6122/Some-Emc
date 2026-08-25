@@ -243,10 +243,14 @@ try {
   );
 
   // spec-011: JCA Appendix I–III budget lines (idempotent by sourceLabel).
+  // spec-025-v1: client review confirmed SWPS (AED 3.60M) and Fire
+  // Fighting/FLS (AED 1.44M) also sit in the JCA — added as their own lines.
   const jcaBudgets = [
     { trade: "ELECTRICAL", amountFils: 700000000n, sourceLabel: "JCA Appendix I" },
     { trade: "HVAC", amountFils: 50000000n, sourceLabel: "JCA Appendix II" },
     { trade: "PLUMBING", amountFils: 30000000n, sourceLabel: "JCA Appendix III" },
+    { trade: "OTHER", amountFils: 360000000n, sourceLabel: "JCA Appendix – Storm Water Pumping Station" },
+    { trade: "FIRE_FIGHTING", amountFils: 144000000n, sourceLabel: "JCA Appendix – Fire Fighting & FLS" },
   ];
   let newBudgets = 0;
   for (const b of jcaBudgets) {

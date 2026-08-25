@@ -420,6 +420,8 @@ function DetailDrawer({
     supplier: { name: string };
     description: string;
     issueDate: string;
+    indentDate?: string | null;
+    deliveryDate?: string | null;
     vatRate: string;
     kind: string;
     status: string;
@@ -483,6 +485,10 @@ function DetailDrawer({
           <dd>{data.description}</dd>
           <dt className="text-zinc-500">Issued</dt>
           <dd className="tabular-nums">{data.issueDate.slice(0, 10)}</dd>
+          <dt className="text-zinc-500">Indent date</dt>
+          <dd className="tabular-nums">{data.indentDate ? data.indentDate.slice(0, 10) : "—"}</dd>
+          <dt className="text-zinc-500">Delivery due</dt>
+          <dd className="tabular-nums">{data.deliveryDate ? data.deliveryDate.slice(0, 10) : "—"}</dd>
           <dt className="text-zinc-500">Amount</dt>
           <dd className="tabular-nums font-medium">{formatAED(data.amountFils)}</dd>
           <dt className="text-zinc-500">VAT</dt>

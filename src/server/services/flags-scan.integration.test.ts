@@ -61,7 +61,7 @@ afterAll(async () => {
 });
 
 describe("spec-017 data-quality scan", () => {
-  it("AC1: seeded Job 1571 — opens one NO_BUDGET_LINE flag per qualifying trade; FIRE_FIGHTING golden", async () => {
+  it("AC1: seeded Job 1571 — NO_BUDGET_LINE flags for GENERAL/HSE/OTHER; FIRE_FIGHTING now budgeted (spec-025)", async () => {
     // Ground truth from the existing, independently tested variance service.
     const { GET } = await import("@/app/api/v1/projects/[id]/variance/route");
     const varianceRes = await GET(req("GET", `/api/v1/projects/${projectId}/variance`, adminCookie), {
@@ -76,22 +76,23 @@ describe("spec-017 data-quality scan", () => {
     expect(body.checkedRules).toEqual(["NO_BUDGET_LINE", "DUPLICATE_SUPPLIER_SUSPECT"]);
 
     const flags = await openFlags("NO_BUDGET_LINE");
-    // Dataset reality: FIRE_FIGHTING + GENERAL + HSE + OTHER carry committed
-    // spend without JCA lines; the spec's golden pins FIRE_FIGHTING.
     expect(flags.map((f) => f.message.split(" ")[0]).sort()).toEqual([...qualifying].sort());
+    // spec-025: FIRE_FIGHTING now carries a JCA line — it must NOT be flagged.
+    expect(flags.some((f) => f.message.startsWith("FIRE_FIGHTING"))).toBe(false);
     // Total openings = budget-rule flags + supplier-pair flags (real data has
     // genuine near-duplicate masters; advisory per spec Risks).
     const suspects = await openFlags("DUPLICATE_SUPPLIER_SUSPECT");
     expect(body.opened).toBe(flags.length + suspects.length);
     expect(suspects.length).toBeGreaterThan(0);
 
-    const fire = flags.filter((f) => f.message.startsWith("FIRE_FIGHTING"));
-    expect(fire).toHaveLength(1);
-    expect(fire[0].severity).toBe("HIGH");
-    expect(fire[0].message).toContain("AED 1,583,925.00");
-    for (const budgeted of ["ELECTRICAL", "HVAC", "PLUMBING"]) {
+    // spec-025: FIRE_FIGHTING holds a 1.44M JCA line — never flagged again.
+    expect(flags.some((f) => f.message.startsWith("FIRE_FIGHTING"))).toBe(false);
+    for (const budgeted of ["ELECTRICAL", "HVAC", "PLUMBING", "FIRE_FIGHTING"]) {
       expect(flags.some((f) => f.message.startsWith(budgeted))).toBe(false);
     }
+    // GENERAL remains flagged (client figures still awaited) — spot its message.
+    const general = flags.find((f) => f.message.startsWith("GENERAL"));
+    expect(general?.severity).toBe("HIGH");
   });
 
   it("AC2: re-scan without changes is idempotent — opens 0, resolves 0", async () => {
@@ -106,12 +107,14 @@ describe("spec-017 data-quality scan", () => {
   });
 
   it("AC3: adding the missing budget line flips the trade's flag to RESOLVED with the auto-note", async () => {
+    // spec-025: FIRE_FIGHTING is now seeded with its own JCA line, so the
+    // flip-to-resolved scenario uses GENERAL (still awaiting client figures).
     await prisma.budgetLine.create({
       data: {
         projectId,
-        trade: "FIRE_FIGHTING",
+        trade: "GENERAL",
         category: "MATERIALS",
-        amountFils: 30000000n,
+        amountFils: 25000000n,
         sourceLabel: `${STAMP} fixture`,
       },
     });
@@ -120,16 +123,16 @@ describe("spec-017 data-quality scan", () => {
     expect(body.opened).toBe(0);
     expect(body.resolved).toBe(1);
 
-    const fire = await prisma.dataFlag.findFirstOrThrow({
-      where: { ruleCode: "NO_BUDGET_LINE", message: { startsWith: "FIRE_FIGHTING" } },
+    const general = await prisma.dataFlag.findFirstOrThrow({
+      where: { ruleCode: "NO_BUDGET_LINE", message: { startsWith: "GENERAL" } },
       orderBy: { id: "desc" },
     });
-    expect(fire.status).toBe("RESOLVED");
-    expect(fire.resolutionNote).toBe("Auto-resolved by scan");
-    expect(fire.resolvedAt).not.toBeNull();
+    expect(general.status).toBe("RESOLVED");
+    expect(general.resolutionNote).toBe("Auto-resolved by scan");
+    expect(general.resolvedAt).not.toBeNull();
 
     const stillOpen = await openFlags("NO_BUDGET_LINE");
-    expect(stillOpen.some((f) => f.message.startsWith("GENERAL"))).toBe(true);
+    expect(stillOpen.some((f) => f.message.startsWith("HSE"))).toBe(true);
   });
 
   it("AC4: typo-pair fixture suppliers each holding an LPO open one suspect flag; merging clears it", async () => {

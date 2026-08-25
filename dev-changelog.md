@@ -208,6 +208,29 @@ spec-007-v2 AC1 semantics unchanged (unique refs, per-project sequence) — gene
 **Task Reference:** T-035
 **Note:** spec-024 implemented to all six ACs, browser-verified end-to-end. Judgment calls: (1) deactivation also blocks stale tokens at the session-guard level (`getSession` rejects inactive users) — belt-and-braces on top of the tokenVersion bump; (2) triage-role GET now returns only ACTIVE users (assignee picker shouldn't offer deactivated staff) while ADMIN GET lists everyone; (3) role changes bump tokenVersion so the new role applies on the next request without waiting for expiry; (4) LAST_ADMIN's zero-case is guarded in-tx by counting other active admins — the integration suite exercises the pass-path plus unit-level count semantics rather than mutating the shared dev DB's many legacy admin accounts. Admin batch is now CLOSED: no placeholder screens remain in Administration.
 
+## [2026-08-25 01:40] — DCL-007
+
+**Task Reference:** T-040
+**Spec Affected:** specs/spec-014-v2.md (budget-lens golden anchors), specs/spec-011-v1.md (variance expectations)
+**Type:** CORRECTION
+
+**Original Spec:**
+spec-011/spec-014 anchored the budget-variance lens on the legacy report's presentation: SWPS (`TEMW/REF/LPO//039`, AED 3,832,500) EXCLUDED from committed, FIRE_FIGHTING shown as a coverage gap (`no_budget`), utilizations ELECTRICAL 85.03% / HVAC 123.39% / PLUMBING 117.87% excl-SWPS, and the NO_BUDGET_LINE scan flagging FIRE_FIGHTING/GENERAL/HSE/OTHER.
+
+**Deviation:**
+Client review (docx "Review and Betterments") confirms SWPS **is inside the JCA at AED 3.60M**, Fire Fighting/FLS **at AED 1.44M**, and General/HSE/Others likewise belong in JCA (figures awaited). Implemented: exclusion lens retired (`EXCLUDED_REFS = []`, budget analytics counts every active in-trade LPO); seed adds BudgetLines OTHER 360,000,000 fils ("JCA Appendix – Storm Water Pumping Station") and FIRE_FIGHTING 144,000,000 fils ("JCA Appendix – Fire Fighting & FLS"); tests re-anchored to inclusive-lens values read from the live dataset instead of legacy-report figures.
+
+**Reason:**
+The original anchors reproduced the *legacy report's presentation*, which the client has now corrected as factually wrong about scope. PRD §6's "Fire Fighting has no visible budget line" narrative is obsolete. Anti-hallucination: new assertions are computed from the dataset itself, not invented figures.
+
+**Impact:**
+Budget tab, variance CSV, flags scan (FF no longer flagged; GENERAL/HSE remain until figures arrive), and any client-side comparisons against the old report percentages. Overview gains ex-VAT total + JCA budget fields. Spec-014-v2 anchor text superseded here; no new spec version needed since the lens was an implementation detail of the analytics service, not an AC constant — recorded per §5.3.
+
+**Spec Updated:** NO — behavior correction documented here; spec-025-v1 governs going forward
+
+**Human Feedback:**
+**Feedback Applied:**
+
 ## [2026-08-24 17:50] — T-030 completion note (no deviation)
 
 **Task Reference:** T-030

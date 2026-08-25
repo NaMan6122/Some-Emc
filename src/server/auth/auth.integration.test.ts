@@ -106,10 +106,16 @@ describe("spec-003-v2 auth flows", () => {
     expect(apiRes?.status).toBe(401);
     expect((await apiRes?.json())?.error?.code).toBe("UNAUTHENTICATED");
 
-    const pageReq = new NextRequest("http://localhost/");
-    const pageRes = await guard(pageReq);
-    expect(pageRes?.status).toBe(307);
-    expect(pageRes?.headers.get("location")).toContain("/login");
+    // spec-036: `/` is now the PUBLIC landing page — unauthenticated visitors
+    // pass through; a protected page still redirects to /login.
+    const landingReq = new NextRequest("http://localhost/");
+    const landingRes = await guard(landingReq);
+    expect(landingRes).toBeUndefined();
+
+    const protectedReq = new NextRequest("http://localhost/overview");
+    const protectedRes = await guard(protectedReq);
+    expect(protectedRes?.status).toBe(307);
+    expect(protectedRes?.headers.get("location")).toContain("/login");
 
     // Authenticated request passes through (guard returns undefined).
     const login = await loginPost(loginRequest(adminEmail, "correct horse battery"));

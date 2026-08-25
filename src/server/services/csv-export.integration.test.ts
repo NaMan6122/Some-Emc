@@ -140,12 +140,15 @@ describe("spec-018 CSV exports", () => {
     expect(byTrade.get("ELECTRICAL")![4]).toBe("under");
   });
 
-  it("AC3: budget-lines.csv carries the three JCA lines; vos.csv header-only on empty register", async () => {
+  it("AC3: budget-lines.csv carries the five JCA lines (incl. spec-025 SWPS/FF); vos.csv header-only", async () => {
     const bl = await get("/export/budget-lines.csv", adminCookie);
     const rows = parseCsv(await bl.text());
     expect(rows[0]).toEqual(["trade", "category", "amountAED", "sourceLabel", "refDate", "note"]);
-    expect(rows).toHaveLength(4);
-    expect(rows[1].join(",")).toContain("AED 7,000,000.00");
+    expect(rows).toHaveLength(6);
+    const bySource = new Map(rows.slice(1).map((r) => [r[3], r]));
+    expect(bySource.get("JCA Appendix I")?.[2]).toBe("AED 7,000,000.00");
+    expect(bySource.get("JCA Appendix – Fire Fighting & FLS")?.[2]).toBe("AED 1,440,000.00");
+    expect(bySource.get("JCA Appendix – Storm Water Pumping Station")?.[0]).toBe("OTHER");
 
     const vos = await get("/export/vos.csv", adminCookie);
     const vRows = parseCsv(await vos.text());

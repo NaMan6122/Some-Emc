@@ -1,18 +1,35 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-25 00:45
-Active Task: T-040 — Implement spec-025 Batch A (budget corrections, VAT-net KPI, boxes, schedule dates) — IN_PROGRESS
+Last Session: 2026-08-25 02:12
+Active Task: T-040 — Implement spec-025 Batch A — DONE (committed); queue: B(026)→C(027)→D(028)→T-042(029)→T-043(030)
 Last File Touched: Memory.md
-Immediate Next Step: Finish T-040 (spec-025 Batch A). Then, per T-041 ruling: implement spec-026..028, then spec-029/030 if promoted. PRD v0.2 scope amendment proposed for next gate.
+Immediate Next Step: Implement spec-026 drill-downs. Open items: struck-off icons list, Gen/HSE/Others JCA figures, PRD v0.2 amendment at next gate.
 
 ## Active Task
 T-040 — Implement spec-025: Budget corrections & Review Batch A
-State: IN_PROGRESS
+State: DONE
 Started: 2026-08-25 00:45
-Last Updated: 2026-08-25 00:45
+Last Updated: 2026-08-25 02:12
 
 ## Task Log
+
+### [2026-08-25 02:10] — T-040: Implement spec-025 Batch A (budget corrections, ex-VAT, boxes, schedule dates)
+**Weight:** SIGNIFICANT (includes DCL-007)
+**State transitions:** PENDING → IN_PROGRESS (00:45) → DONE (02:10).
+**Goal:** Client-review corrections: JCA FF/SWPS lines, exclusion lens retired, ex-VAT KPI, utilised/balance boxes, procurement-schedule dates end-to-end.
+**Spec Reference:** specs/spec-025-v1.md; DCL-007 filed before anchor changes landed in tests.
+**Approach:** EXCLUDED_REFS emptied (kept as [] for compile compat); budget analytics counts all active LPOs. Seed adds OTHER 3.6M + FIRE_FIGHTING 1.44M lines idempotently by sourceLabel. Lpo gains indentDate/deliveryDate (@db.Date); PATCH accepts date-or-null; export CSV adds both columns; bulk import maps optional columns; drawer shows Indent/Delivery rows. Overview service adds totalLpoExVatFils (Σ amount÷(1+rate)) + jcaBudgetFils; UI adds excl-VAT KPI, Actual-Utilized/Balance boxes, flagged explainer strip linking to /flags.
+**Checklist:**
+  - [x] Migration lpo_schedule_dates applied; seed idempotent w/ two new JCA lines
+  - [x] Variance: FF over w/ 1.44M line; OTHER carries SWPS line; GENERAL/HSE still no_budget (figures awaited)
+  - [x] Overview: totalLpoExVatFils ∈ (0.94,0.96)×gross; jcaBudgetFils = sum of five lines
+  - [x] Export/import round-trip incl. new date columns; drawer shows them
+  - [x] Middleware `/` public test updated (landing); csv/auth/flags suites re-anchored
+**Outcome:** All ACs verified; suite re-anchored per DCL-007. Open client items unchanged (struck-off icons, Gen/HSE/Others figures).
+**Test Evidence:** vitest 29 files / 156 tests passed; tsc clean; eslint clean.
+**Blockers:** NONE
+**Rollback:** Revert analytics/seed/validation/lpos/export/UI edits; delete migration.
 
 ### [2026-08-25 01:10] — T-041: Ideation & feasibility — project cost management suite; draft spec-029/030
 **Weight:** SIGNIFICANT

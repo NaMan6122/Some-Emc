@@ -15,10 +15,10 @@ import { computeCompliance } from "@/server/services/vos";
 //   Apr slot), falling back to invoice date;
 // - recoveryRate = cumulative recovered ÷ (carry-in + Σ window invested).
 
-/** Storm Water Pumping Station package — sits outside the JCA budget
- *  (specialist subcontract, PRD §6). Excluded ONLY from the budget-variance
- *  lens; register totals stay faithful to source (spec-007/011 contracts). */
-export const EXCLUDED_REFS = ["TEMW/REF/LPO//039"];
+/** DCL-007 (spec-025): SWPS exclusion RETIRED — client confirmed the package
+ *  sits inside the JCA (AED 3.60M line). Constant kept as empty array so any
+ *  stale import keeps compiling; budget lens now counts every active LPO. */
+export const EXCLUDED_REFS: string[] = [];
 
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
@@ -48,7 +48,7 @@ function pct(part: bigint, whole: bigint): number {
 async function activeLpos(projectId: number) {
   return prisma.lpo.findMany({
     where: { projectId, supersededById: null, status: { not: "CANCELLED" } },
-    select: { refNo: true, trade: true, amountFils: true, issueDate: true, verification: true, supplierId: true },
+    select: { refNo: true, trade: true, amountFils: true, issueDate: true, verification: true, supplierId: true, vatRate: true },
   });
 }
 
@@ -101,8 +101,23 @@ export async function overview(projectId: number) {
   const allocatedOutFils = allocOut.reduce((s, a) => s + (a.lpo.amountFils * BigInt(a.pct)) / 100n, 0n);
   const allocatedInFils = allocIn.reduce((s, a) => s + (a.lpo.amountFils * BigInt(a.pct)) / 100n, 0n);
 
+  // spec-025-v1: VAT-net total. amountFils is VAT-inclusive at each line's own
+  // vatRate; net = Σ amount ÷ (1 + rate), floored per line.
+  const totalLpoExVatFils = lpos.reduce((s, l) => {
+    const rateBp = BigInt(Math.round(Number(l.vatRate) * 10000)); // basis points
+    return s + (l.amountFils * 10000n) / (10000n + rateBp);
+  }, 0n);
+
+  // spec-025-v1: utilised/balance boxes. JCA budget = Σ all budget lines;
+  // utilised = committed total (definition pinned in spec).
+  const jcaBudgetFils = (
+    await prisma.budgetLine.aggregate({ where: { projectId }, _sum: { amountFils: true } })
+  )._sum.amountFils ?? 0n;
+
   return {
     totalLpoFils: total,
+    totalLpoExVatFils,
+    jcaBudgetFils,
     activeCount: lpos.length,
     supplierCount: bySupplier.size,
     avgLpoFils: amounts.length ? total / n : 0n,
@@ -125,12 +140,10 @@ export async function budgetAnalytics(projectId: number) {
     activeLpos(projectId),
     prisma.budgetLine.groupBy({ by: ["trade"], where: { projectId }, _sum: { amountFils: true } }),
   ]);
-  // Budget lens excludes out-of-scope packages (SWPS) from committed side.
-  const excluded = lpos.filter((l) => EXCLUDED_REFS.includes(l.refNo));
-  const included = lpos.filter((l) => !EXCLUDED_REFS.includes(l.refNo));
-
+  // spec-025-v1 / DCL-007: client confirmed SWPS sits INSIDE the JCA — the
+  // exclusion lens is removed; committed counts every active LPO in-trade.
   const committedMap = new Map<string, bigint>();
-  for (const l of included) {
+  for (const l of lpos) {
     committedMap.set(l.trade, (committedMap.get(l.trade) ?? 0n) + l.amountFils);
   }
   const budgetMap = new Map(budgets.map((b) => [b.trade, b._sum?.amountFils ?? 0n]));
@@ -150,8 +163,8 @@ export async function budgetAnalytics(projectId: number) {
 
   return {
     items: rows,
-    excludedRefs: EXCLUDED_REFS,
-    excludedFils: excluded.reduce((s, l) => s + l.amountFils, 0n),
+    excludedRefs: [] as string[],
+    excludedFils: 0n,
   };
 }
 

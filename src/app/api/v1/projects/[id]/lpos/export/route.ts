@@ -45,6 +45,8 @@ export const GET = apiHandler<Ctx>(async (request, ctx) => {
     "verification",
     "kind",
     "remark",
+    "indentDate",
+    "deliveryDate",
   ].join(",");
   const lines = rows.map((r) =>
     [
@@ -60,6 +62,8 @@ export const GET = apiHandler<Ctx>(async (request, ctx) => {
       r.verification,
       r.kind,
       r.remark ?? "",
+      r.indentDate ? r.indentDate.toISOString().slice(0, 10) : "",
+      r.deliveryDate ? r.deliveryDate.toISOString().slice(0, 10) : "",
     ]
       .map((c) => csvEscape(String(c)))
       .join(","),

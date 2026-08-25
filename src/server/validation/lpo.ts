@@ -50,6 +50,9 @@ export const patchLpoSchema = z
     status: z.enum(["ISSUED", "CLOSED", "CANCELLED"]).optional(),
     verification: z.enum(["PENDING", "VERIFIED", "FLAGGED"]).optional(),
     flagNote: z.string().trim().min(3).max(500).optional(),
+    // spec-025-v1: procurement-schedule dates — descriptive, in-place.
+    indentDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
+    deliveryDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
   })
   .strict()
   .refine(

@@ -297,6 +297,13 @@ export async function patchLpo(actorId: number, role: Role, rawId: string, patch
     if (patch.description !== undefined) data.description = patch.description;
     if (patch.remark !== undefined) data.remark = patch.remark;
     if (patch.status !== undefined) data.status = patch.status;
+    // spec-025-v1: procurement-schedule dates are descriptive — in-place.
+    const dateOrNull = (v: string | null | undefined) =>
+      v === undefined ? undefined : v === null ? null : new Date(`${v}T00:00:00Z`);
+    const indentDate = dateOrNull(patch.indentDate);
+    const deliveryDate = dateOrNull(patch.deliveryDate);
+    if (indentDate !== undefined) data.indentDate = indentDate;
+    if (deliveryDate !== undefined) data.deliveryDate = deliveryDate;
     if (row.status === "DRAFT") {
       // DRAFT records are still malleable in every field (ref already locked).
       if (patch.supplierId !== undefined) data.supplier = { connect: { id: patch.supplierId } };

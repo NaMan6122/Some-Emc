@@ -12,7 +12,7 @@ import { allocateNextRef } from "./lpos";
 // auto-creation: phantom vendors are exactly what FR-9 fights).
 
 export const IMPORT_HEADERS = ["supplierName", "trade", "description", "issueDate", "amountAED"] as const;
-const OPTIONAL_HEADERS = ["vatRate", "kind", "remark"] as const;
+const OPTIONAL_HEADERS = ["vatRate", "kind", "remark", "indentDate", "deliveryDate"] as const;
 export const IMPORT_ROW_CAP = 1000;
 
 const TRADES = ["ELECTRICAL", "PLUMBING", "HVAC", "FIRE_FIGHTING", "GENERAL", "HSE", "OTHER"] as const;
@@ -32,6 +32,8 @@ const rowSchema = z.object({
   vatRate: z.coerce.number().min(0).max(1).default(0.05),
   kind: z.enum(KINDS).default("STANDARD"),
   remark: z.string().trim().max(500).optional(),
+  indentDate: dateOnly.optional(),
+  deliveryDate: dateOnly.optional(),
 });
 
 type ValidRow = z.infer<typeof rowSchema> & { supplierId: number };
@@ -90,6 +92,8 @@ export async function validateImportGrid(grid: string[][]): Promise<{ rows: Vali
         : {}),
       ...(idx("kind") >= 0 && (cells[idx("kind")] ?? "").trim() !== "" ? { kind: cells[idx("kind")].trim().toUpperCase() } : {}),
       ...(idx("remark") >= 0 && (cells[idx("remark")] ?? "").trim() !== "" ? { remark: cells[idx("remark")].trim() } : {}),
+      ...(idx("indentDate") >= 0 && (cells[idx("indentDate")] ?? "").trim() !== "" ? { indentDate: cells[idx("indentDate")].trim() } : {}),
+      ...(idx("deliveryDate") >= 0 && (cells[idx("deliveryDate")] ?? "").trim() !== "" ? { deliveryDate: cells[idx("deliveryDate")].trim() } : {}),
     };
     const result = rowSchema.safeParse(raw);
     if (!result.success) {
@@ -166,6 +170,8 @@ export async function commitImport(actorId: number, projectId: number, grid: str
           kind: row.kind,
           status: "ISSUED",
           remark: row.remark ?? null,
+          ...(row.indentDate ? { indentDate: new Date(`${row.indentDate}T00:00:00Z`) } : {}),
+          ...(row.deliveryDate ? { deliveryDate: new Date(`${row.deliveryDate}T00:00:00Z`) } : {}),
           provenance: "SOURCE_DOCUMENT",
         },
       });

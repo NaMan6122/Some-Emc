@@ -48,14 +48,14 @@ function track(lineId: string | number | bigint) {
 }
 
 describe("spec-011 budget module", () => {
-  it("AC1: seeded JCA lines load exactly (7.0M / 0.5M / 0.3M AED)", async () => {
+  it("AC1: seeded JCA lines load exactly (7.0M / 0.5M / 0.3M + SWPS 3.6M / FF 1.44M per spec-025)", async () => {
     const { GET } = await import("@/app/api/v1/projects/[id]/budget-lines/route");
     const res = await GET(req("GET", `/api/v1/projects/${projectId}/budget-lines`, adminCookie), {
       params: Promise.resolve({ id: String(projectId) }),
     });
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body.items).toHaveLength(3);
+    expect(body.items).toHaveLength(5);
     const byTrade = Object.fromEntries(
       (body.items as { trade: string; amountFils: string; sourceLabel: string }[]).map((l) => [l.trade, l]),
     );
@@ -63,6 +63,11 @@ describe("spec-011 budget module", () => {
     expect(byTrade["HVAC"].amountFils).toBe("50000000");
     expect(byTrade["PLUMBING"].amountFils).toBe("30000000");
     expect(byTrade["ELECTRICAL"].sourceLabel).toBe("JCA Appendix I");
+    // spec-025-v1 additions (client review: both packages sit inside the JCA).
+    expect(byTrade["OTHER"].sourceLabel).toContain("Storm Water Pumping Station");
+    expect(byTrade["OTHER"].amountFils).toBe("360000000");
+    expect(byTrade["FIRE_FIGHTING"].sourceLabel).toContain("Fire Fighting");
+    expect(byTrade["FIRE_FIGHTING"].amountFils).toBe("144000000");
   });
 
   it("AC2: COMMERCIAL creates a line → 201 + audit CREATE; FINANCE attempt → 403", async () => {
@@ -186,13 +191,14 @@ describe("spec-011 budget module", () => {
     expect(hvac.status).toBe("over");
     expect(hvac.utilizationPct).toBeGreaterThanOrEqual(123.3);
     expect(hvac.utilizationPct).toBeLessThanOrEqual(123.5);
-    // v1 documented limitation (spec-011 Risks): committed counts ALL non-cancelled
-    // latest-revision LPOs incl. SWPS-style out-of-scope packages, so PLUMBING sits
-    // far above its JCA line. Exclusion logic arrives with spec-014 analytics.
+    // PLUMBING still over (v1 committed semantics count SWPS LPOs in-trade;
+    // spec-025 removed the analytics-side exclusion instead).
     expect(plumbing.status).toBe("over");
     expect(plumbing.utilizationPct).toBeGreaterThan(100);
-    expect(fire.status).toBe("no_budget");
-    expect(fire.budgetFils).toBe("0");
+    // spec-025-v1: FIRE_FIGHTING now carries a 1.44M JCA line (client review);
+    // committed 1,583,925 / 1,440,000 → over ~110%.
+    expect(fire.status).toBe("over");
+    expect(BigInt(fire.budgetFils)).toBe(144000000n);
     expect(BigInt(fire.committedFils)).toBeGreaterThan(0n);
   });
 });

@@ -159,7 +159,9 @@ model Lpo {
   supplier       Supplier        @relation(fields: [supplierId], references: [id], onDelete: Restrict)
   trade          Trade
   description    String
-  issueDate      DateTime        @db.Date
+  issueDate      DateTime     @db.Date
+  indentDate     DateTime?    @db.Date
+  deliveryDate   DateTime?    @db.Date
   amountFils     BigInt
   vatRate        Decimal         @db.Decimal(5, 4)
   kind           LpoKind         @default(STANDARD)

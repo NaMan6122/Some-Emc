@@ -20,6 +20,8 @@ import { useAnalytics, useProjectContext } from "@/hooks/use-app-data";
 
 type Overview = {
   totalLpoFils: string;
+  totalLpoExVatFils?: string;
+  jcaBudgetFils?: string;
   activeCount: number;
   supplierCount: number;
   avgLpoFils: string;
@@ -88,12 +90,48 @@ export function OverviewClient() {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <KpiCard label="Total LPO value" value={aed(data.totalLpoFils)} sub="active incl. VAT" />
+        <KpiCard
+          label="Total excl. VAT"
+          value={data.totalLpoExVatFils ? aed(data.totalLpoExVatFils) : "—"}
+          sub="Σ amount ÷ (1 + line VAT)"
+        />
         <KpiCard label="Active LPOs" value={String(data.activeCount)} sub={`${data.supplierCount} suppliers used`} />
         <KpiCard label="Avg LPO" value={aed(data.avgLpoFils)} />
         <KpiCard label="Median LPO" value={aed(data.medianLpoFils)} />
         <KpiCard label="Largest LPO" value={aed(data.largestLpoFils)} />
-        <KpiCard label="Pending verification" value={String(data.flaggedCount)} sub="awaiting source check" />
       </div>
+
+      {/* spec-025-v1: utilised / balance boxes */}
+      {data.jcaBudgetFils && (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <KpiCard
+            label="Actual LPOs utilized"
+            value={aed(data.totalLpoFils)}
+            sub={`of JCA budget ${aed(data.jcaBudgetFils)}`}
+          />
+          {(() => {
+            const balance = BigInt(data.jcaBudgetFils!) - BigInt(data.totalLpoFils);
+            const over = balance < 0n;
+            return (
+              <KpiCard
+                label={over ? "JCA overrun" : "Balance vs JCA"}
+                value={aed((over ? -balance : balance).toString())}
+                sub={over ? "committed exceeds JCA budget" : "JCA budget remaining"}
+              />
+            );
+          })()}
+        </div>
+      )}
+
+      {/* spec-025-v1: flagged-LPO explainer strip (client asked "What are Flagged LPOs?") */}
+      {data.flaggedCount > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300">
+          <span title="LPOs whose source documents have not been verified yet — seeded from the legacy report's NEED-TO-CHECK entries and any line you mark FLAGGED. They still count toward totals; verification confirms them against paperwork.">
+            ⚠ {data.flaggedCount} LPO{data.flaggedCount === 1 ? "" : "s"} pending source verification.
+          </span>
+          <a href="/flags" className="text-xs font-semibold underline">Review in Data Flags →</a>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <ChartFrame
