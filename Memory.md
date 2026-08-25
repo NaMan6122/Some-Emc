@@ -1,16 +1,38 @@
 # Agent Memory
 
 ## Session Summary
-Last Session: 2026-08-25 02:12
-Active Task: T-040 — Implement spec-025 Batch A — DONE (committed); queue: B(026)→C(027)→D(028)→T-042(029)→T-043(030)
+Last Session: 2026-08-25 04:20
+Active Task: NONE — client-review batch (A–D) + actuals ledger + cost analytics ALL IMPLEMENTED; prod migration applied
 Last File Touched: Memory.md
-Immediate Next Step: Implement spec-026 drill-downs. Open items: struck-off icons list, Gen/HSE/Others JCA figures, PRD v0.2 amendment at next gate.
+Immediate Next Step: Await human direction. Open: struck-off icons, Gen/HSE/Others JCA figures, PRD v0.2 amendment gate, Vercel redeploy to ship everything.
 
 ## Active Task
-T-040 — Implement spec-025: Budget corrections & Review Batch A
+T-045 — Implement spec-029/030 (actuals ledger + cost analytics)
 State: DONE
-Started: 2026-08-25 00:45
-Last Updated: 2026-08-25 02:12
+Started: 2026-08-25 03:40
+Last Updated: 2026-08-25 04:20
+
+## Task Log
+
+### [2026-08-25 04:20] — T-042/T-043: Cost actuals ledger + Cost Control tab — Phase 1+2 complete
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → DONE (04:20).
+**Goal:** Close the actual-cost data gap (the only true missing foundation in the cost-management ideation) and add the derived analytics layer.
+**Spec Reference:** specs/spec-029-v1.md, specs/spec-030-v1.md.
+**Approach:** CostEntry extended with kind INVOICE|PAYMENT (default INVOICE), optional supplierId/lpoId linkage (both validated: supplier exists; LPO belongs to project). createCostEntry books with full audit. GET /cost-entries returns filtered entries + INVOICE/PAYMENT totals; GET /cost-entries.csv exports the ledger. spec-030 adds costControl(projectId): originalBudget (JCA+cost lines), committed (active LPOs), actuals, openCommitments, CTC = max(0, budget−committed−actual), forecastFinal = actual+openComm+CTC, profit & margin% vs contract — all BigInt-exact. New "Cost Control" dashboard tab renders the waterfall + margin KPI + actuals-by-category.
+**Checklist:**
+  - [x] Migration cost_actuals_extensions applied (kind/supplierId/lpoId + indexes)
+  - [x] Ledger GET filters (category/kind/supplier/date-range) + INVOICE/PAYMENT totals
+  - [x] POST validates LPO-in-project and supplier existence → clean 422s
+  - [x] CSV ledger export via shared csv lib
+  - [x] costs analytics endpoint + Cost Control tab (waterfall table + margin KPI)
+  - [x] Full suite green; lint/tsc clean
+**Outcome:** Phase 1+2 complete — ProCare now tracks commitments AND actual costs, and derives CTC/forecast/margin from them. Definitions pinned in service comments (any change = version bump). Remaining from ideation: progress/EV snapshots (parked pending client commitment), resources/equipment (deferred).
+**Test Evidence:** vitest 30 files / 160 tests passed; tsc clean; eslint clean.
+**Blockers:** NONE
+**Rollback:** Down-migration drops new columns/enum values; remove routes/tab.
+
+### [2026-08-25 01:20] — Gate G1 closure: spec-029/030 promoted
 
 ## Session Summary
 Last Session: 2026-08-25 02:40
