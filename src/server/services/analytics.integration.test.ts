@@ -138,6 +138,46 @@ describe("spec-014 analytics — golden values from Job 1571", () => {
     expect(body.longTailSuppliers).toBeGreaterThan(0);
   });
 
+  it("spec-027: paymentCycle metrics null-safe with fixture dates", async () => {
+    // Seed PCs have no cycle dates — all averages null, receivedByMonth empty.
+    const baseline = await get(import("@/app/api/v1/projects/[id]/analytics/cashflow/route")).then((r) => r.json());
+    expect(baseline.paymentCycle.avgApplicationToCertifiedDays).toBeNull();
+
+    // Fixture PC with known gaps: application → invoice 10d, due → received −5d (early).
+    const created = await prisma.paymentCertificate.create({
+      data: {
+        projectId,
+        pcNumber: 91,
+        periodLabel: "T027 probe",
+        applicationDate: new Date("2026-06-01"),
+        invoiceDate: new Date("2026-06-11"),
+        dueDate: new Date("2026-07-01"),
+        paymentReceivedDate: new Date("2026-06-27"),
+        grossFils: 100000n,
+        retentionFils: 0n,
+        netPayableFils: 100000n,
+        status: "PAID",
+        provenance: "SOURCE_DOCUMENT",
+      },
+    });
+    try {
+      const cf = await import("@/server/services/analytics").then(({ cashflow }) => cashflow(projectId));
+      const sub = Math.round(
+        (new Date("2026-06-11").getTime() - new Date("2026-06-01").getTime()) / 86_400_000,
+      );
+      const delay = Math.round(
+        (new Date("2026-06-27").getTime() - new Date("2026-07-01").getTime()) / 86_400_000,
+      );
+      // Averages over seeded(0-date) + fixture: only fixture has dates.
+      expect(cf.paymentCycle.avgApplicationToCertifiedDays).toBe(sub); // 10
+      expect(cf.paymentCycle.avgDelayDays).toBeLessThanOrEqual(delay + 1);
+      expect(cf.paymentCycle.receivedByMonth.length).toBeGreaterThan(0);
+      expect(cf.paymentCycle.receivedByMonth.some((r) => r.month === "2026-06")).toBe(true);
+    } finally {
+      await prisma.paymentCertificate.delete({ where: { id: created.id } });
+    }
+  });
+
   it("all endpoints reject unauthenticated requests with a 401 envelope", async () => {
     // Literal specifiers: Vite only rewrites static/dynamic imports it can see.
     const routes = await Promise.all([

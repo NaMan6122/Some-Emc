@@ -26,6 +26,21 @@ Last Updated: 2026-08-25 02:40
 
 ## Task Log
 
+### [2026-08-25 03:10] — T-041b: Implement spec-027 Payment cycle analytics (Batch C)
+**Weight:** SIGNIFICANT
+**State transitions:** PENDING → DONE (03:10).
+**Goal:** PC-level payment-cycle measurement: application→certificate days, due→received delay, avg delay KPI, received-by-month %; Overview monthly LPO graph removed per client.
+**Spec Reference:** specs/spec-027-v1.md; client docx.
+**Approach:** Three nullable date columns on PaymentCertificate (migration pc_payment_cycle_dates). createPc/patchPc accept them; cashflow analytics computes null-safe averages + signed delays + receivedByMonth (% of certified net by paymentReceivedDate month). PC dashboard: two day-bars + three KPIs in a 3-col grid. OverviewClient monthly chart removed; trade chart now full-width.
+**Checklist:**
+  - [x] Migration applied; seed idempotent; legacy PCs keep null dates without breaking anchors
+  - [x] Fixture probe: app→cert 10d average asserted; negative (early) delay handled; receivedByMonth month-keyed
+  - [x] UI: two day-charts + avg-delay KPI render only when dates exist; VIEWER read-only
+**Outcome:** All spec-027 AC behaviors verified. Suite re-anchored where the removed Overview graph affected assertions (none — its test was self-contained).
+**Test Evidence:** vitest 29 files / 157 tests passed; tsc clean; eslint clean.
+**Blockers:** NONE
+**Rollback:** Down-migration drops three columns; remove charts/KPI block.
+
 ### [2026-08-25 02:40] — T-041a: Implement spec-026 Interactive drill-downs (Batch B)
 **Weight:** STANDARD
 **State transitions:** PENDING → IN_PROGRESS → DONE.

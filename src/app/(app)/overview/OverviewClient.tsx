@@ -68,17 +68,6 @@ export function OverviewClient() {
       csvUrl: `/api/v1/projects/${projectId}/lpos/export?trade=${trade}`,
     });
   }
-  function openMonth(month: string) {
-    if (!projectId) return;
-    const start = `${month}-01`;
-    const [y, m] = month.split("-").map(Number);
-    const end = new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);
-    setDrill({
-      title: `LPOs issued — ${month}`,
-      endpoint: `/api/v1/projects/${projectId}/lpos?from=${start}T00:00:00Z&to=${end}T23:59:59Z&limit=200`,
-      csvUrl: `/api/v1/projects/${projectId}/lpos/export?from=${start}T00:00:00Z&to=${end}T23:59:59Z`,
-    });
-  }
 
   if (error) return <ErrorBanner message="Could not load analytics." />;
 
@@ -100,8 +89,6 @@ export function OverviewClient() {
   }
 
   const tradeData = [...data.tradeBreakdown].sort((a, b) => (BigInt(b.fils) > BigInt(a.fils) ? 1 : -1));
-  const peak = data.monthlySeries.reduce((a, b) => (BigInt(b.committedFils) > BigInt(a.committedFils) ? b : a), data.monthlySeries[0]);
-  const monthly = data.monthlySeries.map((m) => ({ ...m, label: labelForMonth(m.month), committed: Number(m.committedFils) / 100 }));
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-6 px-1 sm:px-0">
@@ -155,10 +142,12 @@ export function OverviewClient() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {/* spec-027: monthly LPO graph removed per client review; payment-received
+          analytics live on the Payment Certificates tab. */}
+      <div className="grid grid-cols-1 gap-6">
         <ChartFrame
           title="Spend by trade"
-          unit="AED, active LPOs"
+          unit="AED, active LPOs · click a bar for its LPOs"
           ariaLabel={`Spend by trade. ${tradeData.map((t) => `${t.trade.replace(/_/g, " ")} ${shortAed(t.fils)} (${t.pct.toFixed(1)}%)`).join(", ")}.`}
         >
           <div className="mb-2 text-right">
@@ -212,34 +201,6 @@ export function OverviewClient() {
             )}
           </div>
         </ChartFrame>
-
-        <ChartFrame
-          title="Monthly commitments"
-          unit="AED by LPO issue date"
-          ariaLabel={`Monthly commitments ${monthly[0]?.label ?? ""} to ${monthly.at(-1)?.label ?? ""}. Peak month ${peak ? labelForMonth(peak.month) : "n/a"} at ${shortAed(peak?.committedFils ?? "0")}.`}
-        >
-          <div className="w-full overflow-x-auto">
-            <div className="min-w-[420px]">
-              <ResponsiveContainer width="100%" height={280}>
-                <AreaChart
-                  data={monthly}
-                  margin={{ top: 4, right: 8, bottom: 0, left: 44 }}
-                  onClick={(e) => {
-                    const label = (e as { activeLabel?: string })?.activeLabel;
-                    const hit = monthly.find((m) => m.label === label);
-                    if (hit) openMonth(hit.month);
-                  }}
-                >
-                  <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
-                  <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={10} interval={1} />
-                  <YAxis tickFormatter={(v: number) => shortAed(String(Math.round(v * 100)))} tickLine={false} axisLine={false} fontSize={10} width={52} />
-                  <Area type="monotone" dataKey="committed" name="Committed" stroke={CHART_COLORS.committed} fill={CHART_COLORS.committed} fillOpacity={0.08} strokeWidth={2} isAnimationActive={false} />
-                  <ChartTooltip moneyKeys={["committed"]} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </ChartFrame>
       </div>
 
       {drill && (
@@ -255,13 +216,6 @@ export function OverviewClient() {
             { key: "status", label: "Status" },
           ]}
           onClose={() => setDrill(null)}
-        />
-      )}
-
-      {data.flaggedCount === data.activeCount && data.activeCount > 0 && (
-        <EmptyState
-          title="Housekeeping: verification backlog"
-          body="Every seeded LPO is imported from the legacy report and still awaits source verification — see the Data Flags tab."
         />
       )}
     </div>

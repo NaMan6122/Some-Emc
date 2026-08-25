@@ -9,6 +9,10 @@ export const createPcSchema = z.object({
   periodStart: isoDate.nullish(),
   periodEnd: isoDate.nullish(),
   invoiceDate: isoDate.nullish(),
+  // spec-027-v1: payment-cycle dates.
+  applicationDate: isoDate.nullish(),
+  dueDate: isoDate.nullish(),
+  paymentReceivedDate: isoDate.nullish(),
   grossFils: moneyString,
   retentionFils: moneyString.default(0n),
   netPayableFils: moneyString,

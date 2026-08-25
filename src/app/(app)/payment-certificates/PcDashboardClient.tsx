@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ComposedChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import useSWR from "swr";
 import { KpiCard } from "@/components/ui/primitives";
 import { ChartFrame, ChartTooltip, CHART_COLORS } from "@/components/charts/themed";
@@ -22,6 +22,12 @@ type Cashflow = {
   retentionTotalFils: string;
   retentionReleasedFils?: string;
   retentionHeldFils?: string;
+  paymentCycle?: {
+    avgApplicationToCertifiedDays: number | null;
+    avgDueToReceivedDays: number | null;
+    avgDelayDays: number | null;
+    receivedByMonth: { month: string; amountFils: string; pct: number }[];
+  };
   variationClaims: { claimedFils: string; unapprovedVoExposureFils: string };
 };
 
@@ -34,6 +40,10 @@ type PcRow = {
   netPayableFils: string;
   status: string;
   provenance: string;
+  applicationDate?: string | null;
+  dueDate?: string | null;
+  paymentReceivedDate?: string | null;
+  invoiceDate?: string | null;
 };
 
 function aed(fils: string): string {
@@ -141,6 +151,59 @@ export function PcDashboardClient() {
           </div>
         </div>
       </ChartFrame>
+
+      {/* spec-027-v1: payment-cycle analytics (null-safe; metrics appear as dates are entered) */}
+      {data.paymentCycle && (
+        <>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+            <KpiCard
+              label="Avg submission → certificate"
+              value={data.paymentCycle.avgApplicationToCertifiedDays != null ? `${data.paymentCycle.avgApplicationToCertifiedDays} days` : "—"}
+              sub={`${pcs.filter((p) => p.applicationDate).length} PCs with dates`}
+            />
+            <KpiCard
+              label="Avg payment delay"
+              value={data.paymentCycle.avgDelayDays != null ? `${data.paymentCycle.avgDelayDays} days` : "—"}
+              sub={data.paymentCycle.avgDelayDays != null && data.paymentCycle.avgDelayDays > 0 ? "past due date" : "on/ before due"}
+            />
+            <KpiCard
+              label="Received through"
+              value={
+                data.paymentCycle.receivedByMonth.length > 0
+                  ? `${labelForMonth(data.paymentCycle.receivedByMonth.at(-1)!.month)} · ${data.paymentCycle.receivedByMonth.reduce((s, r) => s + r.pct, 0).toFixed(1)}%`
+                  : "—"
+              }
+              sub="of certified net received"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <ChartFrame title="Submission → certificate (days)" unit="calendar days per PC" ariaLabel="Days from payment application to certificate.">
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={pcs.filter((p) => p.applicationDate).map((p) => ({ pc: String(p.pcNumber).padStart(2, "0"), days: Math.round((new Date(p.invoiceDate ?? Date.now()).getTime() - new Date(p.applicationDate!).getTime()) / 86_400_000) }))}>
+                  <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+                  <XAxis dataKey="pc" tickLine={false} axisLine={false} fontSize={10} />
+                  <YAxis tickLine={false} axisLine={false} fontSize={10} width={36} />
+                  <Bar dataKey="days" name="Days" fill={CHART_COLORS.committed} radius={[3, 3, 0, 0]} barSize={14} isAnimationActive={false} />
+                  <ChartTooltip moneyKeys={[]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartFrame>
+
+            <ChartFrame title="Due → received (days)" unit="positive = paid late" ariaLabel="Days past due date when payment was received, per PC.">
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={pcs.filter((p) => p.dueDate && p.paymentReceivedDate).map((p) => ({ pc: String(p.pcNumber).padStart(2, "0"), delay: Math.round((new Date(p.paymentReceivedDate!).getTime() - new Date(p.dueDate!).getTime()) / 86_400_000) }))}>
+                  <CartesianGrid stroke="#e4e4e7" vertical={false} strokeOpacity={0.5} className="dark:opacity-20" />
+                  <XAxis dataKey="pc" tickLine={false} axisLine={false} fontSize={10} />
+                  <YAxis tickLine={false} axisLine={false} fontSize={10} width={36} />
+                  <Bar dataKey="delay" name="Delay (days)" fill={CHART_COLORS.certified} radius={[3, 3, 0, 0]} barSize={14} isAnimationActive={false} />
+                  <ChartTooltip moneyKeys={[]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartFrame>
+          </div>
+        </>
+      )}
 
       <section className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div className="overflow-x-auto">

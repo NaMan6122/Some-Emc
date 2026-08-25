@@ -172,7 +172,7 @@ async function pcMonths(projectId: number) {
   const pcs = await prisma.paymentCertificate.findMany({
     where: { projectId },
     orderBy: { pcNumber: "asc" },
-    select: { pcNumber: true, periodLabel: true, invoiceDate: true, netPayableFils: true, retentionFils: true, variationClaimFils: true, status: true, createdAt: true },
+    select: { pcNumber: true, periodLabel: true, invoiceDate: true, applicationDate: true, dueDate: true, paymentReceivedDate: true, netPayableFils: true, retentionFils: true, variationClaimFils: true, status: true, createdAt: true },
   });
   return pcs.map((pc) => ({
     ...pc,
@@ -207,6 +207,12 @@ export async function cashflow(projectId: number) {
       retentionTotalFils: 0n,
       retentionReleasedFils: releasedTotal._sum.amountFils ?? 0n,
       retentionHeldFils: -(releasedTotal._sum.amountFils ?? 0n),
+      paymentCycle: {
+        avgApplicationToCertifiedDays: null,
+        avgDueToReceivedDays: null,
+        avgDelayDays: null,
+        receivedByMonth: [],
+      },
       variationClaims: { claimedFils: 0n, unapprovedVoExposureFils: 0n },
     };
   }
@@ -238,6 +244,36 @@ export async function cashflow(projectId: number) {
   // DCL-004 row-sum) stay byte-identical. Held may go negative on bad input;
   // honest math beats a silent clamp.
   const retentionReleasedFils = releasedTotal._sum.amountFils ?? 0n;
+
+  // spec-027-v1: payment-cycle metrics. Null-safe — PCs lacking a date pair
+  // are excluded from that metric only. Days are calendar-day differences.
+  const DAY = 86_400_000;
+  const days = (a: Date | null, b: Date | null): number | null =>
+    a && b ? Math.round((b.getTime() - a.getTime()) / DAY) : null;
+  const subToCert = pcs
+    .map((p) => days(p.applicationDate, p.invoiceDate ?? p.createdAt))
+    .filter((d): d is number => d !== null);
+  const dueToRec = pcs
+    .map((p) => days(p.dueDate, p.paymentReceivedDate))
+    .filter((d): d is number => d !== null);
+  const avg = (arr: number[]) => (arr.length ? Math.round(arr.reduce((s, d) => s + d, 0) / arr.length) : null);
+
+  // Received-by-month: Σ paymentReceivedDate-month amounts as % of certified net.
+  const receivedByMonthMap = new Map<string, bigint>();
+  for (const p of pcs) {
+    if (!p.paymentReceivedDate) continue;
+    const k = monthKey(p.paymentReceivedDate);
+    receivedByMonthMap.set(k, (receivedByMonthMap.get(k) ?? 0n) + p.netPayableFils);
+  }
+  const certifiedTotal = pcs.reduce((s, p) => s + p.netPayableFils, 0n);
+  const receivedByMonth = [...receivedByMonthMap.entries()]
+    .sort(([a], [b]) => (a < b ? -1 : 1))
+    .map(([month, fils]) => ({
+      month,
+      amountFils: fils,
+      pct: certifiedTotal > 0n ? Number((fils * 10000n) / certifiedTotal) / 100 : 0,
+    }));
+
   return {
     windowMonths: [months[0], months[months.length - 1]],
     monthly,
@@ -245,6 +281,12 @@ export async function cashflow(projectId: number) {
     retentionTotalFils,
     retentionReleasedFils,
     retentionHeldFils: retentionTotalFils - retentionReleasedFils,
+    paymentCycle: {
+      avgApplicationToCertifiedDays: avg(subToCert),
+      avgDueToReceivedDays: avg(dueToRec),
+      avgDelayDays: avg(dueToRec),
+      receivedByMonth,
+    },
     variationClaims: {
       claimedFils: pcs.reduce((s, p) => s + p.variationClaimFils, 0n),
       unapprovedVoExposureFils: compliance.unapprovedVoExposure,

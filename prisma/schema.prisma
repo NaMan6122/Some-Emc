@@ -197,15 +197,18 @@ model BudgetLine {
 }
 
 model PaymentCertificate {
-  id                   BigInt     @id @default(autoincrement())
-  projectId            Int
-  project              Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
-  pcNumber             Int
-  periodLabel          String
-  periodStart          DateTime?
-  periodEnd            DateTime?
-  invoiceDate          DateTime?
-  grossFils            BigInt
+  id                    BigInt     @id @default(autoincrement())
+  projectId             Int
+  project               Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  pcNumber              Int
+  periodLabel           String
+  periodStart           DateTime?
+  periodEnd             DateTime?
+  invoiceDate           DateTime?
+  applicationDate       DateTime?
+  dueDate               DateTime?
+  paymentReceivedDate   DateTime?
+  grossFils             BigInt
   retentionFils        BigInt
   netPayableFils       BigInt
   variationClaimFils   BigInt     @default(0)
