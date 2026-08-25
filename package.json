@@ -16,6 +16,8 @@
     "user:add": "node scripts/user-add.mjs",
     "extract:job1571": "node scripts/extract-seed.mjs",
     "seed:job1571": "node --env-file=.env prisma/seed.mjs",
+    "seed:demo": "node --env-file=.env scripts/seed-demo.mjs",
+    "import:backfill": "node --env-file=.env scripts/import-backfill.mjs",
     "db:migrate": "prisma migrate deploy",
     "postinstall": "prisma generate"
   },

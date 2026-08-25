@@ -243,7 +243,20 @@ docker exec <ctr> npx prisma migrate deploy
 | `typecheck` / `lint` / `test` | `tsc --noEmit` / eslint / vitest |
 | `user:add` | `node scripts/user-add.mjs <email> <name> <ROLE> [password]` |
 | `extract:job1571` / `seed:job1571` | Regenerate + apply Job 1571 seed |
+| `seed:demo` | Seed clearly-labelled demo data (cost lines/entries, PC cycle dates, LPO schedules). `-- --purge` reverses exactly those rows via `prisma/demo-manifest.json` |
+| `import:backfill` | Import **real** client backfill CSVs — see below |
 | `db:migrate` | `prisma migrate deploy` (prod) |
+
+### Backfill & demo data
+
+Two channels populate the newer features (cost control, PC payment-cycle analytics, LPO schedule):
+
+- **Real backfill** — `npm run import:backfill -- --kind costs|pc-dates|lpo-schedule --file <csv> [--apply]`.
+  Dry-run by default; every row is validated (category enum, supplier/LPO existence) before anything writes.
+  CSV formats are documented in the header of `scripts/import-backfill.mjs`.
+- **Demo seed** — `npm run seed:demo` adds illustrative, labelled (`DEMO – …`) rows so dashboards are
+  alive for walkthroughs; `npm run seed:demo -- --purge` removes them again. The two never collide:
+  real rows carry a client `sourceLabel`, demo rows always start with `DEMO – `.
 
 ---
 
