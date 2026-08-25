@@ -30,8 +30,8 @@
 | spec-026 | Interactive drill-downs & downloads (Review B) | v1 | ACTIVE | spec-014, spec-015, spec-018 | — | Promoted at G1 2026-08-25; XLSX deferred → CSV+print PDF |
 | spec-027 | Payment cycle analytics (Review C) | v1 | ACTIVE | spec-002, spec-004, spec-012, spec-015 | — | Promoted at G1 2026-08-25 |
 | spec-028 | Cost overviews: Labour/Supervision/Admin/DLP (Review D) | v1 | ACTIVE | spec-002, spec-004, spec-014 | — | Promoted at G1 2026-08-25 |
-| spec-029 | Cost actuals ledger (Phase 1) | v1 | DRAFT | spec-002, spec-004, spec-028 | — | Phase 1+2 ideation batch; pending G1 |
-| spec-030 | Cost-to-complete, forecast & margin (Phase 2) | v1 | DRAFT | spec-002, spec-011, spec-014, spec-028, spec-029 | — | Phase 1+2 ideation batch; pending G1 |
+| spec-029 | Cost actuals ledger (Phase 1) | v1 | ACTIVE | spec-002, spec-004, spec-028 | — | Promoted at G1 2026-08-25 |
+| spec-030 | Cost-to-complete, forecast & margin (Phase 2) | v1 | ACTIVE | spec-002, spec-011, spec-014, spec-028, spec-029 | — | Promoted at G1 2026-08-25 |
 
 _M1 (spec-001..008): all IMPLEMENTED — milestone ratified at G5 2026-08-23. M2 batch (009–015): all IMPLEMENTED. M3 batch (016–019): all IMPLEMENTED — ratified at G5 2026-08-24._
 

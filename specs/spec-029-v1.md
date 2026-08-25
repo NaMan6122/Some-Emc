@@ -1,10 +1,10 @@
 # spec-029-v1: Cost actuals ledger (Phase 1 — actual costs)
 
-**Status:** DRAFT
+**Status:** ACTIVE — promoted at G1 2026-08-25
 **Version:** 1
 **Depends On:** spec-002, spec-004, spec-028
 **Blocks:** spec-030
-**Task Reference:** —
+**Task Reference:** T-042
 
 ## What
 The missing half of the money picture. ProCare today tracks commitments (LPOs) and money-in (PC certifications) but not what TEMW actually PAYS. This spec introduces the company-wide **actual-cost entry**: `CostEntry` (introduced generically in spec-028) is promoted to the canonical actuals ledger with an extended shape: `CostEntry { projectId, category (CostCategory + MATERIAL, OTHER), supplierId? → Supplier, lpoId? → Lpo (optional commitment linkage), entryDate, amountFils (>0), kind { INVOICE, PAYMENT }, description?, reference? (invoice number), createdAt }`. Rules: an INVOICE books what a supplier/subcontractor billed; a PAYMENT books cash actually paid; both are FINANCE+ADMIN writes, audited, immutable-on-edit (delete+re-enter by ADMIN). LPO linkage is optional metadata — no automatic accrual from LPOs (an issued LPO is a commitment, not a cost until invoiced). GET endpoints filter by project/category/date-range/supplier with running totals; CSV export included in the existing export family (`cost-entries.csv`). The four spec-028 overviews continue to work unchanged — their "actuals" now come from this same table (category-scoped).
